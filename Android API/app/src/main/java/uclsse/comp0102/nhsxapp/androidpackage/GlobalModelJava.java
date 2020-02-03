@@ -10,12 +10,12 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class GlobalModel {
+public class GlobalModelJava {
 
     private String globalPath;
     private String localPath;
 
-    public GlobalModel(String pathOfGlobalModel, String pathOfLocalModel){
+    public GlobalModelJava(String pathOfGlobalModel, String pathOfLocalModel){
         this.globalPath = pathOfGlobalModel;
         this.localPath = pathOfLocalModel;
     }
