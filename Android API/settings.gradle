@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name='nhs_app-PackageOnAndroid'
+rootProject.name='ActivityTest'
