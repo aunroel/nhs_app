@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <Button
+        android:id="@+id/start_service_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Service"
+        />
+
+    <Button
+        android:id="@+id/download_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Download Model"
+        />
+
+    <Button
+        android:id="@+id/upload_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Upload Model"
+        />
+
+    <Button
+        android:id="@+id/training_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Training Model"
+        />
+
+    <Button
+        android:id="@+id/stop_service_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Stop Service"
+        />
+
+</LinearLayout>
