@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="uclsse.comp0102.nhsxapp.activitytest">
-
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    package="uclsse.comp0102.nhsxapp.nhsapp">
 
     <application
         android:allowBackup="true"
@@ -11,13 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <service
-            android:name="uclsse.comp0102.nhsxapp.android.GlobalModelService"
-            android:enabled="true"
-            android:exported="true" />
-
-        <activity android:name=".FirstActivity">
+        <activity android:name="uclsse.comp0102.nhsx.app.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
