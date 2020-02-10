@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">ActivityTest</string>
+    <string name="app_name">NHSAPP</string>
+    <string name="roll">Roll</string>
+    <string name="_1">1</string>
 </resources>
