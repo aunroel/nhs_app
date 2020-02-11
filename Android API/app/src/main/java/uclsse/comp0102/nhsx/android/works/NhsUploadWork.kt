@@ -1,8 +1,6 @@
 package uclsse.comp0102.nhsx.android.works
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.work.*
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -10,12 +8,12 @@ import java.util.concurrent.TimeUnit
 class NhsUploadWork(
     private val appContext: Context,
     private val parameters: WorkerParameters
-): AbsNhsApiCoroutineWorker(appContext, parameters) {
+): AbsNhsApiCoroutineWork(appContext, parameters) {
 
     companion object {
         var isUpload = false
-        private const val WORK_NAME = "Upload Task"
-        private val WORK_CONSTRAINTS = Constraints.Builder()
+        const val WORK_NAME = "Upload Task"
+        val WORK_CONSTRAINTS = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .setRequiresDeviceIdle(true)
             .apply {
@@ -35,9 +33,4 @@ class NhsUploadWork(
         return Result.success()
     }
 
-    override fun createPeriodicWorkRequest(): PeriodicWorkRequest {
-        return PeriodicWorkRequestBuilder<NhsDownloadWork>(7, TimeUnit.DAYS)
-            .setConstraints(WORK_CONSTRAINTS)
-            .build()
-    }
 }
