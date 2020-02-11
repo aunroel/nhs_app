@@ -10,11 +10,11 @@ import java.util.concurrent.TimeUnit
 class NhsDownloadWork(
     private val appContext: Context,
     private val parameters: WorkerParameters
-): AbsNhsApiCoroutineWorker(appContext, parameters) {
+): AbsNhsApiCoroutineWork(appContext, parameters) {
 
     companion object {
-        private const val WORK_NAME = "Download Task"
-        private val WORK_CONSTRAINTS = Constraints.Builder()
+        const val WORK_NAME = "Download Task"
+        val WORK_CONSTRAINTS = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .setRequiresDeviceIdle(true)
             .apply {
@@ -34,12 +34,6 @@ class NhsDownloadWork(
         android.os.SystemClock.sleep(5000)
         NhsUploadWork.isUpload = false
         return Result.success()
-    }
-
-    override fun createPeriodicWorkRequest(): PeriodicWorkRequest {
-        return PeriodicWorkRequestBuilder<NhsDownloadWork>(7, TimeUnit.DAYS)
-            .setConstraints(WORK_CONSTRAINTS)
-            .build()
     }
 
 }

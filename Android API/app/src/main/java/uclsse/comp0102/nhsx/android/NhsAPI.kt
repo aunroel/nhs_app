@@ -3,6 +3,7 @@ package uclsse.comp0102.nhsx.android
 import android.content.Context
 import androidx.work.*
 import uclsse.comp0102.nhsx.android.works.NhsDownloadWork
+import uclsse.comp0102.nhsx.android.works.NhsUploadWork
 import java.util.concurrent.TimeUnit.DAYS
 
 
@@ -17,10 +18,26 @@ class NhsAPI private constructor(context: Context){
         }
     }
 
-
-
-
     init {
+        val workerManager = WorkManager.getInstance(context)
+
+        val uploadRequest =  PeriodicWorkRequestBuilder<NhsUploadWork>(7, DAYS)
+            .setConstraints(NhsUploadWork.WORK_CONSTRAINTS)
+            .build()
+        val downloadRequest =  PeriodicWorkRequestBuilder<NhsDownloadWork>(7, DAYS)
+            .setConstraints(NhsDownloadWork.WORK_CONSTRAINTS)
+            .build()
+
+        workerManager.enqueueUniquePeriodicWork(
+            NhsUploadWork.WORK_NAME,
+            ExistingPeriodicWorkPolicy.KEEP,
+            uploadRequest
+        )
+        workerManager.enqueueUniquePeriodicWork(
+            NhsDownloadWork.WORK_NAME,
+            ExistingPeriodicWorkPolicy.KEEP,
+            downloadRequest
+        )
     }
 
     interface DataClass{ }
