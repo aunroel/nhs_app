@@ -6,8 +6,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class NhsUploadWork(
-    private val appContext: Context,
-    private val parameters: WorkerParameters
+    appContext: Context, parameters: WorkerParameters
 ): AbsNhsApiCoroutineWork(appContext, parameters) {
 
     companion object {
@@ -28,7 +27,7 @@ class NhsUploadWork(
 
     override suspend fun doWork(): Result {
         setForeground(foreNotiApplier.apply(WORK_NAME))
-        android.os.SystemClock.sleep(5000)
+
         isUpload = true
         return Result.success()
     }
