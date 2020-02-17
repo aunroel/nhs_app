@@ -36,8 +36,9 @@ class JsonGlobalFile(
     fun storeDataAndAccumulateDuplication(data: Any) {
         val reflectedClass = data::class.java
         reflectedClass.declaredFields
-            .filter { field -> field.type.isNumber() }
-            .forEach { numberField ->
+            .filter { field ->
+                field.type.isNumber()
+            }.forEach { numberField ->
                 val fieldAccessibilityBackup = numberField.isAccessible
                 numberField.isAccessible = true
                 val fieldName = numberField.name

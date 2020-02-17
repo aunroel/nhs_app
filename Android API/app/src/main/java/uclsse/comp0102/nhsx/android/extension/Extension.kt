@@ -2,19 +2,23 @@ package uclsse.comp0102.nhsx.android.extension
 
 
 infix fun Number.plus(other: Number): Number {
-    when (this::class.java) {
-        Float::class.java,
-        Double::class.java -> {
-            return this.toFloat() + other.toFloat()
+    return when (this) {
+        is Float,
+        is Double -> {
+            this.toFloat() + other.toFloat()
         }
-        Long::class.java -> {
-            return this.toLong() + other.toLong()
+        is Short,
+        is Int -> {
+            this.toInt() + other.toInt()
         }
-        Byte::class.java -> {
-            return this.toByte() + other.toByte()
+        is Long -> {
+            this.toLong() + other.toLong()
+        }
+        is Byte -> {
+            this.toByte() + other.toByte()
         }
         else -> {
-            return this.toInt() + other.toInt()
+            throw UnsupportedOperationException("A unsupported number type ${this::class.java}")
         }
     }
 }
