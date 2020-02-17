@@ -8,11 +8,11 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import uclsse.comp0102.nhsx.android.tools.net.GlobalFile
+import uclsse.comp0102.nhsx.android.tools.GlobalFile
 import java.net.URI
 
 @RunWith(AndroidJUnit4::class)
-class DownloadTest {
+class DownloaderTest {
 
     private lateinit var file: GlobalFile
 
@@ -23,7 +23,11 @@ class DownloadTest {
 
     @Before
     fun setUp() {
-        file = GlobalFile(onlineUrl, localUri, name)
+        file = GlobalFile(
+            onlineUrl,
+            localUri,
+            name
+        )
     }
 
     @Test
@@ -33,18 +37,20 @@ class DownloadTest {
 
     @Test
     fun testDownloadedData() {
-        file.updateLocalCopy()
-        val data = file.readLines().joinToString()
-        assertThat(data).isEqualTo("this is a test file")
+        file.pull()
+        assertThat(file.isFile).isTrue()
+        assertThat(file.name).isEqualTo("test.txt")
     }
 
     @Test
     fun testUploadData() {
-        val newText = "This is a new test file!"
-        file.writeText(newText)
-        file.uploadLocalCopy("/uploader")
-        val data = file.readLines().joinToString()
-        assertThat(data).isEqualTo(newText)
+        val newData = "NEW FILE!!!"
+        file.pull()
+        file.writeText(newData)
+        file.push("/uploader")
+        file.pull()
+        assertThat(file.readLines().toString()).isEqualTo("[$newData]")
+
     }
 
 
