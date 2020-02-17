@@ -1,4 +1,4 @@
-package uclsse.comp0102.nhsx.android.tools.net
+package uclsse.comp0102.nhsx.android.tools
 
 import android.util.Log
 import okhttp3.MediaType
@@ -13,17 +13,11 @@ import java.io.IOException
 import java.net.URI
 
 
-class GlobalFile (
-    private val onlineURI: URI,
-    private val localURI: URI,
-    private val fileName: String
-) : File(localURI.path, fileName) {
-
-    init {
-        val pathDirectory= File(localURI)
-        if(!pathDirectory.exists()){ pathDirectory.mkdirs() }
-        if(!this.exists()) this.createNewFile()
-    }
+open class GlobalFile(
+    onlinePath: URI,
+    localPath: URI,
+    fileName: String
+) : File(localPath.path, fileName) {
 
     private interface ServerConnector {
         @Streaming
@@ -37,21 +31,31 @@ class GlobalFile (
         @POST
         fun upload(
             @Part file: MultipartBody.Part,
-            @Url uploadUrl: String = "upload"
+            @Url uploadUrl: String
         ): Call<ResponseBody>
 
     }
 
-    private val connector = Retrofit.Builder()
-        .baseUrl(onlineURI.toURL())
-        .build()
-        .create(ServerConnector::class.java)
+    private val connector: ServerConnector
 
-    fun updateLocalCopy(){
+    init {
+        val pathDirectory = File(localPath)
+        if (!pathDirectory.exists()) {
+            pathDirectory.mkdirs()
+        }
+        if (!this.exists()) this.createNewFile()
+        connector = Retrofit.Builder()
+            .baseUrl(onlinePath.toURL())
+            .build()
+            .create(ServerConnector::class.java)
+    }
+
+    open fun pull(fromDir: String = "") {
         try {
-            val response = connector.download(fileName).execute()
+            val dirWithFileName = "$fromDir/$name".replace("//", "/").removePrefix("/")
+            val response = connector.download(dirWithFileName).execute()
             if (!response.isSuccessful) throw IOException("updateLocalCopy: isNotSuccessful")
-            val bytes = response.body()?.bytes() ?: throw IOException("updateLocalCopy: isEmptyBody")
+            val bytes = response.body()?.bytes() ?: throw IOException("updateLocalCopy:isEmptyBody")
             writeBytes(bytes)
         }catch(t: IOException){
             t.printStackTrace()
@@ -60,12 +64,13 @@ class GlobalFile (
     }
 
 
-    fun uploadLocalCopy(toDirectory: String = "") {
+    open fun push(toDir: String = "") {
         val octetStreamType = "application/octet-stream"
         val fileStream = RequestBody.create(MediaType.parse(octetStreamType), this)
-        val filePart = MultipartBody.Part.createFormData("file", fileName, fileStream)
+        val filePart = MultipartBody.Part.createFormData("file", name, fileStream)
         try {
-            val response =  connector.upload(filePart, toDirectory).execute()
+            val dir = toDir.removePrefix("/")
+            val response = connector.upload(filePart, dir).execute()
             if (!response.isSuccessful) throw IOException("uploadLocalCopy: isNotSuccessful")
         }catch (t: IOException){
             Log.e("LOG:DownloadManager", "uploadLocalCopy: ${t.message}")

@@ -29,6 +29,9 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+    aaptOptions{
+        noCompress "tflite"
+    }
 }
 
 dependencies {
@@ -40,6 +43,8 @@ dependencies {
     implementation 'androidx.work:work-runtime-ktx:2.3.1'
     implementation 'com.squareup.retrofit2:retrofit:2.7.1'
     implementation 'com.squareup.retrofit2:converter-scalars:2.7.1'
+    implementation 'org.tensorflow:tensorflow-lite:0.0.0-nightly'
+    implementation 'com.google.code.gson:gson:2.8.5'
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
