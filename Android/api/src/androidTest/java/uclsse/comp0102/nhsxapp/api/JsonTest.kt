@@ -12,9 +12,9 @@ import java.net.URI
 
 class JsonTest {
 
-    private lateinit var file: JsonGlobalFile
+    private var file: JsonGlobalFile? = null
     private val context = ApplicationProvider.getApplicationContext<Context>()
-    private val onlineUrl = URI.create("http://10.0.2.2:5000/static/")
+    private val onlineUrl = URI.create("http://10.0.2.2:5000/")
     private val localUri = context.filesDir.toURI()
     private val name = "test.json"
 
@@ -55,23 +55,26 @@ class JsonTest {
 
     @After
     fun tearDown() {
-        if (file.exists()) file.delete()
+        if (file != null && file!!.exists()) file?.delete()
     }
 
     @Test
     fun testStoreDataAndOverwriteDuplication() {
-        file.storeDataAndOverwriteDuplication(testData_1)
-        assertThat(file.readText()).isEqualTo(testStr_1)
-        file.storeDataAndOverwriteDuplication(testData_2)
-        assertThat(file.readText()).isEqualTo(testStr_2)
+        file?.pull("static")
+        file?.storeDataAndOverwriteDuplication(testData_1)
+        assertThat(file?.readText()).isEqualTo(testStr_1)
+        file?.storeDataAndOverwriteDuplication(testData_2)
+        file?.push("uploader")
+        assertThat(file?.readText()).isEqualTo(testStr_2)
     }
 
     @Test
     fun testStoreDataAndAccumulateDuplication() {
-        file.storeDataAndOverwriteDuplication(testData_1)
-        file.storeDataAndAccumulateDuplication(testData_2)
-        assertThat(file.readText()).isEqualTo(testStr_1Plus2)
+        file?.pull("static")
+        file?.storeDataAndOverwriteDuplication(testData_1)
+        file?.storeDataAndAccumulateDuplication(testData_2)
+        file?.push("uploader")
+        assertThat(file?.readText()).isEqualTo(testStr_1Plus2)
     }
-
 
 }
