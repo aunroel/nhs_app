@@ -1,1 +1,10 @@
-<manifest package="uclsse.comp0102.nhsxapp.api" />
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest package="uclsse.comp0102.nhsxapp.api"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application android:usesCleartextTraffic="true" /><!--TODO: MAKE IT FALSE WHEN RELEASE-->
+</manifest>

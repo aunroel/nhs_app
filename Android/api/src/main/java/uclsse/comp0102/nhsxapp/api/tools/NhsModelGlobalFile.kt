@@ -9,28 +9,22 @@ open class NhsModelGlobalFile(
     fileName: String
 ) : GlobalFile(onlinePath, localPath, fileName) {
 
-    private var tfLiteInterpreter: Interpreter
-    private val _tfLiteOptions: Interpreter.Options
+    private var tfLiteInterpreter: Interpreter? = null
+    private val _tfLiteOptions: Interpreter.Options = Interpreter.Options()
 
     val tfLiteOptions
         get() = _tfLiteOptions
 
-    init {
-        super.pull("")
-        tfLiteInterpreter = Interpreter(this)
-        _tfLiteOptions = Interpreter.Options()
-    }
-
     override fun pull(fromDir: String) {
-        super.pull("")
-        tfLiteInterpreter.close()
+        super.pull(fromDir)
+        tfLiteInterpreter?.close()
         tfLiteInterpreter = Interpreter(this)
     }
 
     open fun predict(input: FloatArray, output: FloatArray) {
         val inputArray = arrayOf(input)
         val outputArray = arrayOf(output)
-        tfLiteInterpreter.run(inputArray, outputArray)
+        tfLiteInterpreter!!.run(inputArray, outputArray)
     }
 
 

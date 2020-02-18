@@ -1,9 +1,9 @@
 package uclsse.comp0102.nhsxapp.api.tools
 
 import android.util.Log
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -60,19 +60,23 @@ open class GlobalFile(
         }catch(t: IOException){
             t.printStackTrace()
             Log.e("LOG:DownloadManager", "updateLocalCopy: ${t.message}")
+            throw t
         }
     }
 
 
     open fun push(toDir: String = "") {
-        val requestBody = this.asRequestBody("application/octet-stream".toMediaTypeOrNull())
+        val octetStreamType = "application/octet-stream"
+        val requestBody = RequestBody.create(MediaType.parse(octetStreamType), this)
         val filePart = MultipartBody.Part.createFormData("file", name, requestBody)
         try {
             val dir = toDir.removePrefix("/")
             val response = connector.upload(filePart, dir).execute()
             if (!response.isSuccessful) throw IOException("uploadLocalCopy: isNotSuccessful")
         }catch (t: IOException){
+            t.printStackTrace()
             Log.e("LOG:DownloadManager", "uploadLocalCopy: ${t.message}")
+            throw t
         }
     }
 

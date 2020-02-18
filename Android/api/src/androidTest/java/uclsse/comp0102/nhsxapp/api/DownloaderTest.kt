@@ -14,49 +14,48 @@ import java.net.URI
 @RunWith(AndroidJUnit4::class)
 class DownloaderTest {
 
-    private lateinit var file: GlobalFile
+    private var file: GlobalFile? = null
 
     private val context = getApplicationContext<Context>()
-    private val onlineUrl = URI.create("http://10.0.2.2:5000/static/")
+    private val onlineUrl = URI.create("http://10.0.2.2:5000/")
     private val localUri = context.filesDir.toURI()
     private val name = "test.txt"
+    private val contentStr = "TEST FILE!!!"
 
     @Before
     fun setUp() {
-        file = GlobalFile(
-            onlineUrl,
-            localUri,
-            name
-        )
+        file = GlobalFile(onlineUrl, localUri, name)
     }
 
     @Test
     fun testFilePath() {
-        assertThat(file.path).isEqualTo(localUri.path + name)
+        assertThat(file?.path).isEqualTo(localUri.path + name)
     }
 
     @Test
     fun testDownloadedData() {
-        file.pull()
-        assertThat(file.isFile).isTrue()
-        assertThat(file.name).isEqualTo("test.txt")
+        assertThat(file).isNotNull()
+        file!!.pull("static")
+        assertThat(file!!.isFile).isTrue()
+        assertThat(file!!.readText()).isEqualTo(contentStr)
     }
 
     @Test
     fun testUploadData() {
+        assertThat(file).isNotNull()
         val newData = "NEW FILE!!!"
-        file.pull()
-        file.writeText(newData)
-        file.push("/uploader")
-        file.pull()
-        assertThat(file.readLines().toString()).isEqualTo("[$newData]")
+        file!!.pull("static")
+        file!!.writeText(newData)
+        file!!.push("uploader")
+        file!!.pull("static")
+        assertThat(file!!.readLines().toString()).isEqualTo("[$newData]")
 
     }
 
 
     @After
     fun tear() {
-        file.delete()
+        if (file != null && file!!.exists()) file?.delete()
     }
 
 }
