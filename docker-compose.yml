@@ -1,0 +1,40 @@
+version : "3.2"
+
+services :
+
+  nhs_fed_dev:
+    container_name: nhs_fed_dev_container
+    image: flask-image
+    ports:
+      - "80:5000"
+    volumes:
+      - type: bind
+        source: /Users/feanor/Documents/NHS/nhs_app/
+        target: /app/
+    networks:
+      - nhs-fed-network
+#    restart: unless-stopped
+
+  db_dev:
+    container_name: postgres_dev_container
+    image: postgres
+    environment:
+      POSTGRES_USER: "nhsx"
+      POSTGRES_PASSWORD: "federatedLearning"
+      POSTGRES_DB: "fed_db"
+      PGDATA: /data/postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgvol_dev:/data/postgresql
+    networks:
+      - nhs-fed-network
+    restart: unless-stopped
+
+networks :
+  nhs-fed-network :
+    driver : bridge
+
+volumes:
+  pgvol_dev:
+  nhs_fed_dev:

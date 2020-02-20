@@ -1,7 +1,7 @@
 FROM python:3.6-alpine
 LABEL maintainer "Roman Matios <ucabrm0@ucl.ac.uk>"
-COPY . /app
-WORKDIR /app
+#COPY . /app
+#WORKDIR /app
 RUN \
  apk add --no-cache bash && \
  apk add --no-cache postgresql-libs && \
