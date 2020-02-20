@@ -9,7 +9,7 @@ services :
       - "80:5000"
     volumes:
       - type: bind
-        source: /Users/feanor/Documents/NHS/nhs_app/
+        source: ./
         target: /app/
     networks:
       - nhs-fed-network
