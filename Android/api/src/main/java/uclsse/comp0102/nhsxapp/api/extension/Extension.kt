@@ -1,5 +1,7 @@
 package uclsse.comp0102.nhsxapp.api.extension
 
+import java.net.URI
+
 
 infix fun Number.plus(other: Number): Number {
     return when (this) {
@@ -31,4 +33,16 @@ fun Class<*>.isNumber(): Boolean {
         Byte::class.java, Char::class.java
     )
     return this in numberClassTypes
+}
+
+fun URI.merge(subDir: String, fileName: String = ""): URI {
+    val tmpUri = this.toString().removeSuffix("/")
+    val tmpSubDir = subDir.removeSurrounding("/")
+    val tmpFileName = fileName.removeSurrounding("/")
+    return URI("$tmpUri/$tmpSubDir/$tmpFileName")
+}
+
+fun String.formatUriSubDir(): String {
+    return this.replace("//", "/")
+        .removeSurrounding("/")
 }

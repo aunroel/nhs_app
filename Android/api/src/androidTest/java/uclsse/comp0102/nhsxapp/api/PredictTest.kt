@@ -7,7 +7,7 @@ import com.google.common.truth.Truth
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import uclsse.comp0102.nhsxapp.api.tools.NhsModelGlobalFile
+import uclsse.comp0102.nhsxapp.api.repository.files.NhsModelGlobalFile
 import java.net.URI
 
 class PredictTest {
@@ -31,7 +31,7 @@ class PredictTest {
 
     @Test
     fun testPredict() {
-        file?.pull("static")
+        file?.downloadOnlineVersion("static")
         val input = floatArrayOf(-1f, -1f)
         val expectedOutputRange = Range.closed(-3 - 0.2f, -3 + 0.2f)
         val outputContainer = FloatArray(1)

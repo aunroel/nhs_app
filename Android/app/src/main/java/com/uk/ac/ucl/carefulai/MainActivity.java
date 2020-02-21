@@ -18,6 +18,8 @@ import com.uk.ac.ucl.carefulai.ui.start.StartActivity;
 import java.util.Calendar;
 import java.util.List;
 
+import uclsse.comp0102.nhsxapp.api.NhsAPI;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int STORAGE_CODE = 999;
@@ -81,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             startActivity(new Intent(this, AppActivity.class));
         }
+        NhsAPI.Companion.setContext(getApplicationContext());
     }
 
 }
