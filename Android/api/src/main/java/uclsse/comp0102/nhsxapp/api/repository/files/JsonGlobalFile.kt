@@ -1,6 +1,8 @@
-package uclsse.comp0102.nhsxapp.api.tools
+package uclsse.comp0102.nhsxapp.api.repository.files
 
+import android.util.Log
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import uclsse.comp0102.nhsxapp.api.extension.isNumber
 import uclsse.comp0102.nhsxapp.api.extension.plus
@@ -12,11 +14,15 @@ class JsonGlobalFile(
     fileName: String
 ) : GlobalFile(onlinePath, localPath, fileName) {
 
-    companion object {
-        private val gJson = Gson()
-    }
+    private val gJson: Gson = Gson()
+    private val dataMap: MutableMap<String, Number> = mutableMapOf()
 
-    private val dataMap: MutableMap<String, Number> = mutableMapOf<String, Number>()
+    init {
+        if (exists()) {
+            val data = fromJsonStrToNumberMap(readText())
+            dataMap.putAll(data)
+        }
+    }
 
 
     fun storeDataAndOverwriteDuplication(data: Any) {
@@ -54,12 +60,23 @@ class JsonGlobalFile(
         writeText(gJson.toJson(dataMap))
     }
 
-    override fun pull(fromDir: String) {
-        super.pull(fromDir)
-        val mapType = object : TypeToken<MutableMap<String, Number>>() {}.type
-        val map: MutableMap<String, Number> = gJson.fromJson(readText(), mapType)
+    override fun downloadOnlineVersion(fromDir: String) {
+        super.downloadOnlineVersion(fromDir)
         dataMap.clear()
-        dataMap.putAll(map)
+        dataMap.putAll(fromJsonStrToNumberMap(readText()))
+    }
+
+
+    fun toMap(): Map<String, Number> {
+        return dataMap
+    }
+
+    private fun fromJsonStrToNumberMap(jsonStr: String): MutableMap<String, Number> = try {
+        val mapType = object : TypeToken<MutableMap<String, Number>>() {}.type
+        gJson.fromJson(jsonStr, mapType)
+    } catch (e: JsonSyntaxException) {
+        Log.d("JsonGlobalFile.fromJsonStrToNumberMap", "$jsonStr(Syntax is incorrect)")
+        throw e
     }
 
 }

@@ -7,18 +7,22 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import uclsse.comp0102.nhsxapp.api.NhsAPI;
+
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME = "User_data.db";
-    public static final String TABLE_NAME = "Weekly_data";
-    public static final String TABLE_NAME_2 = "Weekly_Feedback";
-    public static final String COL_1 = "WEEK_NUM";
-    public static final String COL_2 = "STEPS_COUNTED";
-    public static final String COL_3 = "CALLS_COUNT";
-    public static final String COL_4 = "TEXTS_COUNT";
-    public static final String COL_5 = "SCORE";
-    public static final String COL_2_2 = "SCORE";
-    public static final String COL_3_2 = "FEEDBACK";
+    private static final String DATABASE_NAME = "User_data.db";
+    private static final String TABLE_NAME = "Weekly_data";
+    private static final String TABLE_NAME_2 = "Weekly_Feedback";
+    private static final String COL_1 = "WEEK_NUM";
+    private static final String COL_2 = "STEPS_COUNTED";
+    private static final String COL_3 = "CALLS_COUNT";
+    private static final String COL_4 = "TEXTS_COUNT";
+    private static final String COL_5 = "SCORE";
+    private static final String COL_2_2 = "SCORE";
+    private static final String COL_3_2 = "FEEDBACK";
+    private NhsAPI nhsAPI = NhsAPI.Companion.getInstance();
+
 
 
     public DatabaseHelper(Context context) {
@@ -46,6 +50,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_3, callscount);
         contentValues.put(COL_4, textcount);
         long result = db.insert(TABLE_NAME, null, contentValues);
+        nhsAPI.store(new DataClass(stepscount, callscount, textcount));
         return result != -1;
     }
 

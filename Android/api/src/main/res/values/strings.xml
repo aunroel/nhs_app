@@ -1,1 +1,8 @@
-<resources />
+<resources>
+    <string name="SERVER_ADDRESS">http://127.0.0.1:5000/</string>
+    <string name="SERVER_REPOSITORY_DIR">file/</string>
+    <string name="JSON_DATA_FILE_NAME">/test_data.json</string>
+    <string name="JSON_BACKUP_FILE_NAME">/test_data.json</string>
+    <string name="JSON_BACKUP_FILE_DEFAULT_CONTENT">{}</string>
+    <string name="MODEL_FILE_NAME">/test.tflite</string>
+</resources>

@@ -1,4 +1,4 @@
-package uclsse.comp0102.nhsxapp.api.tools
+package uclsse.comp0102.nhsxapp.api.repository.files
 
 import org.tensorflow.lite.Interpreter
 import java.net.URI
@@ -15,8 +15,8 @@ open class NhsModelGlobalFile(
     val tfLiteOptions
         get() = _tfLiteOptions
 
-    override fun pull(fromDir: String) {
-        super.pull(fromDir)
+    override fun downloadOnlineVersion(fromDir: String) {
+        super.downloadOnlineVersion(fromDir)
         tfLiteInterpreter?.close()
         tfLiteInterpreter = Interpreter(this)
     }
@@ -24,7 +24,7 @@ open class NhsModelGlobalFile(
     open fun predict(input: FloatArray, output: FloatArray) {
         val inputArray = arrayOf(input)
         val outputArray = arrayOf(output)
-        tfLiteInterpreter!!.run(inputArray, outputArray)
+        tfLiteInterpreter?.run(inputArray, outputArray)
     }
 
 

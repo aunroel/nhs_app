@@ -33,4 +33,5 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:truth:1.2.0'
     testImplementation 'junit:junit:4.13'
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+    compile project(path: ':api')
 }

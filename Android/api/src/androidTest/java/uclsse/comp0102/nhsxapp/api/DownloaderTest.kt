@@ -8,7 +8,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import uclsse.comp0102.nhsxapp.api.tools.GlobalFile
+import uclsse.comp0102.nhsxapp.api.repository.files.GlobalFile
 import java.net.URI
 
 @RunWith(AndroidJUnit4::class)
@@ -17,7 +17,7 @@ class DownloaderTest {
     private var file: GlobalFile? = null
 
     private val context = getApplicationContext<Context>()
-    private val onlineUrl = URI.create("http://10.0.2.2:5000/")
+    private val onlineUrl = URI.create("http://10.0.2.2:5000/file/")
     private val localUri = context.filesDir.toURI()
     private val name = "test.txt"
     private val contentStr = "TEST FILE!!!"
@@ -35,7 +35,7 @@ class DownloaderTest {
     @Test
     fun testDownloadedData() {
         assertThat(file).isNotNull()
-        file!!.pull("static")
+        file!!.downloadOnlineVersion()
         assertThat(file!!.isFile).isTrue()
         assertThat(file!!.readText()).isEqualTo(contentStr)
     }
@@ -44,10 +44,10 @@ class DownloaderTest {
     fun testUploadData() {
         assertThat(file).isNotNull()
         val newData = "NEW FILE!!!"
-        file!!.pull("static")
+        file!!.downloadOnlineVersion()
         file!!.writeText(newData)
-        file!!.push("uploader")
-        file!!.pull("static")
+        file!!.uploadLocalVersion()
+        file!!.downloadOnlineVersion()
         assertThat(file!!.readLines().toString()).isEqualTo("[$newData]")
 
     }

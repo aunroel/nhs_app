@@ -6,7 +6,7 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import uclsse.comp0102.nhsxapp.api.tools.JsonGlobalFile
+import uclsse.comp0102.nhsxapp.api.repository.files.JsonGlobalFile
 import java.net.URI
 
 
@@ -60,20 +60,20 @@ class JsonTest {
 
     @Test
     fun testStoreDataAndOverwriteDuplication() {
-        file?.pull("static")
+        file?.downloadOnlineVersion("static")
         file?.storeDataAndOverwriteDuplication(testData_1)
         assertThat(file?.readText()).isEqualTo(testStr_1)
         file?.storeDataAndOverwriteDuplication(testData_2)
-        file?.push("uploader")
+        file?.uploadLocalVersion()
         assertThat(file?.readText()).isEqualTo(testStr_2)
     }
 
     @Test
     fun testStoreDataAndAccumulateDuplication() {
-        file?.pull("static")
+        file?.downloadOnlineVersion("static")
         file?.storeDataAndOverwriteDuplication(testData_1)
         file?.storeDataAndAccumulateDuplication(testData_2)
-        file?.push("uploader")
+        file?.uploadLocalVersion()
         assertThat(file?.readText()).isEqualTo(testStr_1Plus2)
     }
 
