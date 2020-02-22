@@ -21,13 +21,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_5 = "SCORE";
     private static final String COL_2_2 = "SCORE";
     private static final String COL_3_2 = "FEEDBACK";
-    private NhsAPI nhsAPI = NhsAPI.Companion.getInstance();
+
+    private NhsAPI nhsAPI;
 
 
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
         SQLiteDatabase db = this.getWritableDatabase();
+        nhsAPI = NhsAPI.Companion.getInstance(context);
     }
 
     @Override

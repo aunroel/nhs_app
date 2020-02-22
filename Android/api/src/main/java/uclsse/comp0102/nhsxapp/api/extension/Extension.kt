@@ -1,6 +1,7 @@
 package uclsse.comp0102.nhsxapp.api.extension
 
 import java.net.URI
+import java.net.URL
 
 
 infix fun Number.plus(other: Number): Number {
@@ -42,7 +43,11 @@ fun URI.merge(subDir: String, fileName: String = ""): URI {
     return URI("$tmpUri/$tmpSubDir/$tmpFileName")
 }
 
-fun String.formatUriSubDir(): String {
+fun String.formatSubDir(): String {
     return this.replace("//", "/")
         .removeSurrounding("/")
+}
+
+fun String.toURL(): URL {
+    return URL(this)
 }

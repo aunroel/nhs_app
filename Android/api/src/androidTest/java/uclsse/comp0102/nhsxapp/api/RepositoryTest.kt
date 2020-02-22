@@ -5,9 +5,9 @@ import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import uclsse.comp0102.nhsxapp.api.repository.NhsRepository
-import uclsse.comp0102.nhsxapp.api.repository.files.GlobalFile
-import uclsse.comp0102.nhsxapp.api.repository.files.JsonGlobalFile
-import uclsse.comp0102.nhsxapp.api.repository.files.NhsModelGlobalFile
+import uclsse.comp0102.nhsxapp.api.repository.files.JsonFile
+import uclsse.comp0102.nhsxapp.api.repository.files.MlFile
+import uclsse.comp0102.nhsxapp.api.repository.files.OnlineFile
 import java.io.File
 import java.net.URI
 
@@ -34,17 +34,17 @@ class RepositoryTest {
         val newGlobalFile = repository.FileBuilder()
             .setFileName("test.txt")
             .setFileSubDir("file")
-            .build(GlobalFile::class.java)
+            .build(OnlineFile::class.java)
 
         val newJsonFile = repository.FileBuilder()
             .setFileName("test.json")
             .setFileSubDir("file")
-            .build(JsonGlobalFile::class.java)
+            .build(JsonFile::class.java)
 
         val newTfFile = repository.FileBuilder()
             .setFileName("test.tflite")
             .setFileSubDir("file")
-            .build(NhsModelGlobalFile::class.java)
+            .build(MlFile::class.java)
 
         repository.add(newGlobalFile)
         repository.add(newJsonFile)

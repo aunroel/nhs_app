@@ -6,13 +6,13 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import uclsse.comp0102.nhsxapp.api.repository.files.JsonGlobalFile
+import uclsse.comp0102.nhsxapp.api.repository.files.JsonFile
 import java.net.URI
 
 
 class JsonTest {
 
-    private var file: JsonGlobalFile? = null
+    private var file: JsonFile? = null
     private val context = ApplicationProvider.getApplicationContext<Context>()
     private val onlineUrl = URI.create("http://10.0.2.2:5000/")
     private val localUri = context.filesDir.toURI()
@@ -50,7 +50,7 @@ class JsonTest {
 
     @Before
     fun setUp() {
-        file = JsonGlobalFile(onlineUrl, localUri, name)
+        file = JsonFile(onlineUrl, localUri, name)
     }
 
     @After
@@ -61,9 +61,9 @@ class JsonTest {
     @Test
     fun testStoreDataAndOverwriteDuplication() {
         file?.downloadOnlineVersion("static")
-        file?.storeDataAndOverwriteDuplication(testData_1)
+        file?.storeAndOverwrite(testData_1)
         assertThat(file?.readText()).isEqualTo(testStr_1)
-        file?.storeDataAndOverwriteDuplication(testData_2)
+        file?.storeAndOverwrite(testData_2)
         file?.uploadLocalVersion()
         assertThat(file?.readText()).isEqualTo(testStr_2)
     }
@@ -71,8 +71,8 @@ class JsonTest {
     @Test
     fun testStoreDataAndAccumulateDuplication() {
         file?.downloadOnlineVersion("static")
-        file?.storeDataAndOverwriteDuplication(testData_1)
-        file?.storeDataAndAccumulateDuplication(testData_2)
+        file?.storeAndOverwrite(testData_1)
+        file?.storeAndAccumulate(testData_2)
         file?.uploadLocalVersion()
         assertThat(file?.readText()).isEqualTo(testStr_1Plus2)
     }
