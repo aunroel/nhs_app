@@ -7,12 +7,12 @@ import com.google.common.truth.Truth
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import uclsse.comp0102.nhsxapp.api.repository.files.NhsModelGlobalFile
+import uclsse.comp0102.nhsxapp.api.repository.files.MlFile
 import java.net.URI
 
 class PredictTest {
 
-    private var file: NhsModelGlobalFile? = null
+    private var file: MlFile? = null
     private val context = ApplicationProvider.getApplicationContext<Context>()
     private val onlineUrl = URI.create("http://10.0.2.2:5000/")
     private val localUri = context.filesDir.toURI()
@@ -21,7 +21,7 @@ class PredictTest {
 
     @Before
     fun setUp() {
-        file = NhsModelGlobalFile(onlineUrl, localUri, name)
+        file = MlFile(onlineUrl, localUri, name)
     }
 
     @After

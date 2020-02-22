@@ -15,6 +15,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import java.util.Calendar;
 import java.util.Date;
 
+import uclsse.comp0102.nhsxapp.api.NhsAPI;
+
 import static java.lang.StrictMath.abs;
 
 public class Alarm extends BroadcastReceiver {
@@ -31,7 +33,7 @@ public class Alarm extends BroadcastReceiver {
 
     private Date intervaldate;
 
-    private Model model;
+    private NhsAPI nhsAPI;
 
     public static float[] inputstandardise(float[] f) {            //this is very long-winded, but is because there is no easy-to-implement standardisation function in TF
         f[0] = ((f[0] - 62979) / (float) 24589.1687);        //mean and st.dev values calculated from original dataset
@@ -99,7 +101,7 @@ public class Alarm extends BroadcastReceiver {
         }
 
 
-        model = new Model();
+        nhsAPI = NhsAPI.Companion.getInstance(context);
 
         myDb = new DatabaseHelper(context);
 
@@ -118,7 +120,7 @@ public class Alarm extends BroadcastReceiver {
 
             editor.apply();
 
-            model.calculateScore(abs(lifeDataUpdate.getStepsCount()), abs(lifeDataUpdate.getCurrentCallsCount()), abs(lifeDataUpdate.getMessageCount()));
+            nhsAPI.getTrainingScore(abs(lifeDataUpdate.getStepsCount()), abs(lifeDataUpdate.getCurrentCallsCount()), abs(lifeDataUpdate.getMessageCount()));
 
             boolean isInserted = myDb.insertData(lifeDataUpdate.getStepsCount(), lifeDataUpdate.getCurrentCallsCount(), lifeDataUpdate.getMessageCount());
 
@@ -141,7 +143,7 @@ public class Alarm extends BroadcastReceiver {
 
                 editor.apply();
 
-                model.calculateScore(abs(lifeDataUpdate.getStepsCount()), abs(lifeDataUpdate.getCurrentCallsCount()), abs(lifeDataUpdate.getMessageCount()));
+                nhsAPI.getTrainingScore(abs(lifeDataUpdate.getStepsCount()), abs(lifeDataUpdate.getCurrentCallsCount()), abs(lifeDataUpdate.getMessageCount()));
 
                 boolean isInserted = myDb.insertData(lifeDataUpdate.getStepsCount(), lifeDataUpdate.getCurrentCallsCount(), lifeDataUpdate.getMessageCount());
 

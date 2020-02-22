@@ -1,3 +1,9 @@
+ext {
+    worker_version = '2.3.2'
+    retrofit_version = '2.7.1'
+    room_version = '2.2.4'
+    tensorflow_lite_version = '0.0.0-nightly'
+}
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -38,16 +44,17 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.work:work-runtime-ktx:2.3.1'
-    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
-    implementation 'com.squareup.retrofit2:converter-scalars:2.7.1'
+    implementation "androidx.work:work-runtime-ktx:${worker_version}"
+    implementation "com.squareup.retrofit2:retrofit:${retrofit_version}"
+    implementation "com.squareup.retrofit2:converter-scalars:${retrofit_version}"
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.google.guava:guava:28.2-jre'
-
-    implementation 'org.tensorflow:tensorflow-lite:0.0.0-nightly'
+    implementation "org.tensorflow:tensorflow-lite:${tensorflow_lite_version}"
+    implementation "androidx.room:room-runtime:${room_version}"
+    annotationProcessor "androidx.room:room-compiler:${room_version}"
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    androidTestImplementation 'androidx.work:work-testing:2.3.1'
+    androidTestImplementation "androidx.work:work-testing:${worker_version}"
     androidTestImplementation 'androidx.test.ext:truth:1.2.0'
     testImplementation 'junit:junit:4.13'
 }

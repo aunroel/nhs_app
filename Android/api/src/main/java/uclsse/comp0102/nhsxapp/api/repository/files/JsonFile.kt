@@ -6,27 +6,19 @@ import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import uclsse.comp0102.nhsxapp.api.extension.isNumber
 import uclsse.comp0102.nhsxapp.api.extension.plus
-import java.net.URI
+import uclsse.comp0102.nhsxapp.api.repository.database.BinaryData
+import java.net.URL
 
-class JsonGlobalFile(
-    onlinePath: URI,
-    localPath: URI,
-    fileName: String
-) : GlobalFile(onlinePath, localPath, fileName) {
+class JsonFile(onHost: URL, core: BinaryData) : OnlineFile(onHost, core) {
 
     private val gJson: Gson = Gson()
-    private val dataMap: MutableMap<String, Number> = mutableMapOf()
 
-    init {
-        if (exists()) {
-            val data = fromJsonStrToNumberMap(readText())
-            dataMap.putAll(data)
-        }
+    private companion object {
+        val DEFAULT_CHARSETS = Charsets.UTF_8
     }
 
-
-    fun storeDataAndOverwriteDuplication(data: Any) {
-        dataMap.clear()
+    fun storeAndOverwrite(data: Any) {
+        val dataMap = mutableMapOf<String, Number>()
         val reflectedClass = data::class.java
         reflectedClass.declaredFields
             .filter { field -> field.type.isNumber() }
@@ -36,15 +28,17 @@ class JsonGlobalFile(
                 dataMap[numberField.name] = numberField.get(data) as Number
                 numberField.isAccessible = fieldAccessibilityBackup
             }
-        writeText(gJson.toJson(dataMap))
+        val newDataBytes = gJson.toJson(dataMap).toByteArray(DEFAULT_CHARSETS)
+        writeBytes(newDataBytes)
     }
 
-    fun storeDataAndAccumulateDuplication(data: Any) {
+    fun storeAndAccumulate(data: Any) {
+        val previousJsonStr = readBytes().toString(DEFAULT_CHARSETS)
+        val dataMap = fromJsonStrToNumberMap(previousJsonStr)
         val reflectedClass = data::class.java
         reflectedClass.declaredFields
-            .filter { field ->
-                field.type.isNumber()
-            }.forEach { numberField ->
+            .filter { field -> field.type.isNumber() }
+            .forEach { numberField ->
                 val fieldAccessibilityBackup = numberField.isAccessible
                 numberField.isAccessible = true
                 val fieldName = numberField.name
@@ -57,18 +51,13 @@ class JsonGlobalFile(
                 }
                 numberField.isAccessible = fieldAccessibilityBackup
             }
-        writeText(gJson.toJson(dataMap))
+        val newDataBytes = gJson.toJson(dataMap).toByteArray(DEFAULT_CHARSETS)
+        writeBytes(newDataBytes)
     }
 
-    override fun downloadOnlineVersion(fromDir: String) {
-        super.downloadOnlineVersion(fromDir)
-        dataMap.clear()
-        dataMap.putAll(fromJsonStrToNumberMap(readText()))
-    }
-
-
-    fun toMap(): Map<String, Number> {
-        return dataMap
+    fun <T : Any> read(type: Class<T>): T {
+        val jsonStr = readBytes().toString(DEFAULT_CHARSETS)
+        return gJson.fromJson(jsonStr, type)
     }
 
     private fun fromJsonStrToNumberMap(jsonStr: String): MutableMap<String, Number> = try {

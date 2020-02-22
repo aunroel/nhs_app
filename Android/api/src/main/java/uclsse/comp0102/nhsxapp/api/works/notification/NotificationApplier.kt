@@ -1,4 +1,4 @@
-package uclsse.comp0102.nhsxapp.api.periodical.notification
+package uclsse.comp0102.nhsxapp.api.works.notification
 
 import android.app.Notification
 import android.app.NotificationChannel
