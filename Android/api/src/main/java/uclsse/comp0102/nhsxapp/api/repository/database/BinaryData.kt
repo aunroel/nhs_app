@@ -16,6 +16,11 @@ data class BinaryData(
     @ColumnInfo(name = "file_contents", typeAffinity = ColumnInfo.BLOB)
     var data: ByteArray = ByteArray(0)
 ) {
+    val name: String
+        get() = subDirWithFileName.substringAfter('/')
+    val subDir: String
+        get() = subDirWithFileName.substringBeforeLast('/').removePrefix("/")
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

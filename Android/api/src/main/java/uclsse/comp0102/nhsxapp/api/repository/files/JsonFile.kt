@@ -7,11 +7,10 @@ import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import uclsse.comp0102.nhsxapp.api.extension.isNumber
 import uclsse.comp0102.nhsxapp.api.extension.plus
-import uclsse.comp0102.nhsxapp.api.repository.database.BinaryData
 import java.net.URL
 
-class JsonFile(onHost: URL, appContext: Context, core: BinaryData) :
-    OnlineFile(onHost, appContext, core) {
+class JsonFile(onHost: URL, subDir: String, appContext: Context) :
+    OnlineFile(onHost, subDir, appContext) {
 
     private val gJson: Gson = Gson()
     private val utf8Charset = Charsets.UTF_8
