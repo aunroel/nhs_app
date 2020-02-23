@@ -1,4 +1,4 @@
-package uclsse.comp0102.nhsxapp.api.works.notification
+package uclsse.comp0102.nhsxapp.api.background.notification
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -7,7 +7,7 @@ import android.content.Context
 import androidx.core.app.NotificationCompat
 import androidx.work.ForegroundInfo
 
-class ForegroundNotificationApplier constructor(
+class NotificationApplier(
     private val appContext: Context
 ) {
     private val foregroundNotificationsInfoList: MutableList<Notification>
@@ -18,12 +18,12 @@ class ForegroundNotificationApplier constructor(
         private const val CHANNEL_ID = "comp0102"
         private const val CHANNEL_NAME = "NHSX_BACKGROUND"
         private const val NOTIFICATION_TITLE = "NHSX"
-        private val core = mutableMapOf<Context, ForegroundNotificationApplier>()
+        private val core = mutableMapOf<Context, NotificationApplier>()
 
-        fun getInstance(byContext: Context): ForegroundNotificationApplier {
+        fun getInstance(byContext: Context): NotificationApplier {
             if (!core.containsKey(byContext))
                 core[byContext] =
-                    ForegroundNotificationApplier(
+                    NotificationApplier(
                         byContext
                     )
             return core[byContext]!!

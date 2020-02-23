@@ -1,16 +1,16 @@
-package uclsse.comp0102.nhsxapp.api.works
+package uclsse.comp0102.nhsxapp.api.background.workers
 
 import android.content.Context
 import androidx.work.*
 import uclsse.comp0102.nhsxapp.api.R
-import uclsse.comp0102.nhsxapp.api.repository.NhsRepository
+import uclsse.comp0102.nhsxapp.api.background.notification.NotificationApplier
+import uclsse.comp0102.nhsxapp.api.repository.NhsFileRepository
 import uclsse.comp0102.nhsxapp.api.repository.files.JsonFile
-import uclsse.comp0102.nhsxapp.api.works.notification.ForegroundNotificationApplier
 import java.util.*
 
 class FileUploadWorker : iNhsCoroutineWorker {
 
-    private lateinit var repository: NhsRepository
+    private lateinit var repository: NhsFileRepository
 
     override val workName = "Upload Task"
     override val workType = NhsUploadWork::class.java
@@ -33,11 +33,11 @@ class FileUploadWorker : iNhsCoroutineWorker {
     ) : CoroutineWorker(appContext, parameters) {
 
         override suspend fun doWork(): Result {
-            val repository = NhsRepository(appContext)
+            val repository = NhsFileRepository(appContext)
             val jsonFileSubDirWithName =
                 applicationContext.getString(R.string.JSON_FILE_NAME_WITH_SUB_DIR)
             val jsonFileFile = repository.access(JsonFile::class.java, jsonFileSubDirWithName)
-            val applier = ForegroundNotificationApplier.getInstance(applicationContext)
+            val applier = NotificationApplier.getInstance(applicationContext)
             setForeground(applier.apply("Upload Task"))
             jsonFileFile.upload()
             return Result.success()

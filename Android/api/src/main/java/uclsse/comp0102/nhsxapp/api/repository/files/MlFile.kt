@@ -1,11 +1,13 @@
 package uclsse.comp0102.nhsxapp.api.repository.files
 
+import android.content.Context
 import org.tensorflow.lite.Interpreter
 import uclsse.comp0102.nhsxapp.api.repository.database.BinaryData
 import java.net.URL
 import java.nio.ByteBuffer
 
-open class MlFile(onHost: URL, core: BinaryData) : OnlineFile(onHost, core) {
+class MlFile(onHost: URL, appContext: Context, core: BinaryData) :
+    OnlineFile(onHost, appContext, core) {
 
     private val tfLiteInterpreter: Interpreter
     private val _tfLiteOptions: Interpreter.Options

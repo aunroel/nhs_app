@@ -1,4 +1,4 @@
-package uclsse.comp0102.nhsxapp.api.works
+package uclsse.comp0102.nhsxapp.api.background.workers
 
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker

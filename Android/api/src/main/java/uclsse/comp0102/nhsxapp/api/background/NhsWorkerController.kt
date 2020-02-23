@@ -1,9 +1,9 @@
-package uclsse.comp0102.nhsxapp.api
+package uclsse.comp0102.nhsxapp.api.background
 
 import android.content.Context
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
-import uclsse.comp0102.nhsxapp.api.works.iNhsCoroutineWorker
+import uclsse.comp0102.nhsxapp.api.background.workers.iNhsCoroutineWorker
 import java.time.Duration
 
 class NhsWorkerController(appContext: Context) {
