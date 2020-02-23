@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="TEST_HOST_ADDRESS">http://10.0.2.2:5000/</string>
+
+    <!--String for testing .txt file-->
+    <string name="TEST_SRC_TXT_FILE_PATH" formatted="false">/file/test/txt/source.txt</string>
+    <string name="TEST_TAR_TXT_FILE_PATH" formatted="false">/file/test/txt/target.txt</string>
+    <string name="TEST_INIT_DATA_IN_SRC_FILE">DATA IN SOURCE FILE</string>
+    <string name="TEST_INIT_DATA_IN_TAR_FILE">DATA IN TARGET FILE</string>
+
+    <!--String for testing .json file-->
+    <string name="TEST_FIRST_JSON_FILE_PATH" formatted="false">/file/test/json/first.json</string>
+    <string name="TEST_SECOND_JSON_FILE_PATH" formatted="false">/file/test/json/second.json</string>
+    <string name="TEST_COMBINE_JSON_FILE_PATH" formatted="false">/file/test/json/combined.json</string>
+
+    <!--String for testing .txt file-->
+    <string name="TEST_MODEL_FILE_PATH" formatted="false">/file/test/model/model.tflite</string>
+
+
+</resources>

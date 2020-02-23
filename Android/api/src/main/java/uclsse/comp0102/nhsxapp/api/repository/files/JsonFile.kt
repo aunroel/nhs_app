@@ -9,8 +9,8 @@ import uclsse.comp0102.nhsxapp.api.extension.isNumber
 import uclsse.comp0102.nhsxapp.api.extension.plus
 import java.net.URL
 
-class JsonFile(onHost: URL, subDir: String, appContext: Context) :
-    OnlineFile(onHost, subDir, appContext) {
+class JsonFile(onHost: URL, subDirWithName: String, appContext: Context) :
+    OnlineFile(onHost, subDirWithName, appContext) {
 
     private val gJson: Gson = Gson()
     private val utf8Charset = Charsets.UTF_8

@@ -1,6 +1,7 @@
 package uclsse.comp0102.nhsxapp.api.extension
 
-import java.net.URI
+import com.google.gson.internal.LazilyParsedNumber
+import java.io.File
 import java.net.URL
 
 
@@ -20,6 +21,9 @@ infix fun Number.plus(other: Number): Number {
         is Byte -> {
             this.toByte() + other.toByte()
         }
+        is LazilyParsedNumber -> {
+            this.toFloat() + other.toFloat()
+        }
         else -> {
             throw UnsupportedOperationException("A unsupported number type ${this::class.java}")
         }
@@ -36,13 +40,6 @@ fun Class<*>.isNumber(): Boolean {
     return this in numberClassTypes
 }
 
-fun URI.merge(subDir: String, fileName: String = ""): URI {
-    val tmpUri = this.toString().removeSuffix("/")
-    val tmpSubDir = subDir.removeSurrounding("/")
-    val tmpFileName = fileName.removeSurrounding("/")
-    return URI("$tmpUri/$tmpSubDir/$tmpFileName")
-}
-
 fun String.formatSubDir(): String {
     return this.replace("//", "/")
         .removeSurrounding("/")
@@ -50,4 +47,12 @@ fun String.formatSubDir(): String {
 
 fun String.toURL(): URL {
     return URL(this)
+}
+
+fun File.createNewFileWithDirIfNotExist() {
+    if (this.exists()) return
+    val parentFile = this.parentFile
+    if (parentFile != null && !parentFile.exists())
+        parentFile.mkdirs()
+    this.createNewFile()
 }

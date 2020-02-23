@@ -5,7 +5,7 @@ import androidx.work.*
 import uclsse.comp0102.nhsxapp.api.R
 import uclsse.comp0102.nhsxapp.api.background.notification.NotificationApplier
 import uclsse.comp0102.nhsxapp.api.repository.NhsFileRepository
-import uclsse.comp0102.nhsxapp.api.repository.files.MlFile
+import uclsse.comp0102.nhsxapp.api.repository.files.ModelFile
 import java.util.*
 
 class FileDownloadWorker : iNhsCoroutineWorker {
@@ -33,10 +33,10 @@ class FileDownloadWorker : iNhsCoroutineWorker {
             val repository = NhsFileRepository(appContext)
             val tfLiteFileSubDirWithName =
                 applicationContext.getString(R.string.TFL_FILE_NAME_WITH_SUB_DIR)
-            val tfFileFile = repository.access(MlFile::class.java, tfLiteFileSubDirWithName)
+            val tfFileFile = repository.access(ModelFile::class.java, tfLiteFileSubDirWithName)
             val applier = NotificationApplier.getInstance(applicationContext)
             setForeground(applier.apply("Download Task"))
-            return if (tfFileFile.download()) Result.success() else Result.retry()
+            return if (tfFileFile.update()) Result.success() else Result.retry()
         }
     }
 }

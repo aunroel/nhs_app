@@ -4,7 +4,7 @@ import android.content.Context
 import uclsse.comp0102.nhsxapp.api.R
 import uclsse.comp0102.nhsxapp.api.extension.formatSubDir
 import uclsse.comp0102.nhsxapp.api.extension.toURL
-import uclsse.comp0102.nhsxapp.api.repository.database.BinaryData
+import uclsse.comp0102.nhsxapp.api.repository.database.BinaryDatabase
 import uclsse.comp0102.nhsxapp.api.repository.files.OnlineFile
 import java.net.URL
 
@@ -16,9 +16,13 @@ class NhsFileRepository(
     fun <T : OnlineFile> access(fileType: Class<T>, fromRelativePath: String): T {
         return fileType.getConstructor(
             URL::class.java,
-            Context::class.java,
-            BinaryData::class.java
+            String::class.java,
+            Context::class.java
         ).newInstance(hostAddress, fromRelativePath.formatSubDir(), context)
+    }
+
+    fun clearAllLocalCache() {
+        BinaryDatabase.getInstance(context).clearAllTables()
     }
 
 }
