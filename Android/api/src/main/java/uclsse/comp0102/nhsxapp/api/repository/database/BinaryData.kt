@@ -17,9 +17,14 @@ data class BinaryData(
     var data: ByteArray = ByteArray(0)
 ) {
     val name: String
-        get() = subDirWithFileName.substringAfter('/')
+        get() = subDirWithFileName
+            .substringAfterLast('/')
+
     val subDir: String
-        get() = subDirWithFileName.substringBeforeLast('/').removePrefix("/")
+        get() = subDirWithFileName
+            .substringBeforeLast('/')
+            .removeSurrounding("/")
+            .plus("/")
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

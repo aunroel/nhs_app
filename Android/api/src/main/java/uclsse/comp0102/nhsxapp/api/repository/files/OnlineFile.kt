@@ -11,19 +11,19 @@ import retrofit2.Retrofit
 import retrofit2.http.*
 import uclsse.comp0102.nhsxapp.api.extension.formatSubDir
 import uclsse.comp0102.nhsxapp.api.repository.database.BinaryData
-import uclsse.comp0102.nhsxapp.api.repository.database.BinaryDataBase
+import uclsse.comp0102.nhsxapp.api.repository.database.BinaryDatabase
 import java.io.IOException
 import java.net.URL
 
 open class OnlineFile(onHost: URL, subDirWithName: String, appContext: Context) {
 
     companion object {
-        private var flyWeightDatabase: BinaryDataBase? = null
+        private var flyWeightDatabase: BinaryDatabase? = null
         private val flyWeighConnectors: MutableMap<String, ServerConnector> = mutableMapOf()
         @Synchronized
-        private fun getDatabase(appContext: Context): BinaryDataBase {
+        private fun getDatabase(appContext: Context): BinaryDatabase {
             flyWeightDatabase = flyWeightDatabase
-                ?: BinaryDataBase.getInstance(appContext)
+                ?: BinaryDatabase.getInstance(appContext)
             return flyWeightDatabase!!
         }
 
@@ -41,7 +41,7 @@ open class OnlineFile(onHost: URL, subDirWithName: String, appContext: Context) 
     }
 
     private val connector: ServerConnector
-    private val database: BinaryDataBase
+    private val database: BinaryDatabase
     private val binaryData: BinaryData
 
     val isDirty: Boolean
@@ -101,7 +101,8 @@ open class OnlineFile(onHost: URL, subDirWithName: String, appContext: Context) 
 
     private fun downloadCore(fromDirWithFileName: String): ByteArray {
         val response = connector.download(fromDirWithFileName).execute()
-        if (!response.isSuccessful) throw IOException("updateLocalCopy: isNotSuccessful")
+        if (!response.isSuccessful)
+            throw IOException("updateLocalCopy: isNotSuccessful(${response.message()})")
         return response.body()?.bytes()
             ?: throw IOException("updateLocalCopy:isEmptyBody")
     }

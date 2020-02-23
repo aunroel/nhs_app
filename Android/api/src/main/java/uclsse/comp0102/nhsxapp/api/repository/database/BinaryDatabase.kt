@@ -6,21 +6,21 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(entities = [BinaryData::class], version = 1, exportSchema = false)
-abstract class BinaryDataBase : RoomDatabase() {
+abstract class BinaryDatabase : RoomDatabase() {
 
     abstract val dataAccessor: BinaryDataDao
 
     companion object {
         @Volatile
-        private var INSTANCE: BinaryDataBase? = null
+        private var INSTANCE: BinaryDatabase? = null
         private const val DATABASE_NAME = "online_file_database"
 
         @Synchronized
-        fun getInstance(context: Context): BinaryDataBase {
+        fun getInstance(context: Context): BinaryDatabase {
             if (INSTANCE != null) return INSTANCE!!
             val builder = Room.databaseBuilder(
                 context.applicationContext,
-                BinaryDataBase::class.java,
+                BinaryDatabase::class.java,
                 DATABASE_NAME
             )
             INSTANCE = builder

@@ -2,9 +2,12 @@ package uclsse.comp0102.nhsxapp.api
 
 import android.content.Context
 import uclsse.comp0102.nhsxapp.api.background.NhsWorkerController
+import uclsse.comp0102.nhsxapp.api.background.workers.FileDownloadWorker
+import uclsse.comp0102.nhsxapp.api.background.workers.FileUploadWorker
 import uclsse.comp0102.nhsxapp.api.repository.NhsFileRepository
 import uclsse.comp0102.nhsxapp.api.repository.files.JsonFile
-import uclsse.comp0102.nhsxapp.api.repository.files.MlFile
+import uclsse.comp0102.nhsxapp.api.repository.files.ModelFile
+import java.time.Duration
 
 
 class NhsAPI private constructor(appContext: Context) {
@@ -19,13 +22,15 @@ class NhsAPI private constructor(appContext: Context) {
     }
 
     private val jsonFile: JsonFile
-    private val mlFile: MlFile
+    private val modelFile: ModelFile
 
     init {
-        val workerController: NhsWorkerController = NhsWorkerController(appContext)
-        val fileRepository: NhsFileRepository = NhsFileRepository(appContext)
-        mlFile = fileRepository.access(
-            MlFile::class.java,
+        val workerController = NhsWorkerController(appContext)
+        workerController.startWork(FileDownloadWorker(), Duration.ofDays(7))
+        workerController.startWork(FileUploadWorker(), Duration.ofDays(7))
+        val fileRepository = NhsFileRepository(appContext)
+        modelFile = fileRepository.access(
+            ModelFile::class.java,
             appContext.getString(R.string.TFL_FILE_NAME_WITH_SUB_DIR)
         )
         jsonFile = fileRepository.access(
@@ -39,12 +44,12 @@ class NhsAPI private constructor(appContext: Context) {
         parameters.forEach { trainingDataSet.add(it.toFloat()) }
         val outputContainer = FloatArray(1)
         val inputContainer = trainingDataSet.toFloatArray()
-        mlFile.predict(inputContainer, outputContainer)
+        modelFile.predict(inputContainer, outputContainer)
         return outputContainer[0].toInt()
     }
 
     fun store(errorRate: Double): Boolean {
-        return false
+        TODO("store the value of $errorRate")
     }
 
     fun store(data: Any): Boolean {
