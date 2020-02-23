@@ -1,5 +1,6 @@
 package uclsse.comp0102.nhsxapp.api.repository.files
 
+import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -9,13 +10,12 @@ import uclsse.comp0102.nhsxapp.api.extension.plus
 import uclsse.comp0102.nhsxapp.api.repository.database.BinaryData
 import java.net.URL
 
-class JsonFile(onHost: URL, core: BinaryData) : OnlineFile(onHost, core) {
+class JsonFile(onHost: URL, appContext: Context, core: BinaryData) :
+    OnlineFile(onHost, appContext, core) {
 
     private val gJson: Gson = Gson()
+    private val utf8Charset = Charsets.UTF_8
 
-    private companion object {
-        val DEFAULT_CHARSETS = Charsets.UTF_8
-    }
 
     fun storeAndOverwrite(data: Any) {
         val dataMap = mutableMapOf<String, Number>()
@@ -28,12 +28,12 @@ class JsonFile(onHost: URL, core: BinaryData) : OnlineFile(onHost, core) {
                 dataMap[numberField.name] = numberField.get(data) as Number
                 numberField.isAccessible = fieldAccessibilityBackup
             }
-        val newDataBytes = gJson.toJson(dataMap).toByteArray(DEFAULT_CHARSETS)
+        val newDataBytes = gJson.toJson(dataMap).toByteArray(utf8Charset)
         writeBytes(newDataBytes)
     }
 
     fun storeAndAccumulate(data: Any) {
-        val previousJsonStr = readBytes().toString(DEFAULT_CHARSETS)
+        val previousJsonStr = readBytes().toString(utf8Charset)
         val dataMap = fromJsonStrToNumberMap(previousJsonStr)
         val reflectedClass = data::class.java
         reflectedClass.declaredFields
@@ -51,12 +51,12 @@ class JsonFile(onHost: URL, core: BinaryData) : OnlineFile(onHost, core) {
                 }
                 numberField.isAccessible = fieldAccessibilityBackup
             }
-        val newDataBytes = gJson.toJson(dataMap).toByteArray(DEFAULT_CHARSETS)
+        val newDataBytes = gJson.toJson(dataMap).toByteArray(utf8Charset)
         writeBytes(newDataBytes)
     }
 
-    fun <T : Any> read(type: Class<T>): T {
-        val jsonStr = readBytes().toString(DEFAULT_CHARSETS)
+    fun <T : Any> to(type: Class<T>): T {
+        val jsonStr = readBytes().toString(utf8Charset)
         return gJson.fromJson(jsonStr, type)
     }
 

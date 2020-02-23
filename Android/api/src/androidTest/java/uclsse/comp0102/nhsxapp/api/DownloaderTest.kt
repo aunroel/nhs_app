@@ -8,34 +8,32 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import uclsse.comp0102.nhsxapp.api.repository.files.OnlineFile
-import java.net.URI
+import uclsse.comp0102.nhsxapp.api.repository.NhsFileRepository
+import uclsse.comp0102.nhsxapp.api.repository.files.wrapper.OnlineDataWrapper
 
 @RunWith(AndroidJUnit4::class)
 class DownloaderTest {
 
-    private var file: OnlineFile? = null
+    private var file: OnlineDataWrapper? = null
 
-    private val context = getApplicationContext<Context>()
-    private val onlineUrl = URI.create("http://10.0.2.2:5000/file/")
-    private val localUri = context.filesDir.toURI()
-    private val name = "test.txt"
-    private val contentStr = "TEST FILE!!!"
+    private lateinit var context: Context
+    private lateinit var nhsRepository: NhsFileRepository
 
     @Before
     fun setUp() {
-        file = OnlineFile(onlineUrl, localUri, name)
+        context = getApplicationContext<Context>()
+        nhsRepository = NhsFileRepository(context)
     }
 
     @Test
-    fun testFilePath() {
-        assertThat(file?.path).isEqualTo(localUri.path + name)
+    fun testAdd() {
+
     }
 
     @Test
     fun testDownloadedData() {
         assertThat(file).isNotNull()
-        file!!.downloadOnlineVersion()
+        file?.update()
         assertThat(file!!.isFile).isTrue()
         assertThat(file!!.readText()).isEqualTo(contentStr)
     }
