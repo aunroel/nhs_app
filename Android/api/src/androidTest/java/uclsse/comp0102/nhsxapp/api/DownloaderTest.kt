@@ -9,7 +9,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import uclsse.comp0102.nhsxapp.api.repository.NhsFileRepository
-import uclsse.comp0102.nhsxapp.api.repository.files.wrapper.OnlineDataWrapper
 
 @RunWith(AndroidJUnit4::class)
 class DownloaderTest {
@@ -33,7 +32,7 @@ class DownloaderTest {
     @Test
     fun testDownloadedData() {
         assertThat(file).isNotNull()
-        file?.update()
+        file.update()
         assertThat(file!!.isFile).isTrue()
         assertThat(file!!.readText()).isEqualTo(contentStr)
     }
@@ -53,7 +52,7 @@ class DownloaderTest {
 
     @After
     fun tear() {
-        if (file != null && file!!.exists()) file?.delete()
+        if (file != null && file!!.exists()) file.delete()
     }
 
 }

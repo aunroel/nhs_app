@@ -49,7 +49,7 @@ class NhsAPI private constructor(appContext: Context) {
 
     fun store(data: Any): Boolean {
         return try {
-            if (jsonFile.isDirty())
+            if (jsonFile.isDirty)
                 jsonFile.storeAndAccumulate(data)
             else
                 jsonFile.storeAndOverwrite(data)
