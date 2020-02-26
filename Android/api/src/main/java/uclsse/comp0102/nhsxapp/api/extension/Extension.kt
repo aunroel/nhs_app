@@ -1,10 +1,6 @@
 package uclsse.comp0102.nhsxapp.api.extension
 
-import androidx.work.Data
-import androidx.work.WorkerParameters
-import androidx.work.workDataOf
 import com.google.gson.internal.LazilyParsedNumber
-import uclsse.comp0102.nhsxapp.api.background.tasks.TaskHolder
 import java.io.File
 import java.net.URL
 import java.util.*
@@ -63,14 +59,6 @@ fun File.createNewFileWithDirIfNotExist() {
 }
 
 const val TASK_PARAMETER_NAME = "task"
-
-fun TaskHolder.toInputData(): Data {
-    return workDataOf(TASK_PARAMETER_NAME to this)
-}
-
-fun WorkerParameters.getTask(): TaskHolder? {
-    return this.inputData.keyValueMap[TASK_PARAMETER_NAME] as TaskHolder?
-}
 
 fun Calendar.getDay(): Int {
     return this[Calendar.DAY_OF_MONTH]

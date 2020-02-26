@@ -4,7 +4,7 @@ import android.content.Context
 import uclsse.comp0102.nhsxapp.api.files.core.record.database.Record
 import uclsse.comp0102.nhsxapp.api.files.core.record.database.RecordDatabase
 
-class ChangeRecorder(appContext: Context, identifier: String) {
+class RecordHelper(appContext: Context, identifier: String) {
     companion object {
         private var flyWeightDatabase: RecordDatabase? = null
 
@@ -18,7 +18,7 @@ class ChangeRecorder(appContext: Context, identifier: String) {
 
 
     private val database: RecordDatabase
-    private val record: Record
+    private var record: Record
 
     init {
         database = getDatabase(appContext)
@@ -56,6 +56,22 @@ class ChangeRecorder(appContext: Context, identifier: String) {
             record.lastUploadTime = value
             database.dataAccessor.update(record)
         }
+
+    var content: ByteArray
+        get(){
+            return record.data
+        }
+        set(value){
+            record.data = value
+            database.dataAccessor.update(record)
+        }
+
+    fun refreshCache(){
+        val idStr = record.identifierStr
+        record = database.dataAccessor.get(idStr)!!
+    }
+
+
 
 
 }
