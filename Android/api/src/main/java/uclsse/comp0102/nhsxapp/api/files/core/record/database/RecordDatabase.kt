@@ -1,26 +1,26 @@
-package uclsse.comp0102.nhsxapp.api.repository.database
+package uclsse.comp0102.nhsxapp.api.files.core.record.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [BinaryData::class], version = 1, exportSchema = false)
-abstract class BinaryDatabase : RoomDatabase() {
+@Database(entities = [Record::class], version = 1, exportSchema = false)
+abstract class RecordDatabase : RoomDatabase() {
 
-    abstract val dataAccessor: BinaryDataDao
+    abstract val dataAccessor: RecordsDao
 
     companion object {
         @Volatile
-        private var INSTANCE: BinaryDatabase? = null
+        private var INSTANCE: RecordDatabase? = null
         private const val DATABASE_NAME = "online_file_database"
 
         @Synchronized
-        fun getInstance(context: Context): BinaryDatabase {
+        fun getInstance(context: Context): RecordDatabase {
             if (INSTANCE != null) return INSTANCE!!
             val builder = Room.databaseBuilder(
                 context.applicationContext,
-                BinaryDatabase::class.java,
+                RecordDatabase::class.java,
                 DATABASE_NAME
             )
             INSTANCE = builder

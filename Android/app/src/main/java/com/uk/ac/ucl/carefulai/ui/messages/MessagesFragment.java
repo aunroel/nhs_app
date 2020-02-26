@@ -32,17 +32,28 @@ import java.util.Map;
 public class MessagesFragment extends Fragment {
 
 
-    private static final String firstContactName = "nameKey1";
-    private static final String secondContactName = "nameKey2";
-    private static final String thirdContactName = "nameKey3";
-    private static final String myPreference = "careNetwork";
     private MessagesViewModel messagesViewModel;
+
     private SharedPreferences careNetworkPreferences;
+
     private TextView contactHistory1, contactHistory2, contactHistory3;
+
+    private static final String firstContactName = "nameKey1";
+
+    private static final String secondContactName = "nameKey2";
+
+    private static final String thirdContactName = "nameKey3";
+
     private EditText name, timeField, dateField;
+
     private Button dateButton, timeButton;
+
     private int mYear, mMonth, mDay, mHour, mMinute;
+
     private String chosenActivity, chosenContact, chosenStatus, userName, phoneNumber;
+
+    private static final String myPreference = "careNetwork";
+
     private ArrayList<String> statusList = new ArrayList<String>() {{
         add("doing great!");
         add("ok");

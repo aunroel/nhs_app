@@ -8,14 +8,14 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import uclsse.comp0102.nhsxapp.api.repository.NhsFileRepository
-import uclsse.comp0102.nhsxapp.api.repository.files.JsonFile
+import uclsse.comp0102.nhsxapp.api.files.JsonFile
+import uclsse.comp0102.nhsxapp.api.files.NhsFileSystem
 import kotlin.math.roundToInt
 
 @RunWith(AndroidJUnit4::class)
 class JsonFileTest {
 
-    private val nhsRepository: NhsFileRepository
+    private val nhsRepository: NhsFileSystem
     private val firstFileDirWithName: String
     private val secondFileDirWithName: String
     private val combinedFileDirWithName: String
@@ -27,7 +27,7 @@ class JsonFileTest {
 
     init {
         val context = ApplicationProvider.getApplicationContext<Context>()
-        nhsRepository = NhsFileRepository(context)
+        nhsRepository = NhsFileSystem(context)
         firstFileDirWithName = context.getString(R.string.TEST_FIRST_JSON_FILE_PATH)
         secondFileDirWithName = context.getString(R.string.TEST_SECOND_JSON_FILE_PATH)
         combinedFileDirWithName = context.getString(R.string.TEST_COMBINE_JSON_FILE_PATH)

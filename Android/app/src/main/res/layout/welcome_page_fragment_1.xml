@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/gradient_blue"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_blue"
     android:gravity="center_vertical"
     android:orientation="vertical">
 
@@ -102,11 +102,11 @@
         android:layout_marginRight="60dp"
         android:layout_marginBottom="100dp"
         android:background="@drawable/button_light_blue_edge"
-        android:onClick="setupscreen"
         android:padding="10dp"
         android:text="Save"
         android:textColor="@color/White"
         android:textSize="18dp"
+        android:onClick="setupscreen"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

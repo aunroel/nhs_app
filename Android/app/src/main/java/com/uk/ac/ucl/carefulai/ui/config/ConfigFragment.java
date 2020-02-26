@@ -21,18 +21,29 @@ import java.util.ArrayList;
 
 public class ConfigFragment extends Fragment {
 
-    private static final String myPreference = "careNetwork";
-    private static final String firstContactName = "nameKey1";
-    private static final String secondContactName = "nameKey2";
-    private static final String thirdContactName = "nameKey3";
-    private static final String firstContactPhone = "phoneKey1";
-    private static final String secondContactPhone = "phoneKey2";
-    private static final String thirdContactPhone = "phoneKey3";
     private ConfigViewModel configViewModel;
+
     private EditText name1, phone1, name2, phone2, name3, phone3;
+
     private Button saveButton;
+
     private FloatingActionButton editButton;
+
     private SharedPreferences careNetworkPreferences;
+
+    private static final String myPreference = "careNetwork";
+
+    private static final String firstContactName = "nameKey1";
+
+    private static final String secondContactName = "nameKey2";
+
+    private static final String thirdContactName = "nameKey3";
+
+    private static final String firstContactPhone = "phoneKey1";
+
+    private static final String secondContactPhone = "phoneKey2";
+
+    private static final String thirdContactPhone = "phoneKey3";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -109,7 +120,6 @@ public class ConfigFragment extends Fragment {
         saveButton.setEnabled(editable);
 
     }
-
     private void saveChanges(SharedPreferences careNetworkPreferences) {
 
         SharedPreferences.Editor careNetworkPreferencesEditor = careNetworkPreferences.edit();

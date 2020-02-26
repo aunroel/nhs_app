@@ -78,6 +78,7 @@ public class LifeDataUpdate {
         editor.putInt("prevTotalStepsCount", initialStepCount);
 
 
+
         editor.apply();
     }
 

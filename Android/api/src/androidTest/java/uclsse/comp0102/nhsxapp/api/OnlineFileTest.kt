@@ -8,13 +8,13 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import uclsse.comp0102.nhsxapp.api.repository.NhsFileRepository
-import uclsse.comp0102.nhsxapp.api.repository.files.OnlineFile
+import uclsse.comp0102.nhsxapp.api.files.NhsFileSystem
+import uclsse.comp0102.nhsxapp.api.files.core.OnlineFile
 
 @RunWith(AndroidJUnit4::class)
 class OnlineFileTest {
 
-    private val nhsRepository: NhsFileRepository
+    private val nhsRepository: NhsFileSystem
     private val sourceFileDirWithName: String
     private val targetFileDirWithName: String
     private val initialDataInSourceFile: String
@@ -26,7 +26,7 @@ class OnlineFileTest {
 
     init {
         val context = getApplicationContext<Context>()
-        nhsRepository = NhsFileRepository(context)
+        nhsRepository = NhsFileSystem(context)
         sourceFileDirWithName = context.getString(R.string.TEST_SRC_TXT_FILE_PATH)
         targetFileDirWithName = context.getString(R.string.TEST_TAR_TXT_FILE_PATH)
         initialDataInSourceFile = context.getString(R.string.TEST_INIT_DATA_IN_SRC_FILE)

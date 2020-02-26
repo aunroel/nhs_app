@@ -37,11 +37,15 @@ import me.everything.providers.core.Data;
 
 public class AppActivity extends AppCompatActivity {
 
-    private static final String dataPreference = "dataPreference";
     private TelephonyProvider telephonyProvider;
+
     private CallsProvider callsProvider;
+
     private String countedSteps = "";
+
     private SharedPreferences dataPreferences;
+
+    private static final String dataPreference = "dataPreference";
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -49,6 +53,17 @@ public class AppActivity extends AppCompatActivity {
             updateViews(intent);
         }
     };
+
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) { //checks whether the pedometer is working
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,24 +92,13 @@ public class AppActivity extends AppCompatActivity {
 
     }
 
-    private boolean isMyServiceRunning(Class<?> serviceClass) { //checks whether the pedometer is working
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private void startStepCount() {
         Intent intent = new Intent(this, ThePedometerService.class);
         ContextCompat.startForegroundService(this, intent);
         registerReceiver(broadcastReceiver, new IntentFilter(ThePedometerService.BROADCAST_ACTION));
     }
 
-    public void insertData() {
-
+    private void insertData() {
 
         SharedPreferences.Editor editor = dataPreferences.edit();
 

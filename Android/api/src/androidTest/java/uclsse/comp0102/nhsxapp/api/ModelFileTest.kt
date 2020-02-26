@@ -9,13 +9,13 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import uclsse.comp0102.nhsxapp.api.repository.NhsFileRepository
-import uclsse.comp0102.nhsxapp.api.repository.files.ModelFile
+import uclsse.comp0102.nhsxapp.api.files.ModelFile
+import uclsse.comp0102.nhsxapp.api.files.NhsFileSystem
 
 @RunWith(AndroidJUnit4::class)
 class ModelFileTest {
 
-    private val nhsRepository: NhsFileRepository
+    private val nhsRepository: NhsFileSystem
     private val modelFileDirAndName: String
 
 
@@ -24,7 +24,7 @@ class ModelFileTest {
 
     init {
         val context = ApplicationProvider.getApplicationContext<Context>()
-        nhsRepository = NhsFileRepository(context)
+        nhsRepository = NhsFileSystem(context)
         modelFileDirAndName = context.getString(R.string.TEST_MODEL_FILE_PATH)
     }
 

@@ -55,7 +55,6 @@
         <activity android:name="com.uk.ac.ucl.carefulai.ui.AppActivity" />
 
         <activity android:name="com.uk.ac.ucl.carefulai.ui.start.PermissionsActivity" />
-
         <service
             android:name=".ThePedometerService"
             android:enabled="true" />
