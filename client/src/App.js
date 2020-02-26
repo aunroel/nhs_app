@@ -1,18 +1,23 @@
 import React, { Fragment, useState } from "react";
-import InputField from "./components/InputField";
-import axios from "axios";
-// import "./App.css";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import ReactSandbox from "./subpages_debugging/ReactSandbox";
+import Container from "./components/Container";
+import Header from "./components/Header";
+import { ModelList } from "./components/ModelList";
+import { ModelUpload } from "./components/ModelUpload";
 
 const App = () => {
-  const [mes, setMes] = useState("Checking server connection...");
-  axios.get("/login").then(() => setMes("Server connection OK"));
-
   return (
-    <Fragment>
-      <h1>App</h1>
-      <InputField />
-      <h3>{mes}</h3>
-    </Fragment>
+    <Router>
+      <Container>
+        <Header />
+        <Switch>
+          <Route exact path="/test" component={ReactSandbox} />
+          <Route exact path="/modellist" component={ModelList} />
+          <Route exact path="/modelupload" component={ModelUpload} />
+        </Switch>
+      </Container>
+    </Router>
   );
 };
 

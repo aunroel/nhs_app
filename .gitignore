@@ -1,2 +1,8 @@
 README_orig.md
 .idea
+
+/client/node_modules
+/client/package-lock.json
+/client/build
+
+/flaskenv
