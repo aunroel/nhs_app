@@ -10,6 +10,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import uclsse.comp0102.nhsxapp.api.files.NhsFileSystem
 import uclsse.comp0102.nhsxapp.api.files.core.OnlineFile
+import java.nio.charset.Charset
 
 @RunWith(AndroidJUnit4::class)
 class OnlineFileTest {
@@ -94,11 +95,12 @@ class OnlineFileTest {
         tar.writeBytes(src.readBytes())
         tar.upload()
         nhsRepository.clearAllLocalCache()
-        val newTarFromRepository = nhsRepository.access(
+        val newTarStrFromRepository = nhsRepository.access(
             OnlineFile::class.java,
             targetFileDirWithName
-        ).readBytes()
-        assertThat(newTarFromRepository).isEqualTo(src.readBytes())
+        ).readBytes().toString(Charset.defaultCharset())
+        val srcStr = src.readBytes().toString(Charset.defaultCharset())
+        assertThat(newTarStrFromRepository).isEqualTo(srcStr)
     }
 
 }

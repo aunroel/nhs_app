@@ -3,53 +3,48 @@ package uclsse.comp0102.nhsxapp.api.files.core
 import android.content.Context
 import uclsse.comp0102.nhsxapp.api.extension.formatSubDir
 import uclsse.comp0102.nhsxapp.api.files.core.online.HttpClient
-import uclsse.comp0102.nhsxapp.api.files.core.record.ChangeRecorder
-import java.io.File
+import uclsse.comp0102.nhsxapp.api.files.core.record.RecordHelper
 import java.net.URL
 
 open class OnlineFile(onHost: URL, subDirWithName: String, appContext: Context) {
 
     private val httpClient: HttpClient = HttpClient(onHost)
-    private val changeRecorder: ChangeRecorder = ChangeRecorder(appContext, subDirWithName)
-    private val subDir = subDirWithName.substringBeforeLast('/').formatSubDir()
-    private val fileName: String = subDirWithName.substringAfterLast('/')
-
-    protected val localCopy: File = File(appContext.filesDir, subDirWithName)
-
+    private val recordHelper: RecordHelper = RecordHelper(appContext, subDirWithName)
+    private val formattedSubDirWithName = subDirWithName.formatSubDir()
+    private val subDir = formattedSubDirWithName.substringBeforeLast('/')+"/"
+    private val fileName: String = formattedSubDirWithName.substringAfterLast('/')
 
     val isModifiedSinceLastUpload: Boolean
-        get() = changeRecorder.lastUploadTime < changeRecorder.lastModifiedTime
+        get() = recordHelper.lastUploadTime < recordHelper.lastModifiedTime
 
     init {
-        val parentDir = localCopy.parentFile
-        if (!parentDir.exists())
-            parentDir.mkdirs()
-        if (!localCopy.exists())
-            localCopy.createNewFile()
+        if (recordHelper.lastUpdateTime == 0L) update()
     }
 
     fun readBytes(): ByteArray {
-        return localCopy.readBytes()
+        return recordHelper.content
     }
 
 
     fun writeBytes(bytes: ByteArray) {
-        localCopy.writeBytes(bytes)
-        changeRecorder.lastModifiedTime = System.currentTimeMillis()
+        recordHelper.content = bytes
+        recordHelper.lastModifiedTime = System.currentTimeMillis()
     }
 
 
     fun update() {
-        val tmpData = httpClient.download(subDir, fileName)
-        localCopy.writeBytes(tmpData)
-        changeRecorder.lastUpdateTime = System.currentTimeMillis()
+        recordHelper.content = httpClient.download(subDir, fileName)
+        recordHelper.lastUpdateTime = System.currentTimeMillis()
     }
 
 
     fun upload() {
-        val tmpData = localCopy.readBytes()
-        httpClient.upload(tmpData, subDir, fileName)
-        changeRecorder.lastUploadTime = System.currentTimeMillis()
+        httpClient.upload(recordHelper.content, subDir, fileName)
+        recordHelper.lastUploadTime = System.currentTimeMillis()
+    }
+
+    fun timeForLastUpdate():Long{
+        return recordHelper.lastUpdateTime
     }
 
 }

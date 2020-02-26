@@ -2,7 +2,9 @@ package uclsse.comp0102.nhsxapp.api.files
 
 import android.content.Context
 import org.tensorflow.lite.Interpreter
+import uclsse.comp0102.nhsxapp.api.extension.createNewFileWithDirIfNotExist
 import uclsse.comp0102.nhsxapp.api.files.core.OnlineFile
+import java.io.File
 import java.net.URL
 
 
@@ -16,8 +18,10 @@ class ModelFile(onHost: URL, subDirWithName: String, appContext: Context) :
 
 
     init {
-        update()
-        tfLiteInterpreter = Interpreter(localCopy)
+        val tmpFile = File(appContext.filesDir, subDirWithName)
+        tmpFile.createNewFileWithDirIfNotExist()
+        tmpFile.writeBytes(readBytes())
+        tfLiteInterpreter = Interpreter(tmpFile)
         _tfLiteOptions = Interpreter.Options()
     }
 

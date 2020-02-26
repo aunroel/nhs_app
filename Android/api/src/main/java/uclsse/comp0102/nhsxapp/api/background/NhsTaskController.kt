@@ -3,9 +3,6 @@ package uclsse.comp0102.nhsxapp.api.background
 import android.content.Context
 import androidx.work.*
 import androidx.work.BackoffPolicy.LINEAR
-import uclsse.comp0102.nhsxapp.api.background.tasks.CoroutineOnlineTaskWorker
-import uclsse.comp0102.nhsxapp.api.background.tasks.TaskHolder
-import uclsse.comp0102.nhsxapp.api.extension.toInputData
 import java.time.Duration
 import java.time.Duration.ofDays
 import androidx.work.ExistingPeriodicWorkPolicy.REPLACE as REPLACE_PERIODIC_POLICY
@@ -21,7 +18,7 @@ class NhsTaskController(appContext: Context) {
         protected var backupDuration: Duration = ofDays(1)
         protected var backoffPolicy: BackoffPolicy = LINEAR
         protected var constraints: Constraints = Constraints.NONE
-        protected lateinit var task: TaskHolder
+        protected lateinit var typeOfWork: Class<out ListenableWorker>
 
         fun setName(expected: String): OneTimeTaskStarter {
             name = expected
@@ -43,15 +40,15 @@ class NhsTaskController(appContext: Context) {
             return this
         }
 
-        fun setTask(expected: () -> Unit): OneTimeTaskStarter {
-            task = TaskHolder().apply { this.innerTask = expected }
+        fun setWorkType(expected: Class<out ListenableWorker>):OneTimeTaskStarter{
+            typeOfWork = expected
             return this
         }
 
         open fun start() {
-            val request = OneTimeWorkRequestBuilder<CoroutineOnlineTaskWorker>()
+            val request = OneTimeWorkRequest
+                .Builder(typeOfWork)
                 .setConstraints(constraints)
-                .setInputData(task.toInputData())
                 .setBackoffCriteria(backoffPolicy, backupDuration)
                 .build()
             workManager.enqueueUniqueWork(name, REPLACE_POLICY, request)
@@ -67,9 +64,9 @@ class NhsTaskController(appContext: Context) {
         }
 
         override fun start() {
-            val request = PeriodicWorkRequestBuilder<CoroutineWorker>(repeatDuration)
+            val request = PeriodicWorkRequest
+                .Builder(typeOfWork, repeatDuration)
                 .setConstraints(constraints)
-                .setInputData(task.toInputData())
                 .setBackoffCriteria(backoffPolicy, backupDuration)
                 .build()
             workManager.enqueueUniquePeriodicWork(name, REPLACE_PERIODIC_POLICY, request)
