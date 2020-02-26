@@ -101,7 +101,7 @@ public class Alarm extends BroadcastReceiver {
         }
 
 
-        nhsAPI = NhsAPI.Companion.getInstance(context);
+        nhsAPI = NhsAPI.Companion.getInstance(context.getApplicationContext());
 
         myDb = new DatabaseHelper(context);
 
@@ -120,7 +120,16 @@ public class Alarm extends BroadcastReceiver {
 
             editor.apply();
 
-            nhsAPI.getTrainingScore(abs(lifeDataUpdate.getStepsCount()), abs(lifeDataUpdate.getCurrentCallsCount()), abs(lifeDataUpdate.getMessageCount()));
+            SharedPreferences dataPreferences = context.getSharedPreferences("dataPreference", Context.MODE_PRIVATE);
+
+            SharedPreferences.Editor dataEditor = dataPreferences.edit();
+
+
+            score = nhsAPI.getTrainingScore(abs(lifeDataUpdate.getStepsCount()), abs(lifeDataUpdate.getCurrentCallsCount()), abs(lifeDataUpdate.getMessageCount()));
+
+            dataEditor.putInt("recentScore", score);
+
+            dataEditor.apply();
 
             boolean isInserted = myDb.insertData(lifeDataUpdate.getStepsCount(), lifeDataUpdate.getCurrentCallsCount(), lifeDataUpdate.getMessageCount());
 
@@ -143,7 +152,15 @@ public class Alarm extends BroadcastReceiver {
 
                 editor.apply();
 
-                nhsAPI.getTrainingScore(abs(lifeDataUpdate.getStepsCount()), abs(lifeDataUpdate.getCurrentCallsCount()), abs(lifeDataUpdate.getMessageCount()));
+                SharedPreferences dataPreferences = context.getSharedPreferences("dataPreference", Context.MODE_PRIVATE);
+
+                SharedPreferences.Editor dataEditor = dataPreferences.edit();
+
+                score = nhsAPI.getTrainingScore(abs(lifeDataUpdate.getStepsCount()), abs(lifeDataUpdate.getCurrentCallsCount()), abs(lifeDataUpdate.getMessageCount()));
+
+                dataEditor.putInt("recentScore", score);
+
+                dataEditor.apply();
 
                 boolean isInserted = myDb.insertData(lifeDataUpdate.getStepsCount(), lifeDataUpdate.getCurrentCallsCount(), lifeDataUpdate.getMessageCount());
 

@@ -5,7 +5,7 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.uk.ac.ucl.carefulai"
-        minSdkVersion 23
+        minSdkVersion 28
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -33,5 +33,5 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:truth:1.2.0'
     testImplementation 'junit:junit:4.13'
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
-    implementation project(path: ':api')
+    compile project(path: ':api')
 }

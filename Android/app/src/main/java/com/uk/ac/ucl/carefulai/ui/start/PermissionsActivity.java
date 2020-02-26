@@ -22,10 +22,11 @@ import java.util.Calendar;
 import java.util.List;
 
 public class PermissionsActivity extends AppCompatActivity {
-    private static final int STORAGE_CODE = 999;
     final private int REQUEST_CODE_ASK_PERMISSIONS = 42;
     Button statsbutton;
     Button mainlauncher;
+    private static final int STORAGE_CODE = 999;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

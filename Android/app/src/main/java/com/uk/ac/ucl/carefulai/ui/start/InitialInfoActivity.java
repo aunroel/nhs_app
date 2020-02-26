@@ -14,10 +14,11 @@ import com.uk.ac.ucl.carefulai.R;
 
 public class InitialInfoActivity extends AppCompatActivity {
 
+    private SharedPreferences careNetworkPreferences;
     private static final String myPreference = "careNetwork";
     private static final String userName = "userName";
     private static final String defaultName = "What Do People Call You?";
-    private SharedPreferences careNetworkPreferences;
+
     private EditText name;
 
     @Override
