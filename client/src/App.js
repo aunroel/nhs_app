@@ -5,6 +5,7 @@ import Container from "./components/Container";
 import Header from "./components/Header";
 import { ModelList } from "./components/ModelList";
 import { ModelUpload } from "./components/ModelUpload";
+import "./App.css";
 
 const App = () => {
   return (
