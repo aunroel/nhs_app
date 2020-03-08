@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useStoreState, useStoreActions } from "easy-peasy";
-import storeModel from "../store";
+import storeModel from "../../../store";
 
 const InputField = () => {
   const [savedList, saveList] = [

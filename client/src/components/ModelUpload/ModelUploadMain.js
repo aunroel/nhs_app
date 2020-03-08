@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import WrongFileFormatMessage from "./WrongFileFormatMessage";
+import isDev from "../../debugging/DevDetect";
+import { MockModelFileTemplate } from "../_Debugging/MockModelData/MockModelFileTemplate";
+import { UploadButton } from "./UploadButton";
 
 const previewBox = {
   width: "100%",
@@ -10,9 +14,7 @@ const previewBox = {
   overflow: "auto"
 };
 
-const wrongFormatStyle = {
-  color: "crimson"
-};
+const FileText = fileText => <pre>{fileText}</pre>;
 
 export const ModelUpload = () => {
   const [fileText, setFileText] = useState(null);
@@ -32,6 +34,9 @@ export const ModelUpload = () => {
   };
 
   const fileIsUploaded = isUploadedFileJSONFormat != null;
+  const fileReadyToUpload = fileIsUploaded && isUploadedFileJSONFormat;
+
+  const upload = () => {};
 
   return (
     <div>
@@ -48,18 +53,17 @@ export const ModelUpload = () => {
       <div>Preview</div>
       <div style={previewBox}>
         {fileIsUploaded ? (
-          isUploadedFileJSONFormat === true ? (
+          isUploadedFileJSONFormat ? (
             <pre>{fileText}</pre>
           ) : (
-            <div style={wrongFormatStyle}>
-              The uploaded file is of wrong format. Please upload a
-              <code>.json</code> file.
-            </div>
+            <WrongFileFormatMessage />
           )
+        ) : isDev() ? (
+          <MockModelFileTemplate />
         ) : null}
       </div>
       <br />
-      <div>Confirm upload here</div>
+      <UploadButton onClick={upload} enabled={fileReadyToUpload} />
     </div>
   );
 };

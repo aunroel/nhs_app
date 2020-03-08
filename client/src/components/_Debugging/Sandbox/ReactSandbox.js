@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import InputField from "../components/InputField";
+import InputField from "./InputField";
 import axios from "axios";
 
 const ReactSandbox = () => {

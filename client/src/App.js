@@ -1,10 +1,10 @@
 import React, { Fragment, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import ReactSandbox from "./subpages_debugging/ReactSandbox";
-import Container from "./components/Container";
+import ReactSandbox from "./components/_Debugging/Sandbox/ReactSandbox";
+import Container from "./components/AppContainer";
 import Header from "./components/Header";
-import { ModelList } from "./components/ModelList";
-import { ModelUpload } from "./components/ModelUpload";
+import { ModelList } from "./components/ModelList/ModelList";
+import { ModelUpload } from "./components/ModelUpload/ModelUploadMain";
 import "./App.css";
 
 const App = () => {
