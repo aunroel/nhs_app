@@ -1,2 +1,3 @@
 include ':app', ':api'
 rootProject.name='Careful AI'
+include ':demoapp'

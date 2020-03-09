@@ -1,5 +1,5 @@
 ext {
-    worker_version = '2.3.2'
+    worker_version = '2.3.3'
     retrofit_version = '2.7.1'
     room_version = '2.2.4'
     tensorflow_lite_version = '0.0.0-nightly'
@@ -10,7 +10,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
 
 
     defaultConfig {
