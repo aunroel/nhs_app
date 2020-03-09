@@ -1,9 +1,14 @@
 # NHS Federated ML appliation
 
 ## Requisites
-Docker
-Kubernetes
-Microsoft Azure account
+  CI/CD            | Python              | Federated ML
+---------          |-------------------- | -------------
+* Docker           | * Python 3.6        | * PySyft
+* Kubernetes       | * Flask             |
+* MS Azure account | * flask-sqlalchemy  |
+|                  | * psycopg2-binary   |
+|                  | * gunicorn          |
+
 
 # Development 
 For using both server and client side in development run both concurrently (in different terminals).
@@ -62,3 +67,10 @@ flask run
 
 ## Project contributors: 
 Marta Smigielska, Davinder Bassan, Najat Baqadir, Sam Xu, Yiren Zhang, Roman Matios, Wojciech Golaszewski
+
+   iOS          | Android       | Backend
+----------------| ------------- | ------------
+Davinder Bassan | Sam Xu        | Marta Smigielska
+Najat Baqadir   | Yiren Zhang   | Wojciech Golaszewski
+|               |               | Roman Matios
+

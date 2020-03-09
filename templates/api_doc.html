@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+    <h3>Example of standard data format for the server updates</h3>
+        <div class="box box-default">
+        <code>
+            <pre>{
+	"supportCode": "Therapist",
+	"wellBeingScore": "10",
+	"weeklySteps": 7777,
+	"weeklyCalls": 222,
+	"errorRate": 69,
+	"postCode": "LL25"
+}</pre>
+        </code>
+    </div>
+    <h3>List of endpoints, that can be used by the mobile applications</h3>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Methods</th>
+                <th scope="col">URL</th>
+                <th scope="col">Body</th>
+                <th scope="col">Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>POST</td>
+                <td>/update/:uid</td>
+                <td>standard data in json format</td>
+                <td>An endpoint to receive updates from the nodes</td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>POST</td>
+                <td>/node</td>
+                <td>{"uid": "unique id for the device"}</td>
+                <td>An endpoint to register the device with the server</td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>GET</td>
+                <td>/model</td>
+                <td></td>
+                <td>An endpoint to download a TFLite model from the server</td>
+            </tr>
+        </tbody>
+    </table>
+
+{% endblock %}
