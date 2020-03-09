@@ -1,0 +1,6 @@
+module Pods_GapdarMyPages {
+  umbrella header "Pods-GapdarMyPages-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="99N-u7-3mX">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Well Being Diary-->
+        <scene sceneID="C5Y-yD-WTn">
+            <objects>
+                <viewController id="4ik-nN-3j6" customClass="WellBeingDiary" customModule="GapdarMyPages" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="gt3-NY-AJC" customClass="GradientUIView" customModule="GapdarMyPages" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="27" translatesAutoresizingMaskIntoConstraints="NO" id="5NN-nY-flp">
+                                <rect key="frame" x="16" y="87" width="343" height="525"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="27" translatesAutoresizingMaskIntoConstraints="NO" id="Su4-5F-sd1">
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="27"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Well-being Diary" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PTu-RN-Tjt">
+                                                <rect key="frame" x="0.0" y="0.0" width="263" height="27"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="27" id="2eF-Hv-MFr"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="23"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lZR-j8-3d2">
+                                                <rect key="frame" x="290" y="0.0" width="53" height="27"/>
+                                                <state key="normal" image="icons8-share-24"/>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="27" translatesAutoresizingMaskIntoConstraints="NO" id="baf-OR-tQW">
+                                        <rect key="frame" x="0.0" y="54" width="343" height="471"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="dnS-lo-2ly">
+                                                <rect key="frame" x="0.0" y="0.0" width="343" height="222"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cLF-1y-OSh" customClass="CombinedChartView" customModule="Charts">
+                                                        <rect key="frame" x="0.0" y="0.0" width="343" height="222"/>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="327" id="3DK-Zf-uTk"/>
+                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="222" id="q05-j2-QbH"/>
+                                                        </constraints>
+                                                    </view>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="222" id="MqD-Ju-nuB"/>
+                                                </constraints>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="dEM-10-Ocf">
+                                                <rect key="frame" x="0.0" y="249" width="343" height="222"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y9o-lu-NAI" customClass="CombinedChartView" customModule="Charts">
+                                                        <rect key="frame" x="0.0" y="0.0" width="343" height="222"/>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="222" id="T8s-4c-eQy"/>
+                                                            <constraint firstAttribute="width" constant="327" id="UJ5-JR-znu"/>
+                                                        </constraints>
+                                                    </view>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="Adh-fF-6RJ" firstAttribute="trailing" secondItem="5NN-nY-flp" secondAttribute="trailing" constant="16" id="3Sr-a8-d6C"/>
+                            <constraint firstItem="5NN-nY-flp" firstAttribute="leading" secondItem="Adh-fF-6RJ" secondAttribute="leading" constant="16" id="RQR-s0-Ch9"/>
+                            <constraint firstItem="5NN-nY-flp" firstAttribute="top" secondItem="Adh-fF-6RJ" secondAttribute="top" constant="23" id="TTg-lf-3dg"/>
+                            <constraint firstItem="Adh-fF-6RJ" firstAttribute="bottom" secondItem="5NN-nY-flp" secondAttribute="bottom" constant="6" id="YWI-g4-ury"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Adh-fF-6RJ"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="firstColor">
+                                <color key="value" red="0.64313725489999995" green="0.7843137255" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="secondColor">
+                                <color key="value" red="0.066666666669999999" green="0.15686274510000001" blue="0.4823529412" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <navigationItem key="navigationItem" id="L5v-5H-ykm"/>
+                    <connections>
+                        <outlet property="callsChartView" destination="cLF-1y-OSh" id="fBK-qZ-xfQ"/>
+                        <outlet property="stepsChartView" destination="y9o-lu-NAI" id="QrG-mq-uBF"/>
+                        <segue destination="K1X-93-nsJ" kind="show" identifier="callGraph" id="E3w-Pe-OZS"/>
+                        <segue destination="w22-fb-Fvn" kind="show" identifier="stepsCall" id="iWL-8x-bX3"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Lom-TF-Isr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="351.19999999999999" y="-1012.4437781109445"/>
+        </scene>
+        <!--CallsStatistics-->
+        <scene sceneID="KDk-JS-AGd">
+            <objects>
+                <viewController title="CallsStatistics" id="K1X-93-nsJ" customClass="CallsStatisticsViewController" customModule="GapdarMyPages" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="TJA-MA-nVg" customClass="GradientUIView" customModule="GapdarMyPages" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Coe-4T-oVu">
+                                <rect key="frame" x="15" y="81" width="345" height="519.5"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="qYC-yz-sqq">
+                                        <rect key="frame" x="0.0" y="0.0" width="345" height="190"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="Qzr-6D-9UE">
+                                                <rect key="frame" x="0.0" y="0.0" width="345" height="60"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Calls vs Well-being" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="esu-uI-YLo">
+                                                        <rect key="frame" x="0.0" y="0.0" width="345" height="60"/>
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="23"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="45" translatesAutoresizingMaskIntoConstraints="NO" id="RbD-OS-iAP">
+                                                <rect key="frame" x="0.0" y="65" width="345" height="60"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="characterWrap" translatesAutoresizingMaskIntoConstraints="NO" id="5UP-fj-sUd" customClass="RoundButton" customModule="GapdarMyPages" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="136" height="60"/>
+                                                        <color key="backgroundColor" white="0.52086046009999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                        <state key="normal">
+                                                            <string key="title">Calls Made and
+Well being</string>
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                <real key="value" value="10"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="callsButtonPressed:" destination="K1X-93-nsJ" eventType="touchUpInside" id="QiC-8H-CXS"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="characterWrap" translatesAutoresizingMaskIntoConstraints="NO" id="WZu-AQ-PJE" customClass="RoundButton" customModule="GapdarMyPages" customModuleProvider="target">
+                                                        <rect key="frame" x="181" y="0.0" width="164" height="60"/>
+                                                        <color key="backgroundColor" red="0.10196078431372549" green="0.60392156862745094" blue="0.66274509803921566" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <state key="normal">
+                                                            <string key="title">Outdoor steps and
+Well being</string>
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                <real key="value" value="10"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="outdoorButtonPressed:" destination="K1X-93-nsJ" eventType="touchUpInside" id="zVd-IM-C4J"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="UOE-HD-YXN">
+                                                <rect key="frame" x="0.0" y="130" width="345" height="60"/>
+                                                <subviews>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="PIx-1b-x7Y">
+                                                        <rect key="frame" x="0.0" y="20" width="309" height="20.5"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Calls made and Well-being" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xfE-85-0Ld">
+                                                                <rect key="frame" x="52" y="0.0" width="204.5" height="20.5"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Ja1-wl-fYE">
+                                                        <rect key="frame" x="309" y="18" width="36" height="24"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xNy-VZ-8M9">
+                                                                <rect key="frame" x="0.0" y="0.0" width="36" height="24"/>
+                                                                <state key="normal" image="icons8-share-24"/>
+                                                            </button>
+                                                        </subviews>
+                                                    </stackView>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Jkg-r8-lJE">
+                                        <rect key="frame" x="0.0" y="190" width="345" height="309"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zal-f8-hNR" customClass="CombinedChartView" customModule="Charts">
+                                                <rect key="frame" x="0.0" y="0.0" width="345" height="309"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="309" id="MDk-Un-mq3"/>
+                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="313" id="sKB-27-UaJ"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="S5h-sv-iod">
+                                        <rect key="frame" x="0.0" y="499" width="345" height="20.5"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number of weeks" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7UH-Ra-DVy">
+                                                <rect key="frame" x="105.5" y="0.0" width="134" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Well-being score" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4SK-UT-7wj" customClass="rotateLabel" customModule="GapdarMyPages" customModuleProvider="target">
+                                <rect key="frame" x="-14" y="352" width="39" height="130"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="rotation">
+                                        <real key="value" value="270"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Number of calls" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zo2-e7-5LK" customClass="rotateLabel" customModule="GapdarMyPages" customModuleProvider="target">
+                                <rect key="frame" x="350" y="329" width="36" height="158"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="rotation">
+                                        <real key="value" value="90"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="4SK-UT-7wj" firstAttribute="centerY" secondItem="TJA-MA-nVg" secondAttribute="centerY" constant="83.5" id="2bs-gu-WWC"/>
+                            <constraint firstItem="Coe-4T-oVu" firstAttribute="leading" secondItem="TJA-MA-nVg" secondAttribute="leading" constant="15" id="4ti-Qv-bI6"/>
+                            <constraint firstItem="4SK-UT-7wj" firstAttribute="centerX" secondItem="Coe-4T-oVu" secondAttribute="leading" constant="10" id="5s2-pr-Wrf"/>
+                            <constraint firstItem="3Th-44-7y7" firstAttribute="bottom" secondItem="Coe-4T-oVu" secondAttribute="bottom" constant="17.5" id="AQ7-05-cYX"/>
+                            <constraint firstItem="zo2-e7-5LK" firstAttribute="centerX" secondItem="zal-f8-hNR" secondAttribute="trailing" constant="10" id="BAb-Qc-sGf"/>
+                            <constraint firstItem="Coe-4T-oVu" firstAttribute="leading" secondItem="4SK-UT-7wj" secondAttribute="centerX" constant="10" id="HIf-eT-g4S"/>
+                            <constraint firstItem="zo2-e7-5LK" firstAttribute="centerY" secondItem="TJA-MA-nVg" secondAttribute="centerY" constant="74.5" id="IWa-pD-h7i"/>
+                            <constraint firstItem="Coe-4T-oVu" firstAttribute="top" secondItem="3Th-44-7y7" secondAttribute="top" constant="17" id="VlG-eG-kCw"/>
+                            <constraint firstItem="3Th-44-7y7" firstAttribute="trailing" secondItem="Coe-4T-oVu" secondAttribute="trailing" constant="15" id="kNE-mF-dAq"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="3Th-44-7y7"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="firstColor">
+                                <color key="value" red="0.64313725489999995" green="0.7843137255" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="secondColor">
+                                <color key="value" red="0.066666666669999999" green="0.15686274510000001" blue="0.4823529412" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <navigationItem key="navigationItem" id="cK9-rI-2Bs"/>
+                    <connections>
+                        <outlet property="callButton" destination="5UP-fj-sUd" id="XzB-wM-0ew"/>
+                        <outlet property="chartView" destination="zal-f8-hNR" id="VHm-BY-qZl"/>
+                        <outlet property="graphTitleLabel" destination="xfE-85-0Ld" id="HNo-ui-Pjt"/>
+                        <outlet property="stepButton" destination="WZu-AQ-PJE" id="g5e-W3-MSO"/>
+                        <outlet property="titleLabel" destination="esu-uI-YLo" id="Iff-0Q-0mi"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DD9-kR-FE1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-356" y="-183.05847076461771"/>
+        </scene>
+        <!--Steps Statistics View Controller-->
+        <scene sceneID="BbD-f5-BKF">
+            <objects>
+                <viewController id="w22-fb-Fvn" customClass="StepsStatisticsViewController" customModule="GapdarMyPages" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Har-Wg-HDK" customClass="GradientUIView" customModule="GapdarMyPages" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Gmz-Xu-FvV">
+                                <rect key="frame" x="20" y="82" width="342" height="525"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="Wa1-4T-pdQ">
+                                        <rect key="frame" x="0.0" y="0.0" width="342" height="166.5"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="zJZ-qV-Dfh">
+                                                <rect key="frame" x="0.0" y="0.0" width="342" height="51.5"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Steps vs Well-being" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GTr-0Z-8u3">
+                                                        <rect key="frame" x="0.0" y="0.0" width="342" height="51.5"/>
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="23"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="u3b-Jd-kK4">
+                                                <rect key="frame" x="0.0" y="57.5" width="342" height="51.5"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="characterWrap" translatesAutoresizingMaskIntoConstraints="NO" id="lL4-oo-vei" customClass="RoundButton" customModule="GapdarMyPages" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="134" height="51.5"/>
+                                                        <color key="backgroundColor" white="0.52086046010277776" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                        <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <state key="normal">
+                                                            <string key="title">Calls Made and
+Well Being </string>
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                <real key="value" value="10"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="callsButtonPressed:" destination="w22-fb-Fvn" eventType="touchUpInside" id="oJB-u6-ukD"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="characterWrap" translatesAutoresizingMaskIntoConstraints="NO" id="h11-G8-UVx" customClass="RoundButton" customModule="GapdarMyPages" customModuleProvider="target">
+                                                        <rect key="frame" x="174" y="0.0" width="168" height="51.5"/>
+                                                        <color key="backgroundColor" red="0.1019607843" green="0.60392156860000001" blue="0.66274509800000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                        <state key="normal">
+                                                            <string key="title">Outdoor Steps and 
+Well being</string>
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                <real key="value" value="10"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="outdoorButtonPressed:" destination="w22-fb-Fvn" eventType="touchUpInside" id="Tml-sF-sWy"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="vRa-ph-GZv">
+                                                <rect key="frame" x="0.0" y="115" width="342" height="51.5"/>
+                                                <subviews>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Jg5-mD-8BM">
+                                                        <rect key="frame" x="0.0" y="15.5" width="309.5" height="20.5"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Outdoor steps and Well-being" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zz1-Sj-FhF">
+                                                                <rect key="frame" x="40" y="0.0" width="230" height="20.5"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="7Ev-F0-bT0">
+                                                        <rect key="frame" x="309.5" y="14" width="32.5" height="24"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hFF-Yy-Fms">
+                                                                <rect key="frame" x="0.0" y="0.0" width="32.5" height="24"/>
+                                                                <state key="normal" image="icons8-share-24"/>
+                                                            </button>
+                                                        </subviews>
+                                                    </stackView>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="QgL-R5-1rg">
+                                        <rect key="frame" x="0.0" y="171.5" width="342" height="328"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PLo-sr-9zw" customClass="CombinedChartView" customModule="Charts">
+                                                <rect key="frame" x="0.0" y="0.0" width="342" height="328"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="315" id="Bbu-We-6nI"/>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="328" id="wvm-6f-YnN"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="4Ms-lY-4Vb">
+                                        <rect key="frame" x="0.0" y="504.5" width="342" height="20.5"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number of weeks" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zmd-Xw-7bb">
+                                                <rect key="frame" x="104" y="0.0" width="134" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Number of steps" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WZB-Wk-N2u" customClass="rotateLabel" customModule="GapdarMyPages" customModuleProvider="target">
+                                <rect key="frame" x="307" y="378.25" width="128" height="128"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="rotation">
+                                        <real key="value" value="90"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Well-being score" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T3S-al-XzX" customClass="rotateLabel" customModule="GapdarMyPages" customModuleProvider="target">
+                                <rect key="frame" x="-55" y="378" width="130.00000000000003" height="130"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="rotation">
+                                        <real key="value" value="270"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="Gmz-Xu-FvV" firstAttribute="leading" secondItem="6aP-xJ-7HS" secondAttribute="leading" constant="20" id="HKc-aP-QvS"/>
+                            <constraint firstItem="Gmz-Xu-FvV" firstAttribute="leading" secondItem="T3S-al-XzX" secondAttribute="centerX" constant="10" id="M0L-Bu-LFp"/>
+                            <constraint firstItem="Gmz-Xu-FvV" firstAttribute="top" secondItem="6aP-xJ-7HS" secondAttribute="top" constant="18" id="MFB-Q9-hVe"/>
+                            <constraint firstItem="T3S-al-XzX" firstAttribute="centerY" secondItem="Har-Wg-HDK" secondAttribute="centerY" constant="109.5" id="cSk-sl-wG8"/>
+                            <constraint firstItem="WZB-Wk-N2u" firstAttribute="centerX" secondItem="PLo-sr-9zw" secondAttribute="trailing" constant="10" id="hM9-fU-BlD"/>
+                            <constraint firstItem="6aP-xJ-7HS" firstAttribute="trailing" secondItem="Gmz-Xu-FvV" secondAttribute="trailing" constant="20" id="j9l-pT-usY"/>
+                            <constraint firstItem="WZB-Wk-N2u" firstAttribute="centerY" secondItem="Har-Wg-HDK" secondAttribute="centerY" constant="108.75" id="v8h-6Z-hSA"/>
+                            <constraint firstItem="6aP-xJ-7HS" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Gmz-Xu-FvV" secondAttribute="bottom" constant="11" id="wgy-66-Iv6"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6aP-xJ-7HS"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="firstColor">
+                                <color key="value" red="0.64313725489999995" green="0.7843137255" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="secondColor">
+                                <color key="value" red="0.066666666669999999" green="0.15686274510000001" blue="0.4823529412" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <navigationItem key="navigationItem" id="KGA-OD-uBw"/>
+                    <connections>
+                        <outlet property="chartView" destination="PLo-sr-9zw" id="vxV-ZO-E2X"/>
+                        <outlet property="graphTitleLabel" destination="Zz1-Sj-FhF" id="y7t-n4-vrt"/>
+                        <outlet property="titleLabel" destination="GTr-0Z-8u3" id="bkT-Mh-x6Q"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WWI-mC-evr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1048.8" y="-183.05847076461771"/>
+        </scene>
+        <!--Graphs-->
+        <scene sceneID="JD9-n6-RUe">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="99N-u7-3mX" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Graphs" image="icons8-combo-chart-40" id="ddq-xQ-dWV"/>
+                    <toolbarItems/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="gdR-eY-kQb">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="4ik-nN-3j6" kind="relationship" relationship="rootViewController" id="baD-5f-GJq"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SE6-UP-9wM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-679" y="-1012"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="icons8-combo-chart-40" width="40" height="40"/>
+        <image name="icons8-share-24" width="24" height="24"/>
+    </resources>
+</document>
