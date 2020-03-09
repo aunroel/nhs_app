@@ -1,4 +1,5 @@
 import React from "react";
+import "./modelUploadDebug.css";
 
 const mockModelTemplate = `
 {
@@ -11,9 +12,8 @@ const mockModelTemplate = `
 
 export const MockModelFileTemplate = () => {
   return (
-    <div>
-      Temporary testing format:
-      <pre>{mockModelTemplate}</pre>
+    <div className="dim">
+      [Dev only] Temporary testing format: <pre>{mockModelTemplate}</pre>
     </div>
   );
 };

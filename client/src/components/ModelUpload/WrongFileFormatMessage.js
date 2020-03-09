@@ -4,6 +4,11 @@ const wrongFormatStyle = {
   color: "crimson"
 };
 
+/**
+ * TODO
+ *  - correct <code> font size
+ */
+
 export default () => {
   return (
     <div style={wrongFormatStyle}>
