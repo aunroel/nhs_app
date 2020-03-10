@@ -7,7 +7,6 @@ old stuff/README_orig.md
 
 /flaskenv
 .env
-env/
 old.docker-compose.yml
 
 __pycache__

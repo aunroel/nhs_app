@@ -1,5 +1,24 @@
 version : "3.2"
 
+services:
+
+  mysql-docker-local:
+    image: mysql:5.7.28
+    container_name: mysql_dev_container
+    restart: unless-stopped
+
+    environment:
+      MYSQL_DATABASE:       "${DEV_DB_NAME}"
+      MYSQL_USER:           "${DEV_DB_USER}"
+      MYSQL_ROOT_PASSWORD:  "${DEV_DB_ROOT_PSWD}"
+      MYSQL_PASSWORD:       "${DEV_DB_PSWD}"
+
+    ports:
+      - "${DEV_DB_PORT}:3306"
+
+    volumes:
+      - ./mysql-dev-db:/var/lib/mysql
+
 services :
 
   nhs_fed_dev:
