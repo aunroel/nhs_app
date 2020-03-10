@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+    name: "nhsapp"
+    labels:
+        app: "nhsapp"
+    annotations:
+        kubernetes.io/ingress.class: addon-http-application-routing
+spec:
+    rules:
+        - host: nhsappfdaf-nhsapp.9de0e186c93b45e9b41a.uksouth.aksapp.io
+          http:
+            paths:
+            - path: /
+              backend:
+                serviceName: "nhsapp"
+                servicePort: 80
