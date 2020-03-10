@@ -4,7 +4,7 @@ from flask_migrate import Migrate
 from flask_login import LoginManager, current_user, login_user
 from flask_restful import Api
 from flask_bootstrap import Bootstrap
-from config import Config
+from config import Config, StagingConfig
 from werkzeug.urls import url_parse
 
 
@@ -139,4 +139,6 @@ def not_found_error(error):
 def internal_error(error):
     headers = {'Content-Type': 'text/html'}
     return make_response(render_template('500.html'), 500, headers)
+
+
 

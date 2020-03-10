@@ -8,6 +8,7 @@ old stuff/README_orig.md
 /flaskenv
 .env
 old.docker-compose.yml
+mysql-dev-db
 
 __pycache__
 nhs_app/forms/__pycache__/
