@@ -27,7 +27,7 @@ jobs:
     - name: Build and push image to ACR
       id: build-image
       run: |
-        docker build "$GITHUB_WORKSPACE/app" -f  "Dockerfile" -t nhsappregistry.azurecr.io/nhsapp:${{ github.sha }}
+        docker build "/app" -f  "Dockerfile" -t nhsappregistry.azurecr.io/nhsapp:${{ github.sha }}
         docker push nhsappregistry.azurecr.io/nhsapp:${{ github.sha }}
     
     - uses: azure/k8s-set-context@v1
