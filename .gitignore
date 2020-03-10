@@ -9,6 +9,7 @@ old stuff/README_orig.md
 .env
 old.docker-compose.yml
 mysql-dev-db
+env/
 
 __pycache__
 nhs_app/forms/__pycache__/
