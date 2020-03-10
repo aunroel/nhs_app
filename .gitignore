@@ -9,4 +9,7 @@ old stuff/README_orig.md
 .env
 old.docker-compose.yml
 
-__pycache__/
+__pycache__
+nhs_app/forms/__pycache__
+nhs_app/models/__pycache__
+nhs_app/resource/__pycache__
