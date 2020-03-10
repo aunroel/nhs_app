@@ -16,7 +16,7 @@ spec:
         app: "nhs_app"
     spec:
       containers:
-      - name: "flask"
+      - name: "nhs_app"
         image: "nhsappregistry.azurecr.io/nhs_app"
 
 
