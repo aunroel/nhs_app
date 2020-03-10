@@ -1,2 +1,15 @@
-README_orig.md
+old stuff/README_orig.md
 .idea
+
+/client/node_modules
+/client/package-lock.json
+/client/build
+
+/flaskenv
+.env
+old.docker-compose.yml
+
+__pycache__
+nhs_app/forms/__pycache__
+nhs_app/models/__pycache__
+nhs_app/resource/__pycache__
