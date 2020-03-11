@@ -10,7 +10,7 @@ def generate_db_uri(user, password, host, port, db_name):
 
 
 class Config(object):
-    """ Base config, uses staging database server"""
+    """ Base config, uses dev database server"""
     # TODO EMAIL SUPPORT
     DEBUG = True
     TESTING = True

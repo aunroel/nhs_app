@@ -8,7 +8,6 @@ old stuff/README_orig.md
 /flaskenv
 .env
 old.docker-compose.yml
-mysql-dev-db
 env/
 
 __pycache__
