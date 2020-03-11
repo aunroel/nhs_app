@@ -1,8 +1,6 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from time import time
 from app import db, login
-import jwt
 
 
 class User(UserMixin, db.Model):
@@ -22,7 +20,6 @@ class User(UserMixin, db.Model):
 
     def __str__(self):
         return {
-            'id': self.id,
             'username': self.username,
             'email': self.email,
             'type': self.user_type
