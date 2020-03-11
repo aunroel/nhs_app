@@ -22,5 +22,27 @@ class ApiDoc(Resource):
 
     @login_required
     def get(self):
+        mobile = [{
+            'status': 'dev',
+            'method': 'POST',
+            'url': '/update/:uid',
+            'body': 'standard data in json format',
+            'description': 'An endpoint to receive updates from the nodes'
+        },
+            {
+                'status': 'ready',
+                'method': 'POST',
+                'url': '/node',
+                'body': '{"uid": "unique id for the device"}',
+                'description': 'An endpoint to register the device with the server'
+            },
+            {
+                'status': 'wip',
+                'method': 'GET',
+                'url': '	/model/:uid',
+                'body': '--//--',
+                'description': 'An endpoint to download a TFLite model from the server'
+            }
+        ]
         headers = {'Content-Type': 'text/html'}
-        return make_response(render_template('api_doc.html'), 200, headers)
+        return make_response(render_template('api_doc.html', mobile=mobile), 200, headers)

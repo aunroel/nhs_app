@@ -15,6 +15,20 @@
         </code>
     </div>
     <h3>List of endpoints, that can be used by the mobile applications</h3>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th scope="row" style="background: limegreen;"></th>
+                <th> Active </th>
+                <th scope="row" style="background: red;"></th>
+                <th> WiP </th>
+                <th scope="row" style="background: orange;"></th>
+                <th> Active, improvable </th>
+            </tr>
+        </tbody>
+
+    </table>
     <table class="table">
         <thead class="thead-dark">
             <tr>
@@ -26,27 +40,21 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <th scope="row" style="background: limegreen;">1</th>
-                <td>POST</td>
-                <td>/update/:uid</td>
-                <td>standard data in json format</td>
-                <td>An endpoint to receive updates from the nodes</td>
+            {% for element in mobile %}
+             <tr>
+                 {% if element.status == 'ready' %}
+                <th scope="row" style="background: limegreen;">{{ loop.index}} </th>
+                 {% elif element.status == 'wip' %}
+                 <th scope="row" style="background: red;">{{ loop.index }}</th>
+                 {% else %}
+                 <th scope="row" style="background: orange;">{{ loop.index }}</th>
+                 {% endif %}
+                <td>{{ element.method }}</td>
+                <td>{{ element.url }}</td>
+                <td>{{ element.body }}</td>
+                <td>{{ element.description }}</td>
             </tr>
-            <tr>
-                <th scope="row" style="background: limegreen;">2</th>
-                <td>POST</td>
-                <td>/node</td>
-                <td>{"uid": "unique id for the device"}</td>
-                <td>An endpoint to register the device with the server</td>
-            </tr>
-            <tr>
-                <th scope="row" style="background: red;">3</th>
-                <td>GET</td>
-                <td>/model</td>
-                <td></td>
-                <td>An endpoint to download a TFLite model from the server</td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 
