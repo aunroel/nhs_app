@@ -1,7 +1,7 @@
 apiVersion: "apps/v1"
 kind: "Deployment"
 metadata:
-  name: "nhs_app"
+  name: "nhs-app"
   namespace: "default"
   labels:
     app: "nhs_app"
@@ -16,7 +16,7 @@ spec:
         app: "nhs_app"
     spec:
       containers:
-      - name: "nhs_app"
+      - name: "nhs-app"
         image: "nhsappregistry.azurecr.io/nhs_app"
 
 
