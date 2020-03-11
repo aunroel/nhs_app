@@ -1,3 +1,2 @@
-include ':app', ':api'
-rootProject.name='Careful AI'
-include ':demoapp'
+rootProject.name='Android'
+include ':app', ':api', ':undergrate'
