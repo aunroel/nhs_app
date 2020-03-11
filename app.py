@@ -4,12 +4,12 @@ from flask_migrate import Migrate
 from flask_login import LoginManager, current_user, login_user
 from flask_restful import Api
 from flask_bootstrap import Bootstrap
-from config import StagingConfig
+from config import Config
 from werkzeug.urls import url_parse
 
 
 app = Flask(__name__)
-app.config.from_object(StagingConfig)
+app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
@@ -29,7 +29,6 @@ api.add_resource(Homepage, '/index', '/', endpoint='index')
 api.add_resource(Aggregator, '/update/<string:uid>', endpoint='update')
 api.add_resource(NodeRegister, '/node', endpoint='node')
 api.add_resource(UserLogout, '/logout', endpoint='logout')
-api.add_resource(UserRegister, '/register', endpoint='register')
 api.add_resource(ApiDoc, '/doc', endpoint='doc')
 api.add_resource(Dashboard, '/dashboard', endpoint='dashboard')
 
