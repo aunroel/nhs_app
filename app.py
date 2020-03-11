@@ -29,7 +29,6 @@ api.add_resource(Homepage, '/index', '/', endpoint='index')
 api.add_resource(Aggregator, '/update/<string:uid>', endpoint='update')
 api.add_resource(NodeRegister, '/node', endpoint='node')
 api.add_resource(UserLogout, '/logout', endpoint='logout')
-api.add_resource(UserRegister, '/register', endpoint='register')
 api.add_resource(ApiDoc, '/doc', endpoint='doc')
 api.add_resource(Dashboard, '/dashboard', endpoint='dashboard')
 
