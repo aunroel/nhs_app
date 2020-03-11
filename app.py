@@ -141,4 +141,8 @@ def internal_error(error):
     return make_response(render_template('500.html'), 500, headers)
 
 
+if __name__ == '__main__':
+    db.init_app(app)
+    app.run(port=5000, debug=True)
+
 
