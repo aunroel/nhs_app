@@ -85,6 +85,18 @@ def internal_error(error):
     return make_response(render_template('500.html'), 500, headers)
 
 
+# @app.route('/plot')
+# def plot():
+#     ml = ML()
+#     ml.get_data_as_json_list()
+#     ml.convert_to_df()
+#     ml.specify_train()
+#     train_stats = ml.train_ds.describe()
+#     train_stats.pop('wellBeingScore')
+#     train_stats = train_stats.transpose()
+#     return 'ok'
+
+
 if __name__ == '__main__':
     db.init_app(app)
     app.run(port=5000, debug=True)

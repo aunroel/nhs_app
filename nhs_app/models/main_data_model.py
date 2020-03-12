@@ -36,7 +36,7 @@ class MainData(db.Model):
     def calls_steps_score_errors(self):
         return [self.wellBeingScore, self.weeklySteps, self.weeklyCalls, self.errorRate]
 
-    def return_all(self):
+    def all_features(self):
         return [self.wellBeingScore, self.supportCode, self.weeklySteps,
                 self.weeklyCalls, self.errorRate, self.postCode]
 
