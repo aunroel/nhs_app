@@ -87,3 +87,5 @@ wrapt==1.11.2
 WTForms==2.2.1
 zipp==2.2.0
 uWsgi
+git+https://github.com/tensorflow/docs
+
