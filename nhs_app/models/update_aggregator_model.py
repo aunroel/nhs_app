@@ -24,13 +24,12 @@ class UpdateAggregator(db.Model):
 
     def __str__(self):
         return {
-            'id': self.id,
-            'support_code':     self.supportCode,
-            'well_being_score': self.wellBeingScore,
-            'weekly_steps':     self.weeklySteps,
-            'weekly_calls':     self.weeklyCalls,
-            'error_rate':       self.errorRate,
-            'post_code':        self.postCode
+            'supportCode':     self.supportCode,
+            'wellBeingScore': self.wellBeingScore,
+            'weeklySteps':     self.weeklySteps,
+            'weeklyCalls':     self.weeklyCalls,
+            'errorRate':       self.errorRate,
+            'postCode':        self.postCode
         }
 
     def save_to_db(self):

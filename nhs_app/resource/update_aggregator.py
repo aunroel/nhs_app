@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse
 from nhs_app.models.update_aggregator_model import UpdateAggregator
-from nhs_app.models.nodes_model import Node
+from nhs_app.models.mobile_model import Node
 
 
 class Aggregator(Resource):
