@@ -39,8 +39,8 @@ class ApiDoc(Resource):
         {
                 'status': 'ready',
                 'method': 'GET',
-                'url': '	/ready',
-                'body': '{"uid": "<unique device id>"}',
+                'url': '	/available',
+                'body': '--//--',
                 'description': 'Ask the server whether a tflite model is ready for download'
         },
         {

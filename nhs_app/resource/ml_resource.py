@@ -10,9 +10,9 @@ _user_parser = reqparse.RequestParser()
 _user_parser.add_argument('uid', type=str, required=True, help='uid required')
 
 
-class MLResource(Resource):
+class MLDownload(Resource):
 
-    def post(self):
+    def get(self):
         data = _user_parser.parse_args()
         if not Node.find_by_uid(data['uid']):
             return {'message': 'Access denied'}, 403
@@ -38,3 +38,15 @@ class MLTrainingResource(Resource):
         headers = {'Content-Type': 'text/html'}
 
         return make_response(render_template('training_complete.html'), 200, headers)
+
+
+class ModelAvailability(Resource):
+
+    @login_required
+    def get(self):
+        headers = {'Content-Type': 'text/html'}
+        if os.path.isfile('models/lite/latest_converted_model.tflite'):
+            return make_response(render_template('model_ready.html', code=200), 200, headers)
+        else:
+            return make_response(render_template('model_ready.html', code=404), 404, headers)
+
