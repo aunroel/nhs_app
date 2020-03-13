@@ -19,6 +19,8 @@ class FeatureFlags(Enum):
 
 
 class ML:
+    # matplotlib crashes python in dev mode if this is not set
+    plt.switch_backend('Agg')
 
     def __init__(self):
         self.raw_data = []
@@ -198,7 +200,11 @@ class ML:
     def convert_to_lite_and_save(self):
         converter = tf.lite.TFLiteConverter.from_keras_model(self.model)
         tflite_model = converter.convert()
-        # dt_string = datetime.now().strftime('%d%m%y_%H%M%S')
+        d_string = datetime.now().strftime('%d_%m_%y')
+
+        if os.path.isfile('models/lite/latest_converted_model.tflite'):
+            os.rename(r'models/lite/latest_converted_model.tflite', r'models/lite/' + d_string + '_model.tflite')
+
         open('models/lite/latest_converted_model.tflite', 'wb').write(tflite_model)
 
 

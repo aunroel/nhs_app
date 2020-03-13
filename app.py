@@ -20,7 +20,7 @@ bootstrap = Bootstrap(app)
 from nhs_app.resource.update_aggregator import Aggregator
 from nhs_app.resource.node import NodeRegister
 from nhs_app.resource.user import UserLogout
-from nhs_app.resource.ml_resource import MLResource, MLTrainingResource
+from nhs_app.resource.ml_resource import MLDownload, MLTrainingResource, ModelAvailability
 from nhs_app.resource.project import Dashboard, Homepage, ApiDoc
 from nhs_app.forms.user_forms import UserLogin, UserRegister
 from nhs_app.models.user_model import User
@@ -32,8 +32,9 @@ api.add_resource(NodeRegister, '/node', endpoint='node')
 api.add_resource(UserLogout, '/logout', endpoint='logout')
 api.add_resource(ApiDoc, '/doc', endpoint='doc')
 api.add_resource(Dashboard, '/dashboard', endpoint='dashboard')
-api.add_resource(MLResource, '/model', endpoint='model')
+api.add_resource(MLDownload, '/model', endpoint='model')
 api.add_resource(MLTrainingResource, '/train', endpoint='train')
+api.add_resource(ModelAvailability, '/available', endpoint='available')
 
 
 @app.route('/login', methods=['GET', 'POST'])
