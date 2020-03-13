@@ -39,8 +39,8 @@ class ApiDoc(Resource):
             {
                 'status': 'wip',
                 'method': 'GET',
-                'url': '	/model/:uid',
-                'body': '--//--',
+                'url': '	/model/',
+                'body': '{"uid": "<unique device id>"}',
                 'description': 'An endpoint to download a TFLite model from the server'
             }
         ]
