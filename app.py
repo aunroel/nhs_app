@@ -4,12 +4,12 @@ from flask_migrate import Migrate
 from flask_login import LoginManager, current_user, login_user
 from flask_restful import Api
 from flask_bootstrap import Bootstrap
-from config import Config
+from config import StagingConfig
 from werkzeug.urls import url_parse
 
 
 app = Flask(__name__)
-app.config.from_object(Config)
+app.config.from_object(StagingConfig)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
