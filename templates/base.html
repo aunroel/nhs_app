@@ -23,6 +23,8 @@
                     {% else %}
                         <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
                         <li><a href="{{ url_for('doc') }}">API Doc</a></li>
+                        <li><a href="{{ url_for('ready') }}">Availability</a></li>
+                        <li><a href="{{ url_for('train') }}" aria-disabled="true">Train Model</a></li>
                     {% endif %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">

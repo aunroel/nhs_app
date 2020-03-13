@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, url_for, redirect, flash, request, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -34,6 +35,16 @@ api.add_resource(ApiDoc, '/doc', endpoint='doc')
 api.add_resource(Dashboard, '/dashboard', endpoint='dashboard')
 api.add_resource(MLResource, '/model', endpoint='model')
 api.add_resource(MLTrainingResource, '/train', endpoint='train')
+
+
+@app.route('/ready')
+def is_model_ready_for_download():
+
+    headers = {'Content-Type': 'text/html'}
+    if os.path.isfile('models/lite/latest_converted_model.tflite'):
+        return make_response(render_template('model_ready.html', code=200), 200, headers)
+    else:
+        return make_response(render_template('model_ready.html', code=404), 404, headers)
 
 
 @app.route('/login', methods=['GET', 'POST'])
