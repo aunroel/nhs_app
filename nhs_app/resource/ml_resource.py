@@ -30,3 +30,4 @@ class MLTrainingResource(Resource):
         ml.updated_refresh()
         ml.predict()
         ml.convert_to_lite_and_save()
+        return 'ok'
