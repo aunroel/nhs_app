@@ -117,11 +117,11 @@ class ML:
         self.train_model()
 
     def updated_refresh(self):
-        # self.get_data_as_json_list()
-        # self.convert_to_df()
-        # self.specify_train()
-        # self.stats()
-        # self.norm()
+        self.get_data_as_json_list()
+        self.convert_to_df()
+        self.specify_train()
+        self.stats()
+        self.norm()
         self.build_model()
 
         EPOCHS = 1000
