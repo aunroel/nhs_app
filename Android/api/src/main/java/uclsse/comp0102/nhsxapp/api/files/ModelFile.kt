@@ -3,34 +3,52 @@ package uclsse.comp0102.nhsxapp.api.files
 import android.content.Context
 import org.tensorflow.lite.Interpreter
 import uclsse.comp0102.nhsxapp.api.extension.createNewFileWithDirIfNotExist
-import uclsse.comp0102.nhsxapp.api.files.core.OnlineFile
+import uclsse.comp0102.nhsxapp.api.files.online.HttpClient
 import java.io.File
+import java.lang.Exception
 import java.net.URL
 
 
 class ModelFile(onHost: URL, subDirWithName: String, appContext: Context) :
-    OnlineFile(onHost, subDirWithName, appContext) {
+    AbsOnlineFile(onHost, subDirWithName, appContext) {
 
-    private val tfLiteInterpreter: Interpreter
-    val _tfLiteOptions: Interpreter.Options
-    val tfLiteOptions
-        get() = _tfLiteOptions
+    private val appContext: Context = appContext
+
+    private val hostAddress: URL = onHost
+    private val dirWithName: String = subDirWithName
+
+    private var tfLiteInterpreter: Interpreter? = null
+
 
 
     init {
-        val tmpFile = File(appContext.filesDir, subDirWithName)
-        tmpFile.createNewFileWithDirIfNotExist()
-        tmpFile.writeBytes(readBytes())
-        tfLiteInterpreter = Interpreter(tmpFile)
-        _tfLiteOptions = Interpreter.Options()
+        if(lastUpdateTime == 0L)
+            update()
+        loadModel()
     }
 
+
+    override fun updateCore(){
+        val httpClient = HttpClient(hostAddress)
+        val newModelBytesArray = httpClient.get(dirWithName)
+        writeBytes(newModelBytesArray)
+        loadModel()
+    }
+
+    override fun uploadCore() {
+        TODO("Not yet implemented")
+    }
 
     fun predict(input: FloatArray, output: FloatArray) {
         val inputArray = arrayOf(input)
         val outputArray = arrayOf(output)
-        tfLiteInterpreter.run(inputArray, outputArray)
+        tfLiteInterpreter?.run(inputArray, outputArray)
     }
 
-
+    private fun loadModel(){
+        val tmpFile = File(appContext.filesDir, dirWithName)
+        tmpFile.createNewFileWithDirIfNotExist()
+        tmpFile.writeBytes(readBytes())
+        tfLiteInterpreter = Interpreter(tmpFile)
+    }
 }

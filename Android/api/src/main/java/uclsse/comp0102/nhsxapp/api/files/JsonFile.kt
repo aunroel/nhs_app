@@ -3,63 +3,76 @@ package uclsse.comp0102.nhsxapp.api.files
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import uclsse.comp0102.nhsxapp.api.extension.isNumber
-import uclsse.comp0102.nhsxapp.api.extension.plus
-import uclsse.comp0102.nhsxapp.api.files.core.OnlineFile
+import retrofit2.Retrofit
+import uclsse.comp0102.nhsxapp.api.extension.isJsonField
+import uclsse.comp0102.nhsxapp.api.files.online.HttpClient
+import java.lang.Exception
 import java.net.URL
 
 class JsonFile(onHost: URL, subDirWithName: String, appContext: Context) :
-    OnlineFile(onHost, subDirWithName, appContext) {
+    AbsOnlineFile(onHost, subDirWithName, appContext) {
+
+    private val hostAddress: URL = onHost
+    private val targetDir: String = subDirWithName
 
     private val gJson: Gson = Gson()
     private val utf8Charset = Charsets.UTF_8
 
     init {
         if (readBytes().isEmpty())
-            writeBytes("{}".toByteArray())
+            writeStr("{}")
     }
 
-    fun storeAndOverwrite(data: Any) {
-        val dataMap = mutableMapOf<String, Number>()
-        val fields = data::class.java.declaredFields
-        val numFields = fields.filter { it.type.isNumber() }
-        for (eachField in numFields) {
-            val accessibleBackup = eachField.isAccessible
-            eachField.isAccessible = true
-            dataMap[eachField.name] = eachField.get(data) as Number
-            eachField.isAccessible = accessibleBackup
+    override fun uploadCore() {
+        val client = HttpClient(hostAddress)
+        client.post(readStr(), targetDir)
+    }
+
+    override fun updateCore() {
+        val newData = "{}"
+        writeStr(newData)
+    }
+
+    fun writeObject(data:Any) {
+        val dataReflex = data::class.java
+        val fields = dataReflex.declaredFields.filter {it.isJsonField()}
+        val dataMap = fields.associate {
+            val accessBak = it.isAccessible
+            it.isAccessible = true
+            val value = it.get(data)!!
+            it.isAccessible = accessBak
+            val annotation = it.getDeclaredAnnotation(JsonData::class.java)!!
+            val name = annotation.name
+            name to value
         }
-        val newDataBytes = gJson.toJson(dataMap).toByteArray(utf8Charset)
-        writeBytes(newDataBytes)
+        val newDataStr = gJson.toJson(dataMap)
+        writeStr(newDataStr)
     }
 
-    fun storeAndAccumulate(data: Any) {
-        val previousJsonStr = readBytes().toString(utf8Charset)
-        val dataMap = fromJsonStrToNumberMap(previousJsonStr)
-        val fields = data::class.java.declaredFields
-        val numFields = fields.filter { it.type.isNumber() }
-        for (eachField in numFields) {
-            val accessibleBackup = eachField.isAccessible
-            eachField.isAccessible = true
-            val currentValue = dataMap[eachField.name] ?: 0
-            val fieldValue = eachField.get(data) as Number
-            dataMap[eachField.name] = currentValue plus fieldValue
-            eachField.isAccessible = accessibleBackup
+    fun <T : Any> readObject(type: Class<T>): T {
+        val jsonStr = readStr()
+        val dataMap = fromJsonStrToNumberMap(jsonStr)
+        val tmpObject = type.getConstructor().newInstance()
+        dataMap.forEach { (fieldName, fieldValue) ->
+            val field = type.getDeclaredField(fieldName)
+            val accessibleBak = field.isAccessible
+            field.isAccessible = true
+            field.set(tmpObject, fieldValue)
+            field.isAccessible = accessibleBak
         }
-        val newDataBytes = gJson.toJson(dataMap).toByteArray(utf8Charset)
-        writeBytes(newDataBytes)
+        return return tmpObject
     }
 
-    fun <T : Any> to(type: Class<T>): T {
-        val jsonStr = readBytes().toString(utf8Charset)
-        return gJson.fromJson(jsonStr, type)
+    private fun readStr(): String{
+        return readBytes().toString(utf8Charset)
     }
 
-    private fun fromJsonStrToNumberMap(jsonStr: String): MutableMap<String, Number> {
-        val mapType = object : TypeToken<MutableMap<String, Number>>() {}.type
+    private fun writeStr(value: String){
+        writeBytes(value.toByteArray(utf8Charset))
+    }
+
+    private fun fromJsonStrToNumberMap(jsonStr: String): MutableMap<String, Any> {
+        val mapType = object : TypeToken<MutableMap<String, Any>>() {}.type
         return gJson.fromJson(jsonStr, mapType)
     }
-
 }
-
-

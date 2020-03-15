@@ -1,0 +1,64 @@
+<resources>
+    <string name="app_name">Careful AI</string>
+    <string name="title_home">Home</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_messages">Contact</string>
+    <string name="title_report">My Progress</string>
+    <string name="title_config">My Care Network</string>
+
+
+
+    <string name="config_name"> Name </string>
+    <string name="config_number"> Contact No. </string>
+    <string name="config_title"> Your Care Network </string>
+    <string name="config_editButton"> Save Changes </string>
+
+
+    <string name="messages_title"> Contact History </string>
+    <string name="message_contactpl"> John Doe</string>
+
+    <string name="intro_text1"> A carer support worker
+        will have recommended this application to you. They recognise that carers often forget to
+        look after themselves. This app has been designed to encourage you to do this. \n\n
+        Occasionally it will nudge you to keep in contact with people you like to speak to, or to
+        pursue activities with them. It will also make you aware of new local groups with similar
+        interests to yourself. \n\n
+        If you consent to this, enter your first name below then click \'Save\'
+    </string>
+
+    <string name="setup_text1">
+        Set up your primary care network on the next three screens.
+        Do this initially with your carer support worker. \n Once saved you can change these at any time.\n\n
+        Who do you like to talk to?
+    </string>
+
+    <string name="setup_text2">
+        What activities do you like?
+    </string>
+
+    <string name="setup_text3">
+        Your carer support worker will let you know what level of activity is good for your wellbeing. \n
+        Please enter it below then click \'Save\'.\n
+    </string>
+
+    <string name="setup_text4">
+        Over the past 7 days, how well have you felt?
+    </string>
+
+    <string name="auto_format1"> Hello </string>
+    <string name="auto_format2"> Just to let you know I am  </string>
+    <string name="auto_format3"> How about on </string>
+    <string name="auto_format4"> at </string>
+    <string name="auto_format5"> we meet for a </string>
+    <string name="auto_format6"> All the best, </string>
+    <string name="auto_format7"> Include wellbeing diary </string>
+
+
+    <string name="seekbar_helper"> As needed, move the Red \n Button up or down the scale \n to log how well you feel.\n
+        On the scale:\n (0 = lowest score \n 10 = highest score).\n Then click Save. \n This will create a diary entry
+    \n in your App.</string>
+
+    <string name="clickonlogos"> Click on the logos below to access local Internet resources on the internet and apps </string>
+
+
+</resources>

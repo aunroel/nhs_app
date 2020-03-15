@@ -1,7 +1,9 @@
 package uclsse.comp0102.nhsxapp.api.extension
 
 import com.google.gson.internal.LazilyParsedNumber
+import uclsse.comp0102.nhsxapp.api.files.JsonData
 import java.io.File
+import java.lang.reflect.Field
 import java.net.URL
 import java.util.*
 
@@ -31,16 +33,26 @@ infix fun Number.plus(other: Number): Number {
     }
 }
 
-fun Class<*>.isNumber(): Boolean {
-    if (!isPrimitive) return false
-    val numberClassTypes = listOf(
-        Double::class.java, Float::class.java,
-        Short::class.java, Int::class.java, Long::class.java,
-        Byte::class.java, Char::class.java
-    )
-    return this in numberClassTypes
-}
+val numberClassTypesList = listOf(
+    Double::class.java, Float::class.java,
+    Short::class.java, Int::class.java, Long::class.java,
+    Byte::class.java, Char::class.java
+)
 
+val Field.isNumberType: Boolean
+    get() = this.type in numberClassTypesList
+
+val stringClassType = String::class.java
+val Field.isStringType: Boolean
+get() = type == stringClassType
+
+fun Field.isJsonField():Boolean{
+    return this.getDeclaredAnnotation(JsonData::class.java) != null
+}
+var accessibleBak: Boolean = false
+fun Field.activateAccessible(){
+
+}
 fun String.formatSubDir(): String {
     return this.replace("//", "/")
         .removeSurrounding("/")
