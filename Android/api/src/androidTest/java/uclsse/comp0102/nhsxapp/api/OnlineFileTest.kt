@@ -1,106 +1,23 @@
 package uclsse.comp0102.nhsxapp.api
 
-import android.content.Context
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.google.common.truth.Truth.assertThat
-import org.junit.After
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import uclsse.comp0102.nhsxapp.api.files.NhsFileSystem
-import uclsse.comp0102.nhsxapp.api.files.core.OnlineFile
-import java.nio.charset.Charset
+import uclsse.comp0102.nhsxapp.api.files.online.HttpClient
+import java.net.URL
 
 @RunWith(AndroidJUnit4::class)
 class OnlineFileTest {
 
-    private val nhsRepository: NhsFileSystem
-    private val sourceFileDirWithName: String
-    private val targetFileDirWithName: String
-    private val initialDataInSourceFile: String
-    private val initialDataInTargetFile: String
+    private val httpClient = HttpClient(URL("http://127.0.0.1:5000/"))
 
-    private var sourceFile: OnlineFile? = null
-    private var targetFile: OnlineFile? = null
-
-
-    init {
-        val context = getApplicationContext<Context>()
-        nhsRepository = NhsFileSystem(context)
-        sourceFileDirWithName = context.getString(R.string.TEST_SRC_TXT_FILE_PATH)
-        targetFileDirWithName = context.getString(R.string.TEST_TAR_TXT_FILE_PATH)
-        initialDataInSourceFile = context.getString(R.string.TEST_INIT_DATA_IN_SRC_FILE)
-        initialDataInTargetFile = context.getString(R.string.TEST_INIT_DATA_IN_TAR_FILE)
-    }
-
-    @Before
-    fun setUp() {
-        sourceFile = nhsRepository.access(
-            OnlineFile::class.java,
-            sourceFileDirWithName
-        )
-        targetFile = nhsRepository.access(
-            OnlineFile::class.java,
-            targetFileDirWithName
-        )
-
-    }
-
-    @After
-    fun tearDown() {
-        nhsRepository.clearAllLocalCache()
-        sourceFile = null
-        targetFile = null
-    }
+    private val uID = "e01a469f-abfd-48a6-864f-4f796613b7c4"
+    private val subDirWithName = ""
+    private val fileName = "/model"
 
     @Test
-    fun testReadBytes() {
-        val src = sourceFile!!
-        assertThat(src).isNotNull()
-        val txtDataInSourceFile = src.readBytes().toString(Charsets.UTF_8)
-        assertThat(txtDataInSourceFile).isEqualTo(initialDataInSourceFile)
-        val tar = targetFile!!
-        assertThat(tar).isNotNull()
-        val txtDataInTargetFile = tar.readBytes().toString(Charsets.UTF_8)
-        assertThat(txtDataInTargetFile).isEqualTo(initialDataInTargetFile)
-    }
-
-    @Test
-    fun testWriteBytes() {
-        val src = sourceFile!!
-        val tar = targetFile!!
-        tar.writeBytes(src.readBytes())
-        val newDataFromRepository = nhsRepository.access(
-            OnlineFile::class.java,
-            targetFileDirWithName
-        ).readBytes()
-        assertThat(newDataFromRepository).isEqualTo(src.readBytes())
-    }
-
-    @Test
-    fun testUpdate() {
-        val src = sourceFile!!
-        val tar = targetFile!!
-        tar.writeBytes(src.readBytes())
-        tar.update()
-        val txtDataInTargetFile = tar.readBytes().toString(Charsets.UTF_8)
-        assertThat(txtDataInTargetFile).isEqualTo(initialDataInTargetFile)
-    }
-
-    @Test
-    fun testUpload() {
-        val src = sourceFile!!
-        val tar = targetFile!!
-        tar.writeBytes(src.readBytes())
-        tar.upload()
-        nhsRepository.clearAllLocalCache()
-        val newTarStrFromRepository = nhsRepository.access(
-            OnlineFile::class.java,
-            targetFileDirWithName
-        ).readBytes().toString(Charset.defaultCharset())
-        val srcStr = src.readBytes().toString(Charset.defaultCharset())
-        assertThat(newTarStrFromRepository).isEqualTo(srcStr)
+    fun testDownload() {
+        httpClient.download(subDirWithName, fileName)
     }
 
 }

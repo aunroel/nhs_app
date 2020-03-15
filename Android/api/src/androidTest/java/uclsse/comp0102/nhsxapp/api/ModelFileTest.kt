@@ -10,7 +10,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import uclsse.comp0102.nhsxapp.api.files.ModelFile
-import uclsse.comp0102.nhsxapp.api.files.NhsFileSystem
 
 @RunWith(AndroidJUnit4::class)
 class ModelFileTest {

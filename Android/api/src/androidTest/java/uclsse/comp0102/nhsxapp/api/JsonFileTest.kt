@@ -9,7 +9,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import uclsse.comp0102.nhsxapp.api.files.JsonFile
-import uclsse.comp0102.nhsxapp.api.files.NhsFileSystem
 import kotlin.math.roundToInt
 
 @RunWith(AndroidJUnit4::class)
@@ -58,27 +57,17 @@ class JsonFileTest {
 
     @Test
     fun testTo() {
-        val actual = firstJsonFile!!.to(TestJsonFormat::class.java)
+        val actual = firstJsonFile!!.readObject(TestJsonFormat::class.java)
         val expected = TestJsonFormat(byte = 1, double = 2.1, float = 3.1f, int = 4, long = 5, short = 6)
         assertThat(actual).isEqualTo(expected)
     }
 
     @Test
-    fun testStoreDataAndOverwriteDuplication() {
-        val expected = secondJsonFile!!.to(TestJsonFormat::class.java)
+    fun testStore() {
+        val expected = secondJsonFile!!.readObject(TestJsonFormat::class.java)
         val first = firstJsonFile!!
-        first.storeAndOverwrite(expected)
-        val actual = first.to(TestJsonFormat::class.java)
-        assertThat(actual).isEqualTo(expected)
-    }
-
-    @Test
-    fun testStoreDataAndAccumulateDuplication() {
-        val secondDataObject = secondJsonFile!!.to(TestJsonFormat::class.java)
-        val first = firstJsonFile!!
-        first.storeAndAccumulate(secondDataObject)
-        val actual = first.to(TestJsonFormat::class.java)
-        val expected = combinedJsonFile!!.to(TestJsonFormat::class.java)
+        first.writeObject(expected)
+        val actual = first.readObject(TestJsonFormat::class.java)
         assertThat(actual).isEqualTo(expected)
     }
 

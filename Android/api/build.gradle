@@ -3,6 +3,7 @@ ext {
     retrofit_version = '2.7.1'
     room_version = '2.2.4'
     tensorflow_lite_version = '0.0.0-nightly'
+    coreRuntimeVersion = '2.1.0'
 }
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
@@ -62,4 +63,5 @@ dependencies {
     androidTestImplementation "androidx.work:work-testing:${worker_version}"
     androidTestImplementation 'androidx.test.ext:truth:1.2.0'
     testImplementation 'junit:junit:4.13'
+    implementation "androidx.arch.core:core-runtime:${coreRuntimeVersion}"
 }

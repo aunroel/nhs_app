@@ -7,7 +7,9 @@ import uclsse.comp0102.nhsxapp.api.R
 import uclsse.comp0102.nhsxapp.api.background.noti.NotificationApplier
 import uclsse.comp0102.nhsxapp.api.files.JsonFile
 import uclsse.comp0102.nhsxapp.api.files.ModelFile
-import uclsse.comp0102.nhsxapp.api.files.NhsFileSystem
+import uclsse.comp0102.nhsxapp.api.NhsFileSystem
+import uclsse.comp0102.nhsxapp.api.extension.formatSubDir
+import uclsse.comp0102.nhsxapp.api.files.RegistrationFile
 
 class NhsDownloadWork(context: Context, workerParams: WorkerParameters
 ) : CoroutineWorker(context, workerParams) {
@@ -18,14 +20,18 @@ class NhsDownloadWork(context: Context, workerParams: WorkerParameters
 
     init {
         val file = NhsFileSystem(context)
-        val jsonFileDirWithName = context.getString(R.string.JSON_FILE_NAME_WITH_SUB_DIR)
-        jsonFile = file.access(JsonFile::class.java, jsonFileDirWithName)
-        val modelFileDirWithName = context.getString(R.string.TFL_FILE_NAME_WITH_SUB_DIR)
-        modelFile = file.access(ModelFile::class.java, modelFileDirWithName)
+        val uID = file.access(
+            RegistrationFile::class.java,
+            context.getString(R.string.REGISTER_FILE_PATH)
+        ).uID
+        val jsonPath = "${context.getString(R.string.JSON_FILE_SUB_DIR)}/${uID}".formatSubDir()
+        jsonFile = file.access(JsonFile::class.java, jsonPath)
+        val modelPath = "${context.getString(R.string.TFL_FILE_SUB_DIR)}/${uID}".formatSubDir()
+        modelFile = file.access(ModelFile::class.java, modelPath)
     }
 
     override suspend fun doWork(): Result {
-        val lastUploadJsonFileTime = jsonFile.timeForLastUpdate()
+        val lastUploadJsonFileTime = jsonFile.lastUpdateTime
         val currentTime = System.currentTimeMillis()
         val isJsonFileUploadOverOneDay =
             (currentTime-lastUploadJsonFileTime) > millisForSingleDay

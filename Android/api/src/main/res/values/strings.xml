@@ -1,5 +1,6 @@
 <resources>
-    <string name="JSON_FILE_NAME_WITH_SUB_DIR">/file/test_data.json</string>
-    <string name="TFL_FILE_NAME_WITH_SUB_DIR">/file/test.tflite</string>
+    <string name="JSON_FILE_SUB_DIR">/update/</string>
+    <string name="TFL_FILE_SUB_DIR">/model/</string>
     <string name="HOST_ADDRESS">http://10.0.2.2:5000/</string>
+    <string name="REGISTER_FILE_PATH">/preference.pf</string>
 </resources>
