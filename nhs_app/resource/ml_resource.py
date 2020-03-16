@@ -12,7 +12,7 @@ _user_parser.add_argument('uid', type=str, required=True, help='uid required')
 
 class MLDownload(Resource):
 
-    def get(self):
+    def post(self):
         data = _user_parser.parse_args()
         if not Node.find_by_uid(data['uid']):
             return {'message': 'Access denied'}, 403

@@ -45,7 +45,7 @@ class ApiDoc(Resource):
         },
         {
                 'status': 'ready',
-                'method': 'GET',
+                'method': 'POST',
                 'url': '	/model',
                 'body': '{"uid": "<unique device id>"}',
                 'description': 'An endpoint to download a TFLite model from the server'
