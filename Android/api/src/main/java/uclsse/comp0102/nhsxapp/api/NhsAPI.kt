@@ -18,6 +18,8 @@ import java.time.Duration
 
 class NhsAPI private constructor(appContext: Context) {
 
+    // Static variables to implement Multiton pattern
+    // for minimising the memory usage of the package
     companion object {
         private var core: NhsAPI? = null
         @Synchronized
@@ -27,16 +29,18 @@ class NhsAPI private constructor(appContext: Context) {
         }
     }
 
-    private val uID = "e01a469f-abfd-48a6-864f-4f796613b7c4"
+    // Json File and Model file
     private lateinit var jsonFile: JsonFile
     private lateinit var modelFile: ModelFile
 
-    fun initFiles(appContext: Context) {
+    init {
         val nhsFileSystem = NhsFileSystem(appContext)
+        // Access the uID of the application by the RegistrationFile
         val registrationFile = nhsFileSystem.access(
             RegistrationFile::class.java,
             appContext.getString(R.string.REGISTER_FILE_PATH)
         )
+        // Access the json file and model file
         val tflFileSubDir = appContext.getString(R.string.TFL_FILE_SUB_DIR)
         modelFile = nhsFileSystem.access(
             ModelFile::class.java,
@@ -47,20 +51,23 @@ class NhsAPI private constructor(appContext: Context) {
             JsonFile::class.java,
             "${jsonFileSubDir}/${registrationFile.uID}".formatSubDir()
         )
+        //initTask(appContext)
     }
 
+    // creating of the periodically Tasks for downloading and uploading files
     fun initTasks(appContext: Context) {
+        // Constraint: Must have network connection
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
-
+        // Create a task for periodically Upload Json File
         val nhsTaskController = NhsTaskController(appContext)
         nhsTaskController.PeriodicalTaskStarter()
             .setRepeatDuration(Duration.ofDays(7))
             .setConstraints(constraints)
             .setBackupDuration(Duration.ofHours(3))
             .setWorkType(NhsUploadWork::class.java)
-
+        // Create a task for periodically download the model file
         nhsTaskController.PeriodicalTaskStarter()
             .setRepeatDuration(Duration.ofDays(7))
             .setConstraints(constraints)
@@ -68,6 +75,9 @@ class NhsAPI private constructor(appContext: Context) {
             .setWorkType(NhsDownloadWork::class.java)
     }
 
+    // Access the training score from the TensorFlow model
+    // The input parameters are model-independent, so that there
+    // can be any number of features.
     fun getTrainingScore(
         vararg parameters: Number,
         fromModelType:ModelType = ModelType.Local
@@ -80,33 +90,49 @@ class NhsAPI private constructor(appContext: Context) {
         return outputContainer[0].toInt()
     }
 
-    fun record(data: Any) {
+    // it can store the data and the method accepts instance of any class,
+    // it will automatically extract the numbers and strings fields from
+    // the input instance.
+    fun record(newData: Any) {
+        // if the json file has already been uploaded, then overwrite it.
         if (jsonFile.lastUploadTime >= jsonFile.lastModifiedTime)
-            jsonFile.writeObject(data)
-        val dataType = data::class.java
+            jsonFile.writeObject(newData)
+        // else it will merge the current data and new data.
+        val dataType = newData::class.java
         val currentData = jsonFile.readObject(dataType)
         dataType.declaredFields.forEach {
+            val accessibleBak = it.isAccessible
+            it.isAccessible = true
             when {
                 it.isNumberType -> {
-                    val newValue = (it.get(data)?:0) as Number
+                    val newValue = (it.get(newData)?:0) as Number
                     val curValue = (it.get(currentData) ?: 0) as Number
                     val finalValue = curValue plus newValue
                     it.set(currentData, finalValue)
                 }
                 it.isStringType -> {
-                    val newValue = (it.get(data)?:"") as String
+                    val newValue = (it.get(newData)?:"") as String
                     val curValue = (it.get(currentData) ?: "") as String
                     val finalValue = if(newValue == "") curValue else newValue
                     it.set(currentData, finalValue)
 
                 }
                 else -> {
-                    val finalValue = it.get(data) ?: it.get(currentData)
+                    val finalValue = it.get(newData) ?: it.get(currentData)
                     it.set(currentData, finalValue)
                 }
             }
+            it.isAccessible = accessibleBak
         }
         jsonFile.writeObject(currentData)
+    }
+
+    fun uploadJsonNow(){
+        jsonFile.upload()
+    }
+
+    fun updateTfModelNow(){
+        modelFile.update()
     }
 
     enum class ModelType{

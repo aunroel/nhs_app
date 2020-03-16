@@ -8,7 +8,10 @@ import java.io.File
 import java.lang.Exception
 import java.net.URL
 
-
+// It is similar with the JsonFile class, the ModelFile
+// class also a subclass of the onlineFile. Besides, the
+// ModelFile wrapped the TFlite APIs, so that it can be
+// used to implement machine learning
 class ModelFile(onHost: URL, subDirWithName: String, appContext: Context) :
     AbsOnlineFile(onHost, subDirWithName, appContext) {
 

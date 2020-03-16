@@ -4,8 +4,16 @@ import android.content.Context
 import uclsse.comp0102.nhsxapp.api.files.local.database.Record
 import uclsse.comp0102.nhsxapp.api.files.local.database.RecordDatabase
 
+// It is a encapsulation of the room database
+// and also an re-implementation of local file
+// It is used to store the binary data of a file
+// with its last modified time, last update and
+// upload time.
 open class LocalRecord(idStr: String, appContext: Context) {
 
+    // These static field and method are used
+    // to implement the flyweight design pattern
+    // for reducing the memory space.
     companion object {
         private var flyWeightDatabase: RecordDatabase? = null
 

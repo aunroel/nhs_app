@@ -3,18 +3,24 @@ package uclsse.comp0102.nhsxapp.api.files
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import retrofit2.Retrofit
+import uclsse.comp0102.nhsxapp.api.extension.convertTo
 import uclsse.comp0102.nhsxapp.api.extension.isJsonField
 import uclsse.comp0102.nhsxapp.api.files.online.HttpClient
-import java.lang.Exception
 import java.net.URL
 
+// It is a subclass of the OnlineFile and
+// it also encapsulate the google json class,
+// so that the class is able to convert instances
+// of data class to json string and then, it also
+// is able to send these data to server.
 class JsonFile(onHost: URL, subDirWithName: String, appContext: Context) :
     AbsOnlineFile(onHost, subDirWithName, appContext) {
 
+    // Basic fields for posting
     private val hostAddress: URL = onHost
     private val targetDir: String = subDirWithName
 
+    // fields about GSON
     private val gJson: Gson = Gson()
     private val utf8Charset = Charsets.UTF_8
 
@@ -23,6 +29,7 @@ class JsonFile(onHost: URL, subDirWithName: String, appContext: Context) :
             writeStr("{}")
     }
 
+    // implementation of the abstract functions
     override fun uploadCore() {
         val client = HttpClient(hostAddress)
         client.post(readStr(), targetDir)
@@ -33,6 +40,8 @@ class JsonFile(onHost: URL, subDirWithName: String, appContext: Context) :
         writeStr(newData)
     }
 
+    // implementation for converting between
+    // different classes and json string
     fun writeObject(data:Any) {
         val dataReflex = data::class.java
         val fields = dataReflex.declaredFields.filter {it.isJsonField()}
@@ -53,11 +62,14 @@ class JsonFile(onHost: URL, subDirWithName: String, appContext: Context) :
         val jsonStr = readStr()
         val dataMap = fromJsonStrToNumberMap(jsonStr)
         val tmpObject = type.getConstructor().newInstance()
-        dataMap.forEach { (fieldName, fieldValue) ->
-            val field = type.getDeclaredField(fieldName)
+        for (field in type.declaredFields) {
+            val annotation = field.getDeclaredAnnotation(JsonData::class.java) ?: continue
+            val name = annotation.name
+            val value = dataMap[name] ?: continue
+            val type = field.type
             val accessibleBak = field.isAccessible
             field.isAccessible = true
-            field.set(tmpObject, fieldValue)
+            field.set(tmpObject, value.convertTo(field.type))
             field.isAccessible = accessibleBak
         }
         return return tmpObject
