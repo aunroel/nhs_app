@@ -29,6 +29,7 @@ class NhsTrainingDataHolder {
     @JsonData(name = "wellBeingScore")
     private var _realWellBeingScore:Int = 1
 
+    @JsonData(name = "predictWellBeingScore")
     private var _predictedWellBeingScore:Int = 1
 
 

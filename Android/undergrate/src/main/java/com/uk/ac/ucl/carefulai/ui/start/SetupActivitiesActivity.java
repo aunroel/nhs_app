@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.uk.ac.ucl.carefulai.Model;
 import com.uk.ac.ucl.carefulai.R;
 
 
@@ -70,6 +71,7 @@ public class SetupActivitiesActivity extends AppCompatActivity {
         }
 
         setTitle("Setup Your Activities");
+        new Model(getApplicationContext()).storeBasicInformation(carerSupportRef, postcode.toString());
     }
 
 

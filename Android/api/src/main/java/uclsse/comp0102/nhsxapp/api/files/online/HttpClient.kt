@@ -3,15 +3,19 @@ package uclsse.comp0102.nhsxapp.api.files.online
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import org.json.JSONObject
 import retrofit2.Retrofit
 import uclsse.comp0102.nhsxapp.api.extension.formatSubDir
 import java.io.IOException
 import java.net.URL
 
-
+// The class is a simply encapsulation for the
+// retrofit2 library. It is used to upload the
+// json string and download the model data
 class HttpClient(onHost: URL) {
 
+    // These static field and method are used
+    // to implement the flyweight design pattern
+    // for reducing the memory space.
     companion object {
         private val FLY_WEIGH_CONNECTORS: MutableMap<String, ServerConnector> = mutableMapOf()
         @Synchronized
@@ -26,6 +30,7 @@ class HttpClient(onHost: URL) {
             return newConnector
         }
     }
+
 
     private val connector: ServerConnector = getConnector(onHost)
 

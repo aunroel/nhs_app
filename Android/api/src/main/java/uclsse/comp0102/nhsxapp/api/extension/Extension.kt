@@ -33,10 +33,33 @@ infix fun Number.plus(other: Number): Number {
     }
 }
 
+fun <T: Any> Any.convertTo(type: Class<T>): Any {
+
+    fun toNumber(): Number {
+        this as Number
+        return when (type) {
+            Float::class.java -> this.toFloat()
+            Double::class.java -> this.toDouble()
+            Short::class.java -> this.toShort()
+            Int::class.java -> this.toInt()
+            Long::class.java -> this.toLong()
+            Byte::class.java -> this.toByte()
+            LazilyParsedNumber::class -> LazilyParsedNumber(this.toString())
+            else -> throw UnsupportedOperationException("A unsupported number type $type")
+        }
+    }
+
+    return when (type) {
+        in numberClassTypesList -> toNumber()
+        stringClassType -> this.toString()
+        else -> throw UnsupportedOperationException("A unsupported data type $type")
+    }
+}
+
 val numberClassTypesList = listOf(
     Double::class.java, Float::class.java,
     Short::class.java, Int::class.java, Long::class.java,
-    Byte::class.java, Char::class.java
+    Byte::class.java, LazilyParsedNumber::class
 )
 
 val Field.isNumberType: Boolean

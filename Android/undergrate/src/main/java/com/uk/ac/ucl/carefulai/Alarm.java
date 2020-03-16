@@ -95,8 +95,7 @@ public class Alarm extends BroadcastReceiver {
         }
 
 
-        model = new Model();
-
+        model = new Model(context);
         myDb = new DatabaseHelper(context);
 
         int score = 0;
