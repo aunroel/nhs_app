@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/button_container"
+
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -18,32 +19,27 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/simuButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Simulated Data" />
-
-        <Button
-            android:id="@+id/predictButton"
+            android:id="@+id/predict_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Predict Wellbeing Score" />
 
         <Button
-            android:id="@+id/uploadButton"
+            android:id="@+id/upload_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Upload Current Json File" />
 
         <Button
-            android:id="@+id/downloadButton"
+            android:id="@+id/update_model"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Download New Model" />
+            android:text="update current model file" />
+
     </LinearLayout>
 
     <TextView
-        android:id="@+id/resultView"
+        android:id="@+id/result_textview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -51,7 +47,7 @@
         android:layout_marginBottom="50dp"
         android:text="Placeholder for the Results text view"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/button_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
