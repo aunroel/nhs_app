@@ -3,6 +3,7 @@ package uclsse.comp0102.nhsxapp.api
 import uclsse.comp0102.nhsxapp.api.files.JsonFile
 import kotlin.math.abs
 
+
 class NhsTrainingDataHolder {
     @JsonFile.JsonData(name = "supportCode")
     var supportCode: String = "Therapist"
