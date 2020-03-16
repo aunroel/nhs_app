@@ -15,7 +15,8 @@ import uclsse.comp0102.nhsxapp.api.files.ModelFile
 import uclsse.comp0102.nhsxapp.api.files.RegistrationFile
 import java.time.Duration
 
-
+/** Open API for prediction
+ */
 class NhsAPI private constructor(appContext: Context) {
 
     // Static variables to implement Multiton pattern
@@ -54,7 +55,8 @@ class NhsAPI private constructor(appContext: Context) {
         //initTask(appContext)
     }
 
-    // creating of the periodically Tasks for downloading and uploading files
+    /** creating of the periodically Tasks for downloading and uploading files
+     */
     fun initTasks(appContext: Context) {
         // Constraint: Must have network connection
         val constraints = Constraints.Builder()
@@ -75,9 +77,9 @@ class NhsAPI private constructor(appContext: Context) {
             .setWorkType(NhsDownloadWork::class.java)
     }
 
-    // Access the training score from the TensorFlow model
-    // The input parameters are model-independent, so that there
-    // can be any number of features.
+    /** Access the training score from the TensorFlow model
+     * The input parameters are model-independent, so that there can be any number of features.
+     */
     fun getTrainingScore(
         vararg parameters: Number,
         fromModelType:ModelType = ModelType.Local
@@ -90,9 +92,9 @@ class NhsAPI private constructor(appContext: Context) {
         return outputContainer[0].toInt()
     }
 
-    // it can store the data and the method accepts instance of any class,
-    // it will automatically extract the numbers and strings fields from
-    // the input instance.
+    /** It can store the data and the method accepts instance of any class,
+     * it will automatically extract the numbers and strings fields from the input instance.
+     */
     fun record(newData: Any) {
         // if the json file has already been uploaded, then overwrite it.
         if (jsonFile.lastUploadTime >= jsonFile.lastModifiedTime)

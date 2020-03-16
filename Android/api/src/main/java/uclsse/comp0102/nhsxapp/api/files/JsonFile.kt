@@ -8,11 +8,11 @@ import uclsse.comp0102.nhsxapp.api.extension.isJsonField
 import uclsse.comp0102.nhsxapp.api.files.online.HttpClient
 import java.net.URL
 
-// It is a subclass of the OnlineFile and
-// it also encapsulate the google json class,
-// so that the class is able to convert instances
-// of data class to json string and then, it also
-// is able to send these data to server.
+/** A subclass of the OnlineFile
+  * also encapsulate the google json class,
+  * so that the class is able to convert instances of data class to json string,
+  * able to send these data to server.
+ */
 class JsonFile(onHost: URL, subDirWithName: String, appContext: Context) :
     AbsOnlineFile(onHost, subDirWithName, appContext) {
 
@@ -30,11 +30,16 @@ class JsonFile(onHost: URL, subDirWithName: String, appContext: Context) :
     }
 
     // implementation of the abstract functions
+
+    /** upload the json file to server
+     */
     override fun uploadCore() {
         val client = HttpClient(hostAddress)
         client.post(readStr(), targetDir)
     }
 
+    /** update the local json file
+     */
     override fun updateCore() {
         val newData = "{}"
         writeStr(newData)

@@ -11,6 +11,9 @@ import uclsse.comp0102.nhsxapp.api.NhsFileSystem
 import uclsse.comp0102.nhsxapp.api.extension.formatSubDir
 import uclsse.comp0102.nhsxapp.api.files.RegistrationFile
 
+/** Download work of the model file
+ * extends class CoroutineWorker
+ */
 class NhsDownloadWork(context: Context, workerParams: WorkerParameters
 ) : CoroutineWorker(context, workerParams) {
 
@@ -18,6 +21,9 @@ class NhsDownloadWork(context: Context, workerParams: WorkerParameters
     private val modelFile: ModelFile
     private val millisForSingleDay: Long = 1000 * 24 * 60 * 60
 
+    /** Initialization
+     * get access to the json and tfl model file with a registerd user ID
+     */
     init {
         val file = NhsFileSystem(context)
         val uID = file.access(
@@ -30,6 +36,11 @@ class NhsDownloadWork(context: Context, workerParams: WorkerParameters
         modelFile = file.access(ModelFile::class.java, modelPath)
     }
 
+    /** Download the model file for a local update, and show notification in foreground
+     * return a successful instance
+     *  checks the timestamp of last update on json file
+     *  if the json file is uploaded over one day then retry
+     */
     override suspend fun doWork(): Result {
         val lastUploadJsonFileTime = jsonFile.lastUpdateTime
         val currentTime = System.currentTimeMillis()

@@ -11,13 +11,20 @@ import uclsse.comp0102.nhsxapp.api.NhsFileSystem
 import uclsse.comp0102.nhsxapp.api.extension.formatSubDir
 import uclsse.comp0102.nhsxapp.api.files.RegistrationFile
 
+/** Upload work of the json and model file
+ */
 class NhsUploadWork(context: Context, workerParams: WorkerParameters
 ) : CoroutineWorker(context, workerParams) {
 
     private val jsonFile: JsonFile
+
+    //formula for the error rate calculation
     private val errorRateFormula =
         { real: Int, predict: Int -> (real - predict) / real.toDouble() }
 
+    /** Initialization
+     * get access to the json file with a registerd user ID
+     */
     init {
         val nhsFileSystem = NhsFileSystem(context)
         val uID = nhsFileSystem.access(
@@ -28,6 +35,11 @@ class NhsUploadWork(context: Context, workerParams: WorkerParameters
         jsonFile = nhsFileSystem.access(JsonFile::class.java, jsonPath)
     }
 
+    /** Upload the json file, show notification in foreground
+     * returns a successful instance
+     * checks if the json file has been modified since last upload work
+     * if so, then retry
+     */
     override suspend fun doWork(): Result {
         if (jsonFile.lastUploadTime >= jsonFile.lastModifiedTime)
             return Result.retry()

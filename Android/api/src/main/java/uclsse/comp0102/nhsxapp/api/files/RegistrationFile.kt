@@ -9,11 +9,12 @@ import java.nio.charset.Charset
 import java.security.MessageDigest
 import kotlin.random.Random
 
-// RegistrationFile manage the unique id of the user,
-// it will check if the user has already registered
-// on the server. If not, it will randomly generate a
-// uID by the SHA256 algorithm and sent the uID to
-// the server for registration.
+/** Registration File manage the unique id of the user,
+  * it will check if the user has already registered
+  * on the server. If not, it will randomly generate a
+  * uID by the SHA256 algorithm and sent the uID to
+  * the server for registration.
+ */
 class RegistrationFile(
     onHost: URL, subDirWithName: String, appContext: Context
 ) : AbsOnlineFile(onHost, subDirWithName, appContext) {
@@ -30,7 +31,9 @@ class RegistrationFile(
         }
     }
 
-    // Repeat the code 10 time to avoid possible collision of UID.
+    /** Register a randomly generated UID
+     * Repeat the code 10 time to avoid possible collision of UID
+     */
     private fun registerUtilSuccessOrThrowException(){
         repeat(10){
             val randomID = createRandomID()
@@ -40,7 +43,8 @@ class RegistrationFile(
         throw IllegalStateException("CANNOT REGISTRATION!")
     }
 
-    // Randomly generate a UID by SHA-256 Algorithm
+    /** Randomly generate a UID by SHA-256 Algorithm
+     */
     private fun createRandomID(): String{
         val randomNum = Random.nextLong(Long.MAX_VALUE)
         val randomStr = "uID:${randomNum}"

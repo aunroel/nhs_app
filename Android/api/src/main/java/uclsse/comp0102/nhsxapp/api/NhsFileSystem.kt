@@ -8,6 +8,8 @@ import uclsse.comp0102.nhsxapp.api.files.local.LocalRecord
 import uclsse.comp0102.nhsxapp.api.files.local.database.RecordDatabase
 import java.net.URL
 
+/** Factory class for creating different types of online files
+ */
 class NhsFileSystem(
     private val appContext: Context
 ) {
@@ -15,6 +17,8 @@ class NhsFileSystem(
     private val cache: MutableMap<String, LocalRecord> = mutableMapOf()
     private val hostAddress: URL = appContext.getString(R.string.HOST_ADDRESS).toURL()
 
+    /** get access to the online files
+     */
     fun <T : AbsOnlineFile> access(fileType: Class<T>, fromRelativePath: String): T {
         return fileType.getConstructor(
             URL::class.java,
@@ -23,6 +27,8 @@ class NhsFileSystem(
         ).newInstance(hostAddress, fromRelativePath.formatSubDir(), appContext)
     }
 
+    /** Clear cache in the local database
+     */
     fun clearAllLocalCache() {
         RecordDatabase.getInstance(appContext).clearAllTables()
     }
