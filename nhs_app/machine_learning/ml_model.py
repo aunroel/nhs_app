@@ -88,8 +88,15 @@ class ML:
 
     def build_model(self):
         self.model = keras.Sequential([
-            keras.layers.Dense(64, activation='relu', input_shape=[len(self.train_ds.keys())]),
-            keras.layers.Dense(64, activation='relu'),
+            keras.layers.Dense(1, activation='sigmoid', input_shape=[len(self.train_ds.keys())]),
+            # keras.layers.Dense(64, activation='relu'),
+            # keras.layers.Dense(1)
+        ])
+
+        self.model = keras.Sequential([
+            # number of input layers == amount of input fields
+            keras.layers.Dense(4, activation='sigmoid', input_shape=[len(self.train_ds.keys())]),
+            # usually it's a good idea to have 1 node, which will serve as an ouput layer
             keras.layers.Dense(1)
         ])
 
@@ -97,30 +104,30 @@ class ML:
 
         self.model.compile(loss='mse', optimizer=optimizer, metrics=['mae', 'mse'])
 
-    def train_model(self):
-        EPOCHS = 1000
-
-        history = self.model.fit(
-            self.normed_train_data, self.train_labels,
-            epochs=EPOCHS, validation_split=0.2, verbose=0,
-            callbacks=[tfdocs.modeling.EpochDots()])
-
-        plotter = tfdocs.plots.HistoryPlotter(smoothing_std=2)
-        plotter.plot({'Basic': history}, metric='mae')
-        plt.ylim([0, 10])
-        plt.ylabel('MAE [MPG]')
-        d_string = datetime.now().strftime('%d_%m_%y')
-        t_string = datetime.now().strftime('%H%M%S')
-
-        self.verify_or_create_dirs('results', d_string)
-
-        plt.savefig('models/results/' + d_string + '/graph_basic_mae_' + t_string + '.png')
-        plt.clf()
-        plotter.plot({'Basic': history}, metric="mse")
-        plt.ylim([0, 20])
-        plt.ylabel('MSE [MPG^2]')
-        plt.savefig('models/results/' + d_string + '/graph_basic_mse_' + t_string + '.png')
-        plt.clf()
+    # def train_model(self):
+    #     EPOCHS = 1000
+    #
+    #     history = self.model.fit(
+    #         self.normed_train_data, self.train_labels,
+    #         epochs=EPOCHS, validation_split=0.2, verbose=0,
+    #         callbacks=[tfdocs.modeling.EpochDots()])
+    #
+    #     plotter = tfdocs.plots.HistoryPlotter(smoothing_std=2)
+    #     plotter.plot({'Basic': history}, metric='mae')
+    #     plt.ylim([0, 10])
+    #     plt.ylabel('MAE [MPG]')
+    #     d_string = datetime.now().strftime('%d_%m_%y')
+    #     t_string = datetime.now().strftime('%H%M%S')
+    #
+    #     self.verify_or_create_dirs('results', d_string)
+    #
+    #     plt.savefig('models/results/' + d_string + '/graph_basic_mae_' + t_string + '.png')
+    #     plt.clf()
+    #     plotter.plot({'Basic': history}, metric="mse")
+    #     plt.ylim([0, 20])
+    #     plt.ylabel('MSE [MPG^2]')
+    #     plt.savefig('models/results/' + d_string + '/graph_basic_mse_' + t_string + '.png')
+    #     plt.clf()
 
     def smart_train_model(self):
         EPOCHS = 1000
@@ -147,14 +154,14 @@ class ML:
         plt.savefig('models/results/' + d_string + '/early_history_mse' + t_string + '.png')
         plt.clf()
 
-    def refresh_model(self):
-        self.get_data_as_json_list()
-        self.convert_to_df()
-        self.specify_train()
-        self.stats()
-        self.norm()
-        self.build_model()
-        self.train_model()
+    # def refresh_model(self):
+    #     self.get_data_as_json_list()
+    #     self.convert_to_df()
+    #     self.specify_train()
+    #     self.stats()
+    #     self.norm()
+    #     self.build_model()
+    #     self.train_model()
 
     def updated_refresh(self):
         self.get_data_as_json_list()

@@ -64,4 +64,3 @@ wrapt==1.12.1
 WTForms==2.2.1
 git+https://github.com/tensorflow/docs
 setuptools==46.0.0
-uWsgi==2.0.18
