@@ -3,7 +3,7 @@
 ## Requisites
   CI/CD            | Python              | Federated ML
 ---------          |-------------------- | -------------
-* Docker           | * Python 3.6        | * Tensorflow
+* Docker           | Python (3.5-3.6.9)        | * Tensorflow
 
 
 # Development 
@@ -46,6 +46,8 @@ flaskenv\Scripts\activate
 pip install -r requirements.txt
 ```
 ### Run
+Make sure that you have the '.env' file in the project root directory with all the entries filled with values.
+In order to run the project for local development, please switch to the 'develop' branch.
 ##### Unix 
 ```
 docker-compose up
