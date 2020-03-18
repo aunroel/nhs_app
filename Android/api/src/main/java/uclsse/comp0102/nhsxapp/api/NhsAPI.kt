@@ -5,7 +5,8 @@ import uclsse.comp0102.nhsxapp.api.extension.*
 import uclsse.comp0102.nhsxapp.api.files.JsonFile
 import uclsse.comp0102.nhsxapp.api.files.ModelFile
 
-
+/** Open API for prediction
+ */
 class NhsAPI private constructor(appContext: Context) {
 
     // Static variables to implement Multiton pattern
@@ -29,9 +30,9 @@ class NhsAPI private constructor(appContext: Context) {
         modelFile = repository.getModelFile()
     }
 
-    // Access the training score from the TensorFlow model
-    // The input parameters are model-independent, so that there
-    // can be any number of features.
+    /** Access the training score from the TensorFlow model
+     * The input parameters are model-independent, so that there can be any number of features.
+     */
     fun getTrainingScore(vararg parameters: Number): Int {
         val trainingDataSet = mutableListOf<Float>()
         parameters.forEach { trainingDataSet.add(it.toFloat()) }
@@ -41,9 +42,9 @@ class NhsAPI private constructor(appContext: Context) {
         return outputContainer[0].toInt()
     }
 
-    // it can store the data and the method accepts instance of any class,
-    // it will automatically extract the numbers and strings fields from
-    // the input instance.
+    /** It can store the data and the method accepts instance of any class,
+     * it will automatically extract the numbers and strings fields from the input instance.
+     */
     fun record(newData: Any) {
         // if the json file has already been uploaded, then overwrite it.
         if (jsonFile.lastUploadTime >= jsonFile.lastModifiedTime)
