@@ -15,7 +15,7 @@ const container = {
   width: "60em",
   backgroundColor: "white",
   padding: "1em"
-}; 
+};
 
 const Container = ({ children }) => {
   return (

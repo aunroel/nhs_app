@@ -11,12 +11,13 @@ import { Register } from "./components/auth/Register";
 const App = () => {
   return (
     <Router>
+      <Header />
       <Container>
-        <Header />
         <Switch>
+          {/* <Route path="/login" component={Login} /> */}
+          <Route path="/register" component={Register} />
           <Route path="/modellist" component={ModelList} />
           <Route path="/modelupload" component={ModelUpload} />
-          <Route path="/register" component={Register} />
           <Route path="/test" component={ReactSandbox} />
         </Switch>
       </Container>

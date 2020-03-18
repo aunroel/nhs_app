@@ -1,3 +1,10 @@
+.headerStyle {
+  background-color: steelblue;
+  color: white;
+  padding: 1em;
+  width: 100%;
+}
+
 .headerButtonStyle {
   width: 15em;
   height: 2em;
@@ -6,5 +13,9 @@
   border-bottom-width: 2px;
   margin: 0.2em;
   text-decoration: none;
-  color: black;
+  color: white;
+}
+
+h1 {
+  /* margin: 0; */
 }

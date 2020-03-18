@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import isDev from "../debugging/DevDetect";
-import "../css/colors.css";
 import "./_header.css";
+import "../css/colors.css";
 
 const Header = () => {
   return (
-    <div>
+    <div className="headerStyle">
       <h1>NHS Wellbeing Predictor</h1>
       <div style={{ display: "flex" }}>
         <Link to="/modellist" className="headerButtonStyle">
