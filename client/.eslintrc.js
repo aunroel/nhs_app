@@ -30,6 +30,7 @@ module.exports = {
       { extensions: [".js", ".jsx", ".tsx"] }
     ],
     "react/prop-types": "warn",
-    "react/jsx-props-no-spreading": "off"
+    "react/jsx-props-no-spreading": "off",
+    "import/prefer-default-export": "off"
   }
 };

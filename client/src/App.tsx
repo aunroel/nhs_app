@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import ReactSandbox from "./components/_Debugging/Sandbox/ReactSandbox";
+import ReactSandbox from "./components/_Debugging/Sandbox/Pages/ReactSandbox";
 import Container from "./components/AppContainer";
 import Header from "./components/Header";
 import ModelList from "./components/ModelList/ModelList";
@@ -14,10 +14,10 @@ const App = () => {
       <Container>
         <Header />
         <Switch>
-          <Route exact path="/modellist" component={ModelList} />
-          <Route exact path="/modelupload" component={ModelUpload} />
-          <Route exact path="/register" component={Register} />
-          <Route exact path="/test" component={ReactSandbox} />
+          <Route path="/modellist" component={ModelList} />
+          <Route path="/modelupload" component={ModelUpload} />
+          <Route path="/register" component={Register} />
+          <Route path="/test" component={ReactSandbox} />
         </Switch>
       </Container>
     </Router>

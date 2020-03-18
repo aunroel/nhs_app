@@ -1,5 +1,5 @@
 import React from "react";
-import "./modelUploadDebug.css";
+import "../../../css/colors.css";
 
 const mockModelTemplate = `
 {
@@ -10,10 +10,13 @@ const mockModelTemplate = `
 }
 `;
 
-export const MockModelFileTemplate = () => {
+const MockModelFileTemplate = () => {
   return (
     <div className="dim">
-      [Dev only] Temporary testing format: <pre>{mockModelTemplate}</pre>
+      [Dev only] Temporary testing format:
+      <pre>{mockModelTemplate}</pre>
     </div>
   );
 };
+
+export default MockModelFileTemplate;

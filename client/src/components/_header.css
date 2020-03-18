@@ -1,0 +1,10 @@
+.headerButtonStyle {
+  width: 15em;
+  height: 2em;
+  border-style: solid;
+  border-width: 0;
+  border-bottom-width: 2px;
+  margin: 0.2em;
+  text-decoration: none;
+  color: black;
+}
