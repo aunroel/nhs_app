@@ -21,6 +21,7 @@ abstract class AbsOnlineFile(
         get() = localRecord.lastModifiedTime
     val lastUploadTime: Long
         get() = localRecord.lastUploadTime
+
     val lastUpdateTime: Long
         get() = localRecord.lastUpdateTime
 

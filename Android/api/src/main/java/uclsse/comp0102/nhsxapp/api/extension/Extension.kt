@@ -1,7 +1,7 @@
 package uclsse.comp0102.nhsxapp.api.extension
 
 import com.google.gson.internal.LazilyParsedNumber
-import uclsse.comp0102.nhsxapp.api.files.JsonData
+import uclsse.comp0102.nhsxapp.api.files.JsonFile
 import java.io.File
 import java.lang.reflect.Field
 import java.net.URL
@@ -61,7 +61,6 @@ val numberClassTypesList = listOf(
     Short::class.java, Int::class.java, Long::class.java,
     Byte::class.java, LazilyParsedNumber::class
 )
-
 val Field.isNumberType: Boolean
     get() = this.type in numberClassTypesList
 
@@ -70,12 +69,18 @@ val Field.isStringType: Boolean
 get() = type == stringClassType
 
 fun Field.isJsonField():Boolean{
-    return this.getDeclaredAnnotation(JsonData::class.java) != null
+    return this.getDeclaredAnnotation(JsonFile.JsonData::class.java) != null
 }
-var accessibleBak: Boolean = false
-fun Field.activateAccessible(){
 
+fun Class<out Any>.forEachField(doAction:(Field)->Unit){
+    this.declaredFields.forEach{
+        val accessibleBak = it.isAccessible
+        it.isAccessible = true
+        doAction
+        it.isAccessible = accessibleBak
+    }
 }
+
 fun String.formatSubDir(): String {
     return this.replace("//", "/")
         .removeSurrounding("/")

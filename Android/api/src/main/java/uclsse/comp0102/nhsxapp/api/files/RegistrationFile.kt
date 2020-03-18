@@ -2,7 +2,6 @@ package uclsse.comp0102.nhsxapp.api.files
 
 import android.content.Context
 import uclsse.comp0102.nhsxapp.api.files.online.HttpClient
-import java.io.IOException
 import java.math.BigInteger
 import java.net.URL
 import java.nio.charset.Charset
@@ -54,7 +53,7 @@ class RegistrationFile(
         val httpClient = HttpClient(hostAddress)
         val uID = readBytes().toString(Charsets.UTF_8)
         val jsonStr = """{"uid": "$uID"}"""
-        httpClient.post(jsonStr, dirWithName)
+        httpClient.uploadByPost(jsonStr, dirWithName)
     }
 
     override fun updateCore() {

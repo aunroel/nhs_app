@@ -16,7 +16,7 @@ interface ServerConnector {
 
     @Multipart
     @POST
-    fun upload(
+    fun uploadFile(
         @Part file: MultipartBody.Part,
         @Url uploadUrl: String
     ): Call<ResponseBody>
