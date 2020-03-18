@@ -18,10 +18,7 @@ public class Model {
         data.setWeeklySteps(stepCount);
         data.setWeeklyCalls(callCount);
         data.setWeeklyMessages(textCount);
-        int score = nhsApi.getTrainingScore(
-                new Number[]{stepCount, callCount, textCount},
-                NhsAPI.ModelType.Local
-        );
+        int score = nhsApi.getTrainingScore(stepCount, callCount, textCount);
         data.setRealWellBeingScore(score);
         nhsApi.record(data);
         return score;

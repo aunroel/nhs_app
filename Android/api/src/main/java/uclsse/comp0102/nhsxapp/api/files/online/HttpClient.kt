@@ -4,7 +4,6 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Retrofit
-import uclsse.comp0102.nhsxapp.api.extension.formatSubDir
 import java.io.IOException
 import java.net.URL
 
@@ -34,32 +33,28 @@ class HttpClient(onHost: URL) {
 
     private val connector: ServerConnector = getConnector(onHost)
 
-    fun download(fromSubDir: String, fileName: String): ByteArray {
-        val subDirWithName = "$fromSubDir/$fileName".formatSubDir()
-        val response = connector.download(subDirWithName).execute()
-        if (!response.isSuccessful) throw IOException("updateLocalCopy: ${response.message()}")
-        return response.body()?.bytes() ?: throw IOException("updateLocalCopy:isEmptyBody")
-    }
-
-
-    fun upload(contents: ByteArray, toSubDir: String, fileName: String) {
+    fun uploadFile(contents: ByteArray, toSubDir: String, fileName: String) {
         val octetStreamType = "application/octet-stream"
         val requestBody = RequestBody.create(MediaType.parse(octetStreamType), contents)
         val filePart = MultipartBody.Part.createFormData("file", fileName, requestBody)
-        val response = connector.upload(filePart, toSubDir).execute()
+        val response = connector.uploadFile(filePart, toSubDir).execute()
         if (!response.isSuccessful) throw IOException("uploadLocalCopy: ${response.message()}")
     }
 
-    fun get(fromSubDir: String): ByteArray {
-        val response = connector.download(fromSubDir).execute()
+    fun downloadByPost(jsonBody: String, fromSubDir: String): ByteArray {
+        val body = RequestBody.create(
+            MediaType.parse("application/json; charset=utf-8"),
+            jsonBody
+        )
+        val response = connector.postFields(body, fromSubDir).execute()
         if (!response.isSuccessful) throw IOException("get: ${response.message()}")
         return response.body()?.bytes() ?: throw IOException("get:isEmptyBody")
     }
 
-    fun post(jsonStr: String, toSubDir: String){
+    fun uploadByPost(jsonBody: String, toSubDir: String){
         val body = RequestBody.create(
             MediaType.parse("application/json; charset=utf-8"),
-            jsonStr
+            jsonBody
         )
         val response = connector.postFields(body, toSubDir).execute()
         if (!response.isSuccessful) throw IOException("post: ${response.message()}")

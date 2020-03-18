@@ -10,8 +10,10 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import uclsse.comp0102.nhsxapp.api.extension.formatSubDir
+import uclsse.comp0102.nhsxapp.api.extension.toURL
 import uclsse.comp0102.nhsxapp.api.files.JsonFile
 import uclsse.comp0102.nhsxapp.api.files.ModelFile
+import uclsse.comp0102.nhsxapp.api.files.finder.OnlineFileFinder
 import uclsse.comp0102.nhsxapp.api.files.RegistrationFile
 
 @RunWith(AndroidJUnit4::class)
@@ -22,7 +24,12 @@ class ServerIntegrationTest {
 
     init {
         val appContext = ApplicationProvider.getApplicationContext<Context>()
-        val nhsFileSystem = NhsFileSystem(appContext)
+        val hostAddress = appContext.getString(R.string.HOST_ADDRESS).toURL()
+        val nhsFileSystem =
+            OnlineFileFinder(
+                hostAddress,
+                appContext
+            )
         val registrationFile = nhsFileSystem.access(
             RegistrationFile::class.java,
             appContext.getString(R.string.REGISTER_FILE_PATH)
@@ -36,7 +43,6 @@ class ServerIntegrationTest {
         jsonFile = nhsFileSystem.access(
             JsonFile::class.java,
             "${jsonFileSubDir}/${registrationFile.uID}".formatSubDir()
-
         )
     }
 

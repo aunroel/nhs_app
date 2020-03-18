@@ -1,4 +1,4 @@
-package uclsse.comp0102.nhsxapp.api.background.noti
+package uclsse.comp0102.nhsxapp.api.tasks.noti
 
 import android.app.Notification
 import android.app.NotificationChannel
