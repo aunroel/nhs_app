@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useStoreState, useStoreActions } from "easy-peasy";
-import storeModel from "../../../store";
+import storeModel from "../../../store/store";
 
 const InputField = () => {
   const [savedList, saveList] = [
-    useStoreState(state => state.todo.todoList),
-    useStoreActions(state => state.todo.overwriteList)
+    useStoreState(state => state.todoList.todoList),
+    useStoreActions(state => state.todoList.overwriteList)
   ];
 
   const [list, setList] = useState(savedList);

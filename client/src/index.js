@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import App from "./App";
 
 import { createStore, StoreProvider, persist } from "easy-peasy";
-import storeModel from "./store";
+import storeModel from "./store/store";
 
 const store = createStore(persist(storeModel));
 

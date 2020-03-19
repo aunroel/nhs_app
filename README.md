@@ -25,7 +25,7 @@ Worklfow is the same for windows and unix
 ### Run
 ```
 cd client
-nodemon start
+npm start
 ```
 
 ## Running server

@@ -6,16 +6,6 @@ import { UploadButton } from "./UploadButton";
 import { ChooseFileButton } from "./ChooseFileButton";
 import "./_modelUpload.css";
 
-const previewBox = {
-  width: "100%",
-  height: "20em",
-  borderWidth: 2,
-  borderColor: "black",
-  borderStyle: "solid",
-  padding: "1em",
-  overflow: "auto"
-};
-
 /**
  * TODO
  *  - remove the temporary testing format and put in
@@ -66,7 +56,7 @@ export const ModelUpload = () => {
         ) : isDev() ? (
           <MockModelFileTemplate />
         ) : null}
-      </div>
+      </div>  
       <br />
       <UploadButton onClick={upload} enabled={fileIsReadyToUpload} />
     </div>
