@@ -1,0 +1,488 @@
+Index: Android/api/src/main/java/uclsse/comp0102/nhsxapp/api/extension/Extension.kt
+===================================================================
+--- Android/api/src/main/java/uclsse/comp0102/nhsxapp/api/extension/Extension.kt	(revision 9ffe84369dd69c3fe31de671e7d443c2d422a296)
++++ Android/api/src/main/java/uclsse/comp0102/nhsxapp/api/extension/Extension.kt	(revision 9ffe84369dd69c3fe31de671e7d443c2d422a296)
+@@ -1,105 +0,0 @@
+-package uclsse.comp0102.nhsxapp.api.extension
+-
+-import com.google.gson.internal.LazilyParsedNumber
+-import uclsse.comp0102.nhsxapp.api.files.JsonFile
+-import java.io.File
+-import java.lang.reflect.Field
+-import java.net.URL
+-import java.util.*
+-
+-
+-infix fun Number.plus(other: Number): Number {
+-    return when (this) {
+-        is Float,
+-        is Double -> {
+-            this.toFloat() + other.toFloat()
+-        }
+-        is Short,
+-        is Int -> {
+-            this.toInt() + other.toInt()
+-        }
+-        is Long -> {
+-            this.toLong() + other.toLong()
+-        }
+-        is Byte -> {
+-            this.toByte() + other.toByte()
+-        }
+-        is LazilyParsedNumber -> {
+-            this.toFloat() + other.toFloat()
+-        }
+-        else -> {
+-            throw UnsupportedOperationException("A unsupported number type ${this::class.java}")
+-        }
+-    }
+-}
+-
+-fun <T: Any> Any.convertTo(type: Class<T>): Any {
+-
+-    fun toNumber(): Number {
+-        this as Number
+-        return when (type) {
+-            Float::class.java -> this.toFloat()
+-            Double::class.java -> this.toDouble()
+-            Short::class.java -> this.toShort()
+-            Int::class.java -> this.toInt()
+-            Long::class.java -> this.toLong()
+-            Byte::class.java -> this.toByte()
+-            LazilyParsedNumber::class -> LazilyParsedNumber(this.toString())
+-            else -> throw UnsupportedOperationException("A unsupported number type $type")
+-        }
+-    }
+-
+-    return when (type) {
+-        in numberClassTypesList -> toNumber()
+-        stringClassType -> this.toString()
+-        else -> throw UnsupportedOperationException("A unsupported data type $type")
+-    }
+-}
+-
+-val numberClassTypesList = listOf(
+-    Double::class.java, Float::class.java,
+-    Short::class.java, Int::class.java, Long::class.java,
+-    Byte::class.java, LazilyParsedNumber::class
+-)
+-val Field.isNumberType: Boolean
+-    get() = this.type in numberClassTypesList
+-
+-val stringClassType = String::class.java
+-val Field.isStringType: Boolean
+-get() = type == stringClassType
+-
+-fun Field.isJsonField():Boolean{
+-    return this.getDeclaredAnnotation(JsonFile.JsonData::class.java) != null
+-}
+-
+-fun Class<out Any>.forEachField(doAction:(Field)->Unit){
+-    this.declaredFields.forEach{
+-        val accessibleBak = it.isAccessible
+-        it.isAccessible = true
+-        doAction
+-        it.isAccessible = accessibleBak
+-    }
+-}
+-
+-fun String.formatSubDir(): String {
+-    return this.replace("//", "/")
+-        .removeSurrounding("/")
+-}
+-
+-fun String.toURL(): URL {
+-    return URL(this)
+-}
+-
+-fun File.createNewFileWithDirIfNotExist() {
+-    if (this.exists()) return
+-    val parentFile = this.parentFile
+-    if (parentFile != null && !parentFile.exists())
+-        parentFile.mkdirs()
+-    this.createNewFile()
+-}
+-
+-const val TASK_PARAMETER_NAME = "task"
+-
+-fun Calendar.getDay(): Int {
+-    return this[Calendar.DAY_OF_MONTH]
+-}
+\ No newline at end of file
+Index: Android/api/src/main/java/uclsse/comp0102/nhsxapp/api/NhsAPI.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- Android/api/src/main/java/uclsse/comp0102/nhsxapp/api/NhsAPI.kt	(revision 9ffe84369dd69c3fe31de671e7d443c2d422a296)
++++ Android/api/src/main/java/uclsse/comp0102/nhsxapp/api/NhsAPI.kt	(date 1584579486000)
+@@ -1,11 +1,11 @@
+ package uclsse.comp0102.nhsxapp.api
+ 
+ import android.content.Context
+-import uclsse.comp0102.nhsxapp.api.extension.*
+ import uclsse.comp0102.nhsxapp.api.files.JsonFile
+ import uclsse.comp0102.nhsxapp.api.files.ModelFile
+ 
+-/** Open API for prediction
++/**
++ * The API for the
+  */
+ class NhsAPI private constructor(appContext: Context) {
+ 
+@@ -30,7 +30,8 @@
+         modelFile = repository.getModelFile()
+     }
+ 
+-    /** Access the training score from the TensorFlow model
++    /**
++     * Access the training score from the TensorFlow model
+      * The input parameters are model-independent, so that there can be any number of features.
+      */
+     fun getTrainingScore(vararg parameters: Number): Int {
+@@ -42,32 +43,21 @@
+         return outputContainer[0].toInt()
+     }
+ 
+-    /** It can store the data and the method accepts instance of any class,
++    /**
++     * It can store the data and the method accepts instance of any class,
+      * it will automatically extract the numbers and strings fields from the input instance.
++     * If the file has already uploaded to the server, then the input data will overwrite current
++     * one. Else, they will be merged.
+      */
+     fun record(newData: Any) {
++        val isJsonFileUploadedThisWeek =
++            jsonFile.lastUploadTime >= jsonFile.lastModifiedTime
+         // if the json file has already been uploaded, then overwrite it.
+-        if (jsonFile.lastUploadTime >= jsonFile.lastModifiedTime)
++        // else it will merge the current data with new data.
++        if (isJsonFileUploadedThisWeek)
+             jsonFile.writeObject(newData)
+-        // else it will merge the current data and new data.
+-        val currentData = jsonFile.readObject(newData::class.java)
+-        newData::class.java.forEachField {
+-            if (it.isNumberType){
+-                val newValue = (it.get(newData)?:0) as Number
+-                val curValue = (it.get(currentData) ?: 0) as Number
+-                val finalValue = curValue plus newValue
+-                it.set(currentData, finalValue)
+-            } else if(it.isStringType) {
+-                val newValue = (it.get(newData)?:"") as String
+-                val curValue = (it.get(currentData) ?: "") as String
+-                val finalValue = if(newValue == "") curValue else newValue
+-                it.set(currentData, finalValue)
+-            } else{
+-                val finalValue = it.get(newData) ?: it.get(currentData)
+-                it.set(currentData, finalValue)
+-            }
+-        }
+-        jsonFile.writeObject(currentData)
++        else
++            jsonFile.mergeObject(newData)
+     }
+ 
+     fun uploadJsonNow(): Boolean{
+Index: Android/api/src/main/java/uclsse/comp0102/nhsxapp/api/extension/NumberAndStringExtension.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- Android/api/src/main/java/uclsse/comp0102/nhsxapp/api/extension/NumberAndStringExtension.kt	(date 1584628168000)
++++ Android/api/src/main/java/uclsse/comp0102/nhsxapp/api/extension/NumberAndStringExtension.kt	(date 1584628168000)
+@@ -0,0 +1,45 @@
++package uclsse.comp0102.nhsxapp.api.extension
++
++import com.google.gson.internal.LazilyParsedNumber
++
++
++@Suppress("UNCHECKED_CAST")
++fun <T: Any> Any.convertTo(type: Class<T>): T {
++    val value = this.toString()
++    return when (type) {
++        String::class.java -> value
++        Double::class.java -> value.toDouble()
++        Float::class.java -> value.toFloat()
++        Short::class.java -> value.toShort()
++        Int::class.java -> value.toInt()
++        Long::class.java -> value.toLong()
++        Byte::class.java -> value.toByte()
++        LazilyParsedNumber::class -> LazilyParsedNumber(value)
++        else -> throw UnsupportedOperationException("A unsupported number type ${type::class}")
++    } as T
++}
++
++infix fun Number.plus(other: Number): Number {
++    return when (this) {
++        is Float,
++        is Double -> this.toFloat() + other.toFloat()
++        is Short,
++        is Int -> this.toInt() + other.toInt()
++        is Long -> this.toLong() + other.toLong()
++        is Byte -> this.toByte() + other.toByte()
++        is LazilyParsedNumber -> this.toFloat() + other.toFloat()
++        else -> throw UnsupportedOperationException("A unsupported number type ${this::class.java}")
++    }
++}
++
++val numberClassTypesList = listOf(
++    Double::class.java, Float::class.java,
++    Short::class.java, Int::class.java, Long::class.java,
++    Byte::class.java, LazilyParsedNumber::class
++)
++val Any.isNumber: Boolean
++    get() = this::class.java in numberClassTypesList
++
++val stringClassType = String::class.java
++val Any.isString: Boolean
++    get() = this::class.java == stringClassType
+Index: Android/api/src/main/java/uclsse/comp0102/nhsxapp/api/files/JsonFile.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- Android/api/src/main/java/uclsse/comp0102/nhsxapp/api/files/JsonFile.kt	(revision 9ffe84369dd69c3fe31de671e7d443c2d422a296)
++++ Android/api/src/main/java/uclsse/comp0102/nhsxapp/api/files/JsonFile.kt	(date 1584628035000)
+@@ -3,10 +3,9 @@
+ import android.content.Context
+ import com.google.gson.Gson
+ import com.google.gson.reflect.TypeToken
+-import uclsse.comp0102.nhsxapp.api.extension.convertTo
+-import uclsse.comp0102.nhsxapp.api.extension.isJsonField
+ import uclsse.comp0102.nhsxapp.api.files.online.HttpClient
+ import java.net.URL
++import uclsse.comp0102.nhsxapp.api.extension.*
+ 
+ /** A subclass of the OnlineFile
+   * also encapsulate the google json class,
+@@ -20,78 +19,98 @@
+     private val hostAddress: URL = onHost
+     private val targetDir: String = subDirWithName
+ 
+-    // fields about GSON
+-    private val gJson: Gson = Gson()
++    // Fields about Json Converter
++    private val jGson:Gson = Gson()
+     private val utf8Charset = Charsets.UTF_8
++    private val mapType = object : TypeToken<MutableMap<String, Any>>() {}.type
++
+ 
+     init {
+         if (readBytes().isEmpty())
+             writeStr("{}")
+     }
+ 
+-    // implementation of the abstract functions
+-
+-    /** upload the json file to server
++    /**
++     * upload the json file to server
+      */
+     override fun uploadCore() {
+         val client = HttpClient(hostAddress)
+         client.uploadByPost(readStr(), targetDir)
+     }
+ 
+-    /** update the local json file
++    /**
++     * update the local json file
+      */
+     override fun updateCore() {
+-        val newData = "{}"
+-        writeStr(newData)
++        throw NoSuchMethodException("A Json file cannot be update from online!")
+     }
+ 
+-    // implementation for converting between
+-    // different classes and json string
+-    fun writeObject(data:Any) {
+-        val dataReflex = data::class.java
+-        val fields = dataReflex.declaredFields.filter {it.isJsonField()}
+-        val dataMap = fields.associate {
+-            val accessBak = it.isAccessible
+-            it.isAccessible = true
+-            val value = it.get(data)!!
+-            it.isAccessible = accessBak
+-            val annotation = it.getDeclaredAnnotation(JsonData::class.java)!!
+-            val name = annotation.name
+-            name to value
+-        }
+-        val newDataStr = gJson.toJson(dataMap)
+-        writeStr(newDataStr)
++    /**
++     * implementation for converting between
++     * different classes and json string
++     */
++    fun readStr(): String{
++        return readBytes().toString(utf8Charset)
++    }
++
++    fun writeStr(strData: String){
++        writeBytes(strData.toByteArray(utf8Charset))
+     }
++
+ 
+     fun <T : Any> readObject(type: Class<T>): T {
+-        val jsonStr = readStr()
+-        val dataMap = fromJsonStrToNumberMap(jsonStr)
++        return fromStrToObject(readStr(), type)
++    }
++
++    fun writeObject(objData:Any) {
++        writeStr(fromObjectToStr(objData))
++    }
++
++
++    fun mergeObject(inputObjData:Any){
++        val curJsonStr = readStr()
++        val inputJsonStr = fromObjectToStr(inputObjData)
++        val curDataMap = jGson.fromJson(curJsonStr, mapType) as Map<String, Any>
++        val inputDataMap = jGson.fromJson(inputJsonStr, mapType) as Map<String, Any>
++        val newMap = (curDataMap.keys + inputDataMap.keys).associateWith {
++            val newValue = jsonPropertyMerge(curDataMap[it], inputDataMap[it])
++            it to newValue
++        }
++        val newMapJsonStr = jGson.toJson(newMap, mapType)
++        writeStr(newMapJsonStr)
++    }
++
++    private fun <T:Any>jsonPropertyMerge(first: T?, second: T?): T?{
++        if (first == null) return second
++        if (second == null) return null
++        @Suppress("UNCHECKED_CAST")
++        return when {
++            first.isString -> if(second == "") first else second
++            first.isNumber -> ((first as Number) plus (second as Number)) as T
++            else -> throw UnsupportedClassVersionError("only for string and number")
++        }
++    }
++
++    private fun <T : Any> fromStrToObject(dataStr: String, type: Class<T>): T{
++        val dataMap = jGson.fromJson(dataStr, mapType) as Map<String, Any>
+         val tmpObject = type.getConstructor().newInstance()
+-        for (field in type.declaredFields) {
+-            val annotation = field.getDeclaredAnnotation(JsonData::class.java) ?: continue
++        type.declaredFields.forEachWithAccess {
++            val annotation = it.getDeclaredAnnotation(JsonData::class.java)
++            val value = if (annotation != null) dataMap[annotation.name] else null
++            if (value != null) it.set(tmpObject, value.convertTo(type))
++        }
++        return tmpObject
++    }
++
++    private fun fromObjectToStr(objData:Any):String{
++        val extractedMap = mutableMapOf<String, Any>()
++        objData::class.java.declaredJsonFields.forEachWithAccess {
++            val annotation = it.getDeclaredAnnotation(JsonData::class.java)!!
+             val name = annotation.name
+-            val value = dataMap[name] ?: continue
+-            val type = field.type
+-            val accessibleBak = field.isAccessible
+-            field.isAccessible = true
+-            field.set(tmpObject, value.convertTo(field.type))
+-            field.isAccessible = accessibleBak
++            extractedMap[name] = it.get(objData)!!
+         }
+-        return return tmpObject
++        return jGson.toJson(extractedMap)
+     }
+-
+-    private fun readStr(): String{
+-        return readBytes().toString(utf8Charset)
+-    }
+-
+-    private fun writeStr(value: String){
+-        writeBytes(value.toByteArray(utf8Charset))
+-    }
+-
+-    private fun fromJsonStrToNumberMap(jsonStr: String): MutableMap<String, Any> {
+-        val mapType = object : TypeToken<MutableMap<String, Any>>() {}.type
+-        return gJson.fromJson(jsonStr, mapType)
+-    }
+ 
+     // JsonData annotation is used to specify the
+     // json properties in a data class. The data with
+Index: Android/api/src/main/java/uclsse/comp0102/nhsxapp/api/extension/StringAndFileExtension.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- Android/api/src/main/java/uclsse/comp0102/nhsxapp/api/extension/StringAndFileExtension.kt	(date 1584579392000)
++++ Android/api/src/main/java/uclsse/comp0102/nhsxapp/api/extension/StringAndFileExtension.kt	(date 1584579392000)
+@@ -0,0 +1,21 @@
++package uclsse.comp0102.nhsxapp.api.extension
++
++import java.io.File
++import java.net.URL
++
++fun String.formatSubDir(): String {
++    return this.replace("//", "/")
++        .removeSurrounding("/")
++}
++
++fun String.toURL(): URL {
++    return URL(this)
++}
++
++fun File.createNewFileWithDirIfNotExist() {
++    if (this.exists()) return
++    val parentFile = this.parentFile
++    if (parentFile != null && !parentFile.exists())
++        parentFile.mkdirs()
++    this.createNewFile()
++}
+\ No newline at end of file
+Index: Android/api/src/main/java/uclsse/comp0102/nhsxapp/api/extension/ClassReflexExtension.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- Android/api/src/main/java/uclsse/comp0102/nhsxapp/api/extension/ClassReflexExtension.kt	(date 1584579392000)
++++ Android/api/src/main/java/uclsse/comp0102/nhsxapp/api/extension/ClassReflexExtension.kt	(date 1584579392000)
+@@ -0,0 +1,18 @@
++package uclsse.comp0102.nhsxapp.api.extension
++
++import uclsse.comp0102.nhsxapp.api.files.JsonFile
++import java.lang.reflect.Field
++
++fun Array<Field>.forEachWithAccess(doAction:(Field)->Unit){
++    this.forEach {
++        val accessibleBak = it.isAccessible
++        it.isAccessible = true
++        doAction(it)
++        it.isAccessible = accessibleBak
++    }
++}
++
++val Class<out Any>.declaredJsonFields: Array<Field>
++    get() = this.declaredFields.filter {
++        it.getDeclaredAnnotation(JsonFile.JsonData::class.java) != null
++    }.toTypedArray()
+\ No newline at end of file
+Index: Android/api/src/main/java/uclsse/comp0102/nhsxapp/api/NhsTrainingDataHolder.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- Android/api/src/main/java/uclsse/comp0102/nhsxapp/api/NhsTrainingDataHolder.kt	(revision 9ffe84369dd69c3fe31de671e7d443c2d422a296)
++++ Android/api/src/main/java/uclsse/comp0102/nhsxapp/api/NhsTrainingDataHolder.kt	(date 1584550179000)
+@@ -1,8 +1,6 @@
+ package uclsse.comp0102.nhsxapp.api
+ 
+ import uclsse.comp0102.nhsxapp.api.files.JsonFile
+-import kotlin.math.abs
+-
+ 
+ class NhsTrainingDataHolder {
+     @JsonFile.JsonData(name = "supportCode")
+@@ -23,9 +21,7 @@
+     @JsonFile.JsonData(name = "errorRate")
+     private var errorRate:Int = 0
+ 
+-    private val errorRateFormula = {real:Int, predict:Int ->
+-        abs(real - predict).times(100).div(real)
+-    }
++    private val errorRateFormula = {real:Int, predict:Int -> real - predict }
+ 
+     @JsonFile.JsonData(name = "wellBeingScore")
+     private var _realWellBeingScore:Int = 1

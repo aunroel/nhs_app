@@ -1,8 +1,6 @@
 package uclsse.comp0102.nhsxapp.api
 
 import uclsse.comp0102.nhsxapp.api.files.JsonFile
-import kotlin.math.abs
-
 
 class NhsTrainingDataHolder {
     @JsonFile.JsonData(name = "supportCode")
@@ -23,9 +21,7 @@ class NhsTrainingDataHolder {
     @JsonFile.JsonData(name = "errorRate")
     private var errorRate:Int = 0
 
-    private val errorRateFormula = {real:Int, predict:Int ->
-        abs(real - predict).times(100).div(real)
-    }
+    private val errorRateFormula = {real:Int, predict:Int -> real - predict }
 
     @JsonFile.JsonData(name = "wellBeingScore")
     private var _realWellBeingScore:Int = 1
