@@ -18,3 +18,4 @@ models/graphs/15_03_20/
 models/lite/latest_converted_model.tflite
 models/results/15_03_20/
 static/
+mysql-dev-db/ib*
