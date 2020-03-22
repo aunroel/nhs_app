@@ -9,13 +9,14 @@ const subsubUrls = [
   new SubURL("subsub3", "Sub sub 3")
 ];
 
-console.table(subsubUrls);
+const SubSubPageBox = () => {
+  const { subsub } = useParams();
+  return <h4>{subsub}</h4>;
+};
 
 const SubPageBox = () => {
-  const { url, path } = useRouteMatch();
+  const { url } = useRouteMatch();
   const { subroute } = useParams();
-
-  console.table({ url, path, subroute });
 
   return (
     <>
@@ -28,11 +29,6 @@ const SubPageBox = () => {
       </Switch>
     </>
   );
-};
-
-const SubSubPageBox = () => {
-  const { subsub } = useParams();
-  return <h4>{subsub}</h4>;
 };
 
 export default SubPageBox;

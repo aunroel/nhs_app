@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import React from "react";
 import WrongFileFormatMessage from "./WrongFileFormatMessage";
-import { MockModelFileTemplate } from "../../_Debugging/MockModelData/MockModelFileTemplate";
+import MockModelFileTemplate from "../../_Debugging/MockModelData/MockModelFileTemplate";
 import isDev from "../../../debugging/DevDetect";
 
 const PreviewBox = ({ fileText, fileIsJSONFormat, fileIsChosen }) => {

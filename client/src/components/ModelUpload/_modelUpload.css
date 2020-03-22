@@ -2,7 +2,7 @@
   width: 100%;
   height: 20em;
   border-width: 2;
-  border-color: black;
+  border-color: var(--secondary-color);
   border-style: solid;
   padding: 1em;
   overflow: auto;

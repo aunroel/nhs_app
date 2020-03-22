@@ -1,0 +1,45 @@
+.header-container {
+  background-color: var(--header-background-color);
+  color: var(--primary-color);
+  width: 100%;
+  height: 80px;
+}
+
+.flex-box-vert-align {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.overflow-y {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.header-logo {
+  font-size: 1.5em;
+  overflow: hidden;
+  padding-left: 20px;
+  padding-right: 20px;
+  max-width: 30%;
+}
+
+.header-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  height: 100%;
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+.header-button {
+}
+
+.header-button-clicked {
+  border-bottom: 3px;
+  border-color: var(--primary-color);
+}
