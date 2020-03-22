@@ -2,7 +2,7 @@ import React from "react";
 import WrongFileFormatMessage from "./WrongFileFormatMessage";
 import { MockModelFileTemplate } from "../_Debugging/MockModelData/MockModelFileTemplate";
 
-export const previewBox = () => {
+export const PreviewBox = () => {
   return (
     <div>
       <div>Preview</div>
