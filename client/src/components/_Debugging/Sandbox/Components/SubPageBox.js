@@ -10,7 +10,11 @@ const subsubUrls = [
 ];
 
 const SubSubPageBox = () => {
+  const { url } = useRouteMatch();
   const { subsub } = useParams();
+
+  console.table({ url, subsub });
+
   return <h4>{subsub}</h4>;
 };
 

@@ -12,12 +12,12 @@ html {
 }
 
 :root {
-  --header-background-color: steelblue;
-  --primary-background-color: white;
-  --secondary-background-color: aliceblue;
+  --header-primary-color: rgb(0, 94, 184);
+  --header-secondary-color: white;
   --primary-color: white;
-  --secondary-color: black;
+  --vivid-color: rgb(160, 223, 231);
   --text-color: black;
+  --secondary-background-color: aliceblue;
 }
 
 body {

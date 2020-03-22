@@ -1,5 +1,5 @@
 .header-container {
-  background-color: var(--header-background-color);
+  background-color: var(--header-primary-color);
   color: var(--primary-color);
   width: 100%;
   height: 80px;
@@ -17,14 +17,16 @@
 }
 
 .header-logo {
+  font-weight: bold;
   font-size: 1.5em;
   overflow: hidden;
   padding-left: 20px;
-  padding-right: 20px;
+  padding-right: 40px;
   max-width: 30%;
 }
 
 .header-button {
+  font-size: 1.2em;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,9 +36,16 @@
   height: 100%;
   text-decoration: none;
   color: var(--primary-color);
+  transition: 300ms ease-out;
 }
 
-.header-button {
+.header-button:hover {
+  color: var(--vivid-color);
+}
+
+.header-button-selected {
+  color: var(--vivid-color);
+  box-shadow: inset 0px -6px var(--vivid-color);
 }
 
 .header-button-clicked {
