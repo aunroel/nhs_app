@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useStoreState, useStoreActions } from "easy-peasy";
-import storeModel from "../../../store/store";
 
 const TodoList = () => {
   const [savedList, saveList] = [
@@ -48,4 +47,4 @@ const TodoList = () => {
   );
 };
 
-export default InputField;
+export default TodoList;

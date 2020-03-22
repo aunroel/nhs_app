@@ -23,10 +23,13 @@ module.exports = {
   },
   plugins: ["react", "@typescript-eslint"],
   rules: {
+    "no-nested-ternary": "warn",
+
     "react/jsx-filename-extension": [
       1,
       { extensions: [".js", ".jsx", ".tsx"] }
     ],
-    "react/prop-types": "warn"
+    "react/prop-types": "warn",
+    "react/jsx-props-no-spreading": "off"
   }
 };

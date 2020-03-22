@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import isDev from "../../debugging/DevDetect";
-import WrongFileFormatMessage from "./WrongFileFormatMessage";
-import { MockModelFileTemplate } from "../_Debugging/MockModelData/MockModelFileTemplate";
-import { UploadButton } from "./UploadButton";
-import { ChooseFileButton } from "./ChooseFileButton";
+import { UploadButton } from "./subcomponents/UploadButton";
+import { ChooseFileButton } from "./subcomponents/ChooseFileButton";
 import "./_modelUpload.css";
+import PreviewBox from "./subcomponents/PreviewBox";
 
 /**
  * TODO
@@ -19,44 +17,46 @@ import "./_modelUpload.css";
  */
 
 const ModelUpload = () => {
-  const [fileText, setFileText] = useState(null);
-  const [isUploadedFileJSONFormat, setFormatValid] = useState(null);
+  const [fileProperties, setFileProperties] = useState({
+    fileText: null,
+    fileIsJSONFormat: null
+  });
 
   const handleFiles = async event => {
     const file = event.target.files[0];
 
     const isFormatValid = file.type === "application/json";
-    setFormatValid(isFormatValid);
 
-    if (!isFormatValid) return;
+    if (!isFormatValid) {
+      setFileProperties({
+        fileText: null,
+        fileIsJSONFormat: false
+      });
+      return;
+    }
 
     const jsonFile = JSON.constructor(file);
     const jsonAsString = await jsonFile.text();
-    setFileText(jsonAsString);
+
+    setFileProperties({
+      fileText: jsonAsString,
+      fileIsJSONFormat: true
+    });
   };
 
-  const fileIsChosen = isUploadedFileJSONFormat != null;
-  const fileIsReadyToUpload = fileIsChosen && isUploadedFileJSONFormat;
+  const fileIsChosen = fileProperties.fileIsJSONFormat != null;
+  const fileIsReadyToUpload = fileIsChosen && fileProperties.fileIsJSONFormat;
 
   const upload = () => {};
+
+  const previewBoxProps = { ...fileProperties, fileIsChosen };
 
   return (
     <div>
       <h2>Model Upload</h2>
       <ChooseFileButton onChoice={handleFiles} />
       <br />
-      <div>Preview</div>
-      <div className="previewBox">
-        {fileIsChosen ? (
-          isUploadedFileJSONFormat ? (
-            <pre>{fileText}</pre>
-          ) : (
-            <WrongFileFormatMessage />
-          )
-        ) : isDev() ? (
-          <MockModelFileTemplate />
-        ) : null}
-      </div>
+      <PreviewBox {...previewBoxProps} />
       <br />
       <UploadButton onClick={upload} enabled={fileIsReadyToUpload} />
     </div>
