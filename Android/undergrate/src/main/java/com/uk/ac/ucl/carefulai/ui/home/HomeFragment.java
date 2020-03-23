@@ -1,7 +1,11 @@
 package com.uk.ac.ucl.carefulai.ui.home;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,58 +13,66 @@ import android.widget.TextView;
 import android.util.TypedValue;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+
+import com.uk.ac.ucl.carefulai.LifeDataUpdate;
 import com.uk.ac.ucl.carefulai.R;
+import com.uk.ac.ucl.carefulai.ui.AppActivity;
 
 public class HomeFragment extends Fragment {
-
-    private HomeViewModel homeViewModel;
-
-    private TextView stepsView;
-
-    private TextView contactView;
 
     private SharedPreferences dataPreferences;
 
     private final String myPreferences = "dataPreference";
 
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         dataPreferences = root.getContext().getSharedPreferences(myPreferences, 0);
 
-        stepsView = root.findViewById(R.id.stepsView);
+        TextView stepsView = root.findViewById(R.id.stepsView);
 
-        contactView = root.findViewById(R.id.contactView);
+        TextView callView = root.findViewById(R.id.callView);
 
-        int stepCount = dataPreferences.getInt("stepcount", 0);
+        TextView textsView = root.findViewById(R.id.textsView);
 
-        if (stepCount == 0) {
-            stepsView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-            stepsView.setText("No step data collected yet");
+        TextView homeScore = root.findViewById(R.id.homeScore);
+
+        LifeDataUpdate lifeDataUpdate = new LifeDataUpdate(root.getContext());
+
+        if(lifeDataUpdate.checkIfFirstLaunchApp()){
+            lifeDataUpdate.saveDataToInitialState();
         }
 
-        else  {
-            stepsView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
-            stepsView.setText(String.valueOf(stepCount));
+        int callcount= lifeDataUpdate.getCurrentCallsCount();
+        if (callcount<0){
+            callcount=0;
         }
 
-        int contactCount = dataPreferences.getInt("callcount", 0) + dataPreferences.getInt("messagecount", 0);
-
-        if (contactCount == 0) {
-            contactView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-            contactView.setText("No contact data collected yet");
+        int messagecount= lifeDataUpdate.getMessageCount();
+        if (messagecount<0){
+            messagecount=0;
         }
 
-        else  {
-            contactView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
-            contactView.setText(String.valueOf(contactCount));
-        }
+        int recentScore = dataPreferences.getInt("recentScore", 0);
 
+        stepsView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+        stepsView.setText(AppActivity.countedSteps);
+
+        callView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+        callView.setText(String.valueOf(callcount));
+
+        textsView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+        textsView.setText(String.valueOf(messagecount));
+
+        homeScore.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+        homeScore.setText(String.valueOf(recentScore));
 
         return root;
     }
+
+
+
 }

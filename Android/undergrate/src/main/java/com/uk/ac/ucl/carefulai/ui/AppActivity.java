@@ -1,8 +1,8 @@
 package com.uk.ac.ucl.carefulai.ui;
 
+
 import android.app.ActivityManager;
 import android.app.AlarmManager;
-import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
@@ -14,20 +14,20 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.uk.ac.ucl.carefulai.DatabaseHelper;
+import com.uk.ac.ucl.carefulai.PostRequest;
+import com.uk.ac.ucl.carefulai.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.uk.ac.ucl.carefulai.Alarm;
-import com.uk.ac.ucl.carefulai.DatabaseHelper;
-import com.uk.ac.ucl.carefulai.R;
 import com.uk.ac.ucl.carefulai.ThePedometerService;
+import com.uk.ac.ucl.carefulai.ui.home.HomeFragment;
+import com.uk.ac.ucl.carefulai.ui.nudge.ActivitySupportActivity;
+import com.uk.ac.ucl.carefulai.ui.nudge.PersonalNudgeActivity;
+import com.uk.ac.ucl.carefulai.ui.nudge.WellbeingActivity;
+import com.uk.ac.ucl.carefulai.ui.start.InitialInfoActivity;
 import com.uk.ac.ucl.carefulai.ui.start.StartActivity;
-
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
@@ -45,24 +45,22 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+
 public class AppActivity extends AppCompatActivity {
 
     private TelephonyProvider telephonyProvider;
 
     private CallsProvider callsProvider;
 
-    private String countedSteps = "";
+    public static String countedSteps = "0";
 
     private SharedPreferences dataPreferences;
 
+    private SharedPreferences careNetworkPreferences;
+
     private static final String dataPreference = "dataPreference";
 
-
-    private Dialog seekBarDialog;
-
-    private SeekBar simpleSeekBar;
-
-    private Button saveUserScore;
+    private NavController navController;
 
     private DatabaseHelper myDb;
 
@@ -71,25 +69,115 @@ public class AppActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_config, R.id.navigation_report, R.id.navigation_home, R.id.navigation_messages, R.id.navigation_settings)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+        dataPreferences = this.getSharedPreferences(dataPreference, Context.MODE_PRIVATE);
 
-        dataPreferences = getApplicationContext().getSharedPreferences(dataPreference, Context.MODE_PRIVATE);
-
-        seekBarDialog = new Dialog(this);
+        careNetworkPreferences = getApplicationContext().getSharedPreferences("careNetwork", Context.MODE_PRIVATE);
 
         myDb = new DatabaseHelper(this);
 
-        if (!isMyServiceRunning(ThePedometerService.class)) { startStepCount(); insertData(); }
+        if (dataPreferences.getBoolean("isTracking", false)) {
+            if (!isMyServiceRunning(ThePedometerService.class)) {
+                startStepCount();
+                insertData();
+            }
+        }
+        else {
+            noTrackingPermission(dataPreferences, careNetworkPreferences, myDb);
+        }
+
+    }
+
+    private void noTrackingPermission(SharedPreferences dataPreferences, SharedPreferences careNetworkPreferences, DatabaseHelper myDb) {
+        myDb.clearDatabase();
+
+        SharedPreferences.Editor dataEditor = dataPreferences.edit();
+
+        SharedPreferences.Editor careEditor = careNetworkPreferences.edit();
+
+        dataEditor.clear();
+
+        dataEditor.apply();
+
+        careEditor.clear();
+
+        careEditor.apply();
+
+        Toast.makeText(this, "Tracking stopped, clearing data", Toast.LENGTH_LONG).show();
+
+        startActivity(new Intent(this, StartActivity.class));
+    }
+
+    protected void onResume() {
+        super.onResume();
+        if (!dataPreferences.getBoolean("isTracking", false))  noTrackingPermission(dataPreferences, careNetworkPreferences, myDb);
+
+        Intent fromalarm = getIntent();
+        if (fromalarm.getBooleanExtra("contactEdit", false)) {
+            fromalarm.removeExtra("contactEdit");
+            navController.navigate(R.id.navigation_config);
+            return;
+        }
+        else if (fromalarm.getStringExtra("origin") != null) {
+            if (fromalarm.getStringExtra("origin").equals("alarm")) {
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.v("On feedback called:", "now");
+                        showFeedback();
+                    }
+                }, 900);
+            }
+            fromalarm.removeExtra("origin");
+        }
+
+        Log.v("onResume:", "executed");
+
+        //Send people to the first page of the app if they haven't granted permissions yet
+        Calendar beginCal = Calendar.getInstance(); //is there a better way of doing this than checking for usage stats?
+        beginCal.add((Calendar.MINUTE), -60*24*7);
+        Calendar endCal = Calendar.getInstance();
+        final UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
+        final List<UsageStats> queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, beginCal.getTimeInMillis(), endCal.getTimeInMillis());
+        Intent intent;
+        if (queryUsageStats.size() == 0) {
+            intent = new Intent(this, StartActivity.class);
+            startActivity(intent);
+        }
+        else if (dataPreferences.getBoolean("twoDayNudge", false)
+                || dataPreferences.getBoolean("twoWeekNudge", false)
+                || dataPreferences.getBoolean("twoWeekNudge", false)
+        ) {
+
+            SharedPreferences.Editor editor = dataPreferences.edit();
+            editor.putBoolean("twoDayNudge", false);
+            editor.putBoolean("twoWeekNudge", false);
+            editor.putBoolean("tenDayNudge", false);
+            editor.apply();
+
+            startActivity(new Intent(this, PersonalNudgeActivity.class));
+        }
+
+        else if (dataPreferences.getBoolean("activityNudge1", false)
+                || dataPreferences.getBoolean("activityNudge2", false)
+                || dataPreferences.getBoolean("activityNudge3", false)
+        ) {
+            startActivity(new Intent(this, ActivitySupportActivity.class));
+        }
+
+        int latestscore = dataPreferences.getInt("recentScore", 0);
+
+        Log.v("Latest score in S.Pref:", String.valueOf(latestscore));
 
     }
 
@@ -104,56 +192,15 @@ public class AppActivity extends AppCompatActivity {
         return false;
     }
 
+    private void showFeedback() {
+        startActivity(new Intent(this, WellbeingActivity.class));
+    }
     private void startStepCount(){
         Intent intent = new Intent(this, ThePedometerService.class);
         ContextCompat.startForegroundService(this, intent);
         registerReceiver(broadcastReceiver, new IntentFilter(ThePedometerService.BROADCAST_ACTION));
     }
 
-
-
-    private void showFeedback() {
-
-        int score = dataPreferences.getInt("recentScore", 0);
-
-        seekBarDialog.setContentView(R.layout.epic_yesnofeedback);
-
-        ImageView closePopup = (ImageView) seekBarDialog.findViewById(R.id.closePopup);
-
-        closePopup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                seekBarDialog.dismiss();
-            }
-        });
-
-        simpleSeekBar =findViewById(R.id.simpleSeekBar);
-
-        simpleSeekBar.setProgress(score);
-
-        simpleSeekBar.setMax(10);
-
-        saveUserScore = (Button) seekBarDialog.findViewById(R.id.saveSeekbar);
-
-        saveUserScore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveUserScore();
-            }
-        });
-
-    }
-
-    private void saveUserScore() {
-
-        int userScore = simpleSeekBar.getProgress();
-
-        int week = (int) myDb.getThisWeekNumber();
-
-        myDb.insertUserScore(String.valueOf(week),userScore);
-
-        seekBarDialog.dismiss();
-    }
 
     private void insertData() {
 
@@ -179,22 +226,60 @@ public class AppActivity extends AppCompatActivity {
         c.setTime(d);
         c.add(Calendar.MINUTE, 60*24*7);
         time = c.getTimeInMillis();
-        editor.putLong("alarmtime", time);
+
+
+        editor.putLong("mainAlarmTime", time);
+        editor.putLong("dailyAlarmTime", time);
+        editor.putLong("twoDayAlarmTime", time);
+
+
         editor.apply();
-        Log.v("alarmtime is now: ",String.valueOf(new Date(dataPreferences.getLong("alarmtime", 0))));
-        Intent intent = new Intent(this, Alarm.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+
+        Intent mainIntent = new Intent(this, Alarm.class);
+
+        mainIntent.putExtra("mainIntent", true);
+
+        PendingIntent mainPendingIntent = PendingIntent.getBroadcast(
                 this,
                 0,
-                intent,
+                mainIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        alarmManager.setRepeating(AlarmManager.RTC, time,1000*60*60*24*7, pendingIntent);
-        Toast.makeText(AppActivity.this, "Tracking Started!", Toast.LENGTH_LONG).show();
+        alarmManager.setRepeating(AlarmManager.RTC, time,1000*60*60*24*7, mainPendingIntent);
+
+
+
+        Intent dailyIntent = new Intent(this, Alarm.class);
+
+        dailyIntent.putExtra("dailyIntent", true);
+
+        PendingIntent dailyPendingIntent = PendingIntent.getBroadcast(
+                this,
+                0,
+                mainIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        alarmManager.setRepeating(AlarmManager.RTC, time,1000*60*60*24, dailyPendingIntent);
+
+
+        Intent twoDayIntent = new Intent(this, Alarm.class);
+
+        twoDayIntent.putExtra("twoDayIntent", true);
+
+        twoDayIntent.putExtra("twoDayStepCount", dataPreferences.getInt("stepcount" , 0));
+
+        PendingIntent twoDayPendingIntent = PendingIntent.getBroadcast(
+                this,
+                0,
+                twoDayIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        alarmManager.setRepeating(AlarmManager.RTC, time, 1000*60*60*24*2, twoDayPendingIntent);
+
 
     }
 
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    public BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             // call updateUI passing in our intent which is holding the data to display.
@@ -207,7 +292,6 @@ public class AppActivity extends AppCompatActivity {
 
         if (intent.getStringExtra("Counted_Step") != null) {
             countedSteps = intent.getStringExtra("Counted_Step");
-
             dataPreferencesEditor.putInt("freshsteps",Integer.parseInt(countedSteps));
             dataPreferencesEditor.apply();
         }
@@ -216,38 +300,5 @@ public class AppActivity extends AppCompatActivity {
         }
     }
 
-    protected void onResume() {
-        super.onResume();
-        Intent fromalarm = getIntent();
-        if (fromalarm.getStringExtra("origin") != null) {
-            if (fromalarm.getStringExtra("origin").equals("alarm")) {
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.v("On feedback called:", "now");
-                        showFeedback();
-                    }
-                }, 900);
-            }
-            fromalarm.removeExtra("origin");
-        }
-        Log.v("onResume:", "executed");
 
-        //Send people to the first page of the app if they haven't granted permissions yet
-        Calendar beginCal = Calendar.getInstance(); //is there a better way of doing this than checking for usage stats?
-        beginCal.add((Calendar.MINUTE), -60*24*7);
-        Calendar endCal = Calendar.getInstance();
-        final UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-        final List<UsageStats> queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, beginCal.getTimeInMillis(), endCal.getTimeInMillis());
-        Intent intent;
-        if (queryUsageStats.size() == 0) {
-            intent = new Intent(this, StartActivity.class);
-            startActivity(intent);
-        }
-
-        int latestscore = dataPreferences.getInt("recentScore", 0);
-        Log.v("Latest score in S.Pref:", String.valueOf(latestscore));
-
-    }
 }

@@ -3,13 +3,13 @@
 
     <item
         android:id="@+id/navigation_config"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_config" />
+        android:icon="@drawable/a89070784_152102999240541_7129737138328829952_n"
+        android:title="Network " />
 
     <item
         android:id="@+id/navigation_report"
-        android:icon="@android:drawable/ic_menu_recent_history"
-        android:title="@string/title_report" />
+        android:icon="@drawable/graphicon"
+        android:title="Well-being" />
 
     <item
         android:id="@+id/navigation_home"
@@ -18,12 +18,12 @@
 
     <item
         android:id="@+id/navigation_messages"
-        android:icon="@android:drawable/ic_menu_send"
+        android:icon="@drawable/messageicon"
         android:title="@string/title_messages" />
 
     <item
         android:id="@+id/navigation_settings"
-        android:icon="@android:drawable/ic_menu_preferences"
+        android:icon="@drawable/a89177037_2581050955553594_3071851332693393408_n"
         android:title="@string/title_settings" />
 
 </menu>

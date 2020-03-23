@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import com.uk.ac.ucl.carefulai.DatabaseHelper;
 import com.uk.ac.ucl.carefulai.R;
@@ -32,36 +31,39 @@ public class FirstEntryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.welcome_page_fragment_4);
 
         dataPreferences = this.getSharedPreferences(myPreference, Context.MODE_PRIVATE);
 
-        takeFirstScore(dataPreferences);
+        simpleSeekBar = (SeekBar) findViewById(R.id.introSeekBar);
+
+        saveUserScore = (Button) findViewById(R.id.save_intro_seekbar);
+
+        myDb = new DatabaseHelper(this);
+
+        takeFirstScore(dataPreferences, simpleSeekBar, saveUserScore, myDb);
 
         //setTitle("Setup Your Activities");
     }
 
 
-        private void takeFirstScore(final SharedPreferences dataPreferences) {
-
-            simpleSeekBar = findViewById(R.id.simpleSeekBar);
+        private void takeFirstScore(final SharedPreferences dataPreferences, final SeekBar simpleSeekBar, Button saveUserScore, final DatabaseHelper myDb) {
 
             simpleSeekBar.setProgress(5);
 
             simpleSeekBar.setMax(10);
 
-            saveUserScore = (Button) findViewById(R.id.save_intro_seekbar);
-
             saveUserScore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    saveUserScore(dataPreferences);
+                    saveUserScore(dataPreferences, simpleSeekBar, myDb);
                 }
             });
 
         }
 
-        private void saveUserScore(SharedPreferences dataPreferences) {
+        private void saveUserScore(SharedPreferences dataPreferences, SeekBar simpleSeekBar, DatabaseHelper myDb) {
 
             SharedPreferences.Editor editor = dataPreferences.edit();
 

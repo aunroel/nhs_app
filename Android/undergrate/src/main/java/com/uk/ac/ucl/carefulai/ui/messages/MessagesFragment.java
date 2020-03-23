@@ -1,37 +1,26 @@
 package com.uk.ac.ucl.carefulai.ui.messages;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.telephony.SmsManager;
+import android.provider.CallLog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.uk.ac.ucl.carefulai.R;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Map;
+
+import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
 public class MessagesFragment extends Fragment {
 
-
-    private MessagesViewModel messagesViewModel;
 
     private SharedPreferences careNetworkPreferences;
 
@@ -43,33 +32,18 @@ public class MessagesFragment extends Fragment {
 
     private static final String thirdContactName = "nameKey3";
 
-    private EditText name, timeField, dateField;
-
-    private Button dateButton, timeButton;
-
-    private int mYear, mMonth, mDay, mHour, mMinute;
-
-    private String chosenActivity, chosenContact, chosenStatus, userName, phoneNumber;
-
     private static final String myPreference = "careNetwork";
 
-    private ArrayList<String> statusList = new ArrayList<String>() {{ add("doing great!"); add("ok"); add("a bit down"); }};
+    private int call1, call2, call3, message1, message2, message3 = 0;
+
+    private String number1, number2, number3;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-
-        messagesViewModel =
-                ViewModelProviders.of(this).get(MessagesViewModel.class);
         final View root = inflater.inflate(R.layout.fragment_messages, container, false);
 
         careNetworkPreferences = root.getContext().getSharedPreferences(myPreference, Context.MODE_PRIVATE);
-
-        userName = careNetworkPreferences.getString("userName", "");
-
-        name = (EditText) root.findViewById(R.id.nameText);
-
-        name.setText(userName);
 
         contactHistory1 = root.findViewById(R.id.contactHistory1);
         contactHistory1.setText(careNetworkPreferences.getString(firstContactName, ""));
@@ -80,253 +54,74 @@ public class MessagesFragment extends Fragment {
         contactHistory3 = root.findViewById(R.id.contactHistory3);
         contactHistory3.setText(careNetworkPreferences.getString(thirdContactName, ""));
 
-        timeField = root.findViewById(R.id.timeField);
 
+        number1 = careNetworkPreferences.getString("phoneKey1", "");
+        number2 = careNetworkPreferences.getString("phoneKey2", "");
+        number3 = careNetworkPreferences.getString("phoneKey3", "");
 
-
-
-        populateActivitySpinner(root, careNetworkPreferences);
-
-        populateContactSpinner(root, careNetworkPreferences);
-
-        populateStatusSpinner(root);
-
-        Button sendButton = (Button) root.findViewById(R.id.sendSMS);
-        sendButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                sendSMS();
-            }
-        });
-
-
-        dateButton = (Button) root.findViewById(R.id.dateButton);
-
-        timeButton = (Button) root.findViewById(R.id.timeButton);
-
-        dateField = (EditText) root.findViewById(R.id.dateField);
-
-        timeField = (EditText) root.findViewById(R.id.timeField);
-
-        dateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                // Get Current Date
-                final Calendar c = Calendar.getInstance();
-                mYear = c.get(Calendar.YEAR);
-                mMonth = c.get(Calendar.MONTH);
-                mDay = c.get(Calendar.DAY_OF_MONTH);
-
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(root.getContext(),
-                        new DatePickerDialog.OnDateSetListener() {
-
-                            @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
-
-                                dateField.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-
-                            }
-                        }, mYear, mMonth, mDay);
-                datePickerDialog.show();
-
-            }
-        });
-
-        timeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Get Current Time
-                final Calendar c = Calendar.getInstance();
-                mHour = c.get(Calendar.HOUR_OF_DAY);
-                mMinute = c.get(Calendar.MINUTE);
-
-                // Launch Time Picker Dialog
-                TimePickerDialog timePickerDialog = new TimePickerDialog(root.getContext(),
-                        new TimePickerDialog.OnTimeSetListener() {
-
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay,
-                                                  int minute) {
-
-                                timeField.setText(hourOfDay + ":" + minute);
-                            }
-                        }, mHour, mMinute, false);
-                timePickerDialog.show();
-            }
-        });
+        getCallDetails(root);
 
         return root;
     }
 
+    private void getCallDetails(View root) {
+        Context context = root.getContext();
+        ContentResolver cr = context.getContentResolver();
+        Cursor managedCursor = cr.query(CallLog.Calls.CONTENT_URI, null,
+                null, null, null);
 
-
-    private void populateActivitySpinner(View root, SharedPreferences careNetworkPreferences) {
-
-        ArrayList<String> activities = new ArrayList<>();
-
-        for (int i = 1; i < 4; i++) {
-            activities.add(careNetworkPreferences.getString("activityKey" + i, ""));
-        }
-
-
-        Spinner activitySpinner = (Spinner) root.findViewById(R.id.activity_spinner);
-
-        ArrayAdapter<String> activityAdapter = new ArrayAdapter<>(root.getContext(), android.R.layout.simple_spinner_item, activities);
-
-        activityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        activitySpinner.setAdapter(activityAdapter);
-
-        activitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-                chosenActivity = adapterView.getItemAtPosition(i).toString();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-    }
-
-    private void populateStatusSpinner(View root) {
-
-
-        Spinner statusSpinner = (Spinner) root.findViewById(R.id.status_spinner);
-
-        ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(root.getContext(), android.R.layout.simple_spinner_item, statusList);
-
-        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        statusSpinner.setAdapter(statusAdapter);
-
-        statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-                chosenStatus = adapterView.getItemAtPosition(i).toString();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-    }
-
-
-    private void populateContactSpinner(final View root, final SharedPreferences careNetworkPreferences) {
-
-        ArrayList<String> contacts = new ArrayList<>();
-
-        for (int i = 1; i < 4; i++) {
-            contacts.add(careNetworkPreferences.getString("nameKey" + i, ""));
-        }
-
-        Spinner contactSpinner = (Spinner) root.findViewById(R.id.contact_spinner);
-
-        ArrayAdapter<String> contactAdapter = new ArrayAdapter<>(root.getContext(), android.R.layout.simple_spinner_item, contacts);
-
-        contactAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        contactSpinner.setAdapter(contactAdapter);
-
-        contactSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-                String option = adapterView.getItemAtPosition(i).toString();
-
-                chosenContact = option;
-
-                Map<String, ?> allEntries = careNetworkPreferences.getAll();
-                for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-
-                    if (entry.getValue().toString().equals(option)) {
-
-                        String contactKey = entry.getKey().replace("nameKey", "");
-
-                        phoneNumber = careNetworkPreferences.getString("phoneKey" + contactKey, "");
-
-                        break;
-                    }
-
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-    }
-
-    private boolean isNullOrEmpty(ArrayList<String> strings) {
-
-        for (int i = 0; i < strings.size(); i++) {
-
-            String str = strings.get(i);
-
-            if(str == null || str.trim().isEmpty()) {
-
-                return true;
-            }
-
-        }
-        return false;
-    }
-
-    private void sendSMS() {
-
-        final String chosenDate = dateField.getText().toString();
-
-        final String chosenTime = timeField.getText().toString();
-
-        final ArrayList<String> params = new ArrayList<String>() {{ add(chosenActivity); add(chosenContact); add(chosenStatus); add(chosenDate); add(chosenTime); }};
-
-        if (isNullOrEmpty(params)) {
-
-            Toast.makeText(this.getActivity(), "Please Fill In All Fields", Toast.LENGTH_SHORT).show();
-
-            return;
-
-        }
-
-        String textMessage = "Hello "
-                + chosenContact
-                + ", Just to let you know that I am "
-                + chosenStatus
-                + ". How about on "
-                + chosenDate
-                + ", at "
-                + chosenTime
-                + " we meet for a "
-                + chosenActivity
-                + ". All the best, "
-                + userName;
 
         try {
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNumber,null, textMessage,null,null);
-            Toast.makeText(this.getActivity(), "To: " + phoneNumber + ", " + textMessage, Toast.LENGTH_LONG).show();
+            int number = managedCursor.getInt(managedCursor.getColumnIndex(CallLog.Calls.NUMBER));
+            int type = managedCursor.getInt(managedCursor.getColumnIndex(CallLog.Calls.TYPE));
+            int date = managedCursor.getInt(managedCursor.getColumnIndex(CallLog.Calls.DATE));
+            int duration = managedCursor.getInt(managedCursor.getColumnIndex(CallLog.Calls.DURATION));
+
+            while (managedCursor.moveToNext()) {
+                String phNumber = managedCursor.getString(number);
+                String callType = managedCursor.getString(type);
+                String callDate = managedCursor.getString(date);
+                Date callDayTime = new Date(Long.valueOf(callDate));
+                String callDuration = managedCursor.getString(duration);
+                String dir = null;
+                int dircode = Integer.parseInt(callType);
+                switch (dircode) {
+                    case CallLog.Calls.OUTGOING_TYPE:
+                        dir = "OUTGOING";
+                        break;
+
+                    case CallLog.Calls.INCOMING_TYPE:
+                        dir = "INCOMING";
+                        break;
+
+                    case CallLog.Calls.MISSED_TYPE:
+                        dir = "MISSED";
+                        break;
+                }
+
+                if (phNumber.equals(number1)) call1++;
+                else if (phNumber.equals(number2)) call2++;
+                else if (phNumber.equals(number3)) call3++;
+
+            }
+            managedCursor.close();
+        } catch (Exception e) {
+            Log.d("Call log", "No call log data");
         }
-        catch (Exception e){
-            Toast.makeText(this.getActivity(), "SMS Failed to Send, Please try again", Toast.LENGTH_SHORT).show();
+        finally {
+
+            TextView callHistory1, callHistory2, callHistory3;
+
+            callHistory1 = root.findViewById(R.id.callHistory1);
+            callHistory1.setText(String.valueOf(call1));
+
+            callHistory2 = root.findViewById(R.id.callHistory2);
+            callHistory2.setText(String.valueOf(call2));
+
+            callHistory3 = root.findViewById(R.id.callHistory3);
+            callHistory3.setText(String.valueOf(call3));
         }
+
     }
 
 

@@ -1,19 +1,22 @@
 package com.uk.ac.ucl.carefulai;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.provider.CallLog;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.core.app.ActivityCompat;
+
+import me.everything.providers.android.BuildConfig;
 import me.everything.providers.android.calllog.CallsProvider;
 import me.everything.providers.android.telephony.TelephonyProvider;
 
 public class LifeDataUpdate {
-
-    public static int stepstaken;
 
     private DatabaseHelper myDb;
     private SharedPreferences dataPreference;
@@ -27,17 +30,16 @@ public class LifeDataUpdate {
     private Context context;
 
 
-
-    public LifeDataUpdate(Context context){
+    public LifeDataUpdate(Context context) {
         this.context = context;
 
-        dataPreference =  context.getSharedPreferences(myPreferences, context.MODE_PRIVATE);
+        dataPreference = context.getSharedPreferences(myPreferences, context.MODE_PRIVATE);
         editor = dataPreference.edit();
         myDb = new DatabaseHelper(context);
 
     }
 
-    public boolean checkIfFirstLaunchApp(){
+    public boolean checkIfFirstLaunchApp() {
         boolean firstrun = false;
         final String PREFS_NAME = "MyPrefsFile";
         final String PREF_VERSION_CODE_KEY = "version_code";
@@ -53,7 +55,7 @@ public class LifeDataUpdate {
         if (currentVersionCode == savedVersionCode) {
             // This is just a normal run
         } else if (savedVersionCode == DOESNT_EXIST) {
-            firstrun=true;
+            firstrun = true;
         } else if (currentVersionCode > savedVersionCode) {
 
         }
@@ -66,36 +68,31 @@ public class LifeDataUpdate {
     public void saveDataToInitialState() {
 
         int initialCallCounts = getCallDuration().size();
-        int initialMessageCounts= getTotalMessagesCount();
-        float initialCallDuration = getTotalCallDuration();
+        int initialMessageCounts = getTotalMessagesCount();
         int initialStepCount = getTotalStepsCount();
 
 
-        editor.putInt("prevTotalCallCount",initialCallCounts);
+        editor.putInt("prevTotalCallCount", initialCallCounts);
 
-        editor.putInt("prevTotalMessageCount",initialMessageCounts);
+        editor.putInt("prevTotalMessageCount", initialMessageCounts);
 
-        editor.putFloat("prevTotalCallsDuration",initialCallDuration);
-
-        editor.putInt("prevTotalStepsCount",initialStepCount);
+        editor.putInt("prevTotalStepsCount", initialStepCount);
 
         editor.apply();
     }
 
 
-
-
     public int getCurrentCallsCount() {
-        int totalCallCount=0;
-        int previousCallCount=0;
-        int currentCallCounts=0;
+        int totalCallCount = 0;
+        int previousCallCount = 0;
+        int currentCallCounts = 0;
 
 
         totalCallCount = getCallDuration().size();
 
-        previousCallCount = dataPreference.getInt("prevTotalCallCount",0);
+        previousCallCount = dataPreference.getInt("prevTotalCallCount", 0);
 
-        currentCallCounts= totalCallCount-previousCallCount;
+        currentCallCounts = totalCallCount - previousCallCount;
 
         return currentCallCounts;
 
@@ -114,20 +111,6 @@ public class LifeDataUpdate {
         }
         managedCursor.close();
         return calls;
-
-    }
-
-    private float getTotalCallDuration(){
-        float callsduration=0;
-
-        List<String> calls_duration = getCallDuration();
-
-        for (String duration:calls_duration){
-            int durarion_int = Integer.parseInt(duration);
-            callsduration+=durarion_int;
-        }
-
-        return callsduration;
 
     }
 
@@ -154,7 +137,6 @@ public class LifeDataUpdate {
 
         return dataPreference.getInt("stepcount",0);
     }
-
 
 
     private int getTotalMessagesCount(){

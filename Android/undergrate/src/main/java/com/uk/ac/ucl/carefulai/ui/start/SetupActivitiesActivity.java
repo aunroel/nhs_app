@@ -5,9 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.uk.ac.ucl.carefulai.Model;
 import com.uk.ac.ucl.carefulai.R;
 
 
@@ -21,11 +22,12 @@ public class SetupActivitiesActivity extends AppCompatActivity {
     private static final String firstActivity = "activityKey1";
     private static final String secondActivity = "activityKey2";
     private static final String thirdActivity = "activityKey3";
-    private static final String stepsTarget = "steps";
-    private static final String contactTarget = "contact";
+    private static final String stepsTarget = "stepsTarget";
+    private static final String contactTarget = "contactTarget";
     private static final String carerSupportRef = "carer_support_ref";
     private static final String postCode = "postcode";
 
+    private Button noThanks3;
     TextView activity1, activity2, activity3, steps, contact, carer_support_ref, postcode;
 
     SharedPreferences careNetworkPreferences;
@@ -52,16 +54,16 @@ public class SetupActivitiesActivity extends AppCompatActivity {
             activity1.setText(careNetworkPreferences.getString(firstActivity, ""));
         }
         if (careNetworkPreferences.contains(secondActivity)) {
-            activity3.setText(careNetworkPreferences.getString(secondActivity, ""));
+            activity2.setText(careNetworkPreferences.getString(secondActivity, ""));
         }
         if (careNetworkPreferences.contains(thirdActivity)) {
-            contact.setText(careNetworkPreferences.getString(thirdActivity, ""));
+            activity3.setText(careNetworkPreferences.getString(thirdActivity, ""));
         }
         if (careNetworkPreferences.contains(stepsTarget)) {
-            activity2.setText(careNetworkPreferences.getString(stepsTarget, ""));
+            steps.setText(String.valueOf(careNetworkPreferences.getInt(stepsTarget, 0)));
         }
         if (careNetworkPreferences.contains(contactTarget)) {
-            steps.setText(careNetworkPreferences.getString(contactTarget, ""));
+            contact.setText((String.valueOf(careNetworkPreferences.getInt(contactTarget, 0))));
         }
         if (careNetworkPreferences.contains(carerSupportRef)) {
             carer_support_ref.setText(careNetworkPreferences.getString(carerSupportRef, ""));
@@ -70,10 +72,19 @@ public class SetupActivitiesActivity extends AppCompatActivity {
             postcode.setText(careNetworkPreferences.getString(postCode, ""));
         }
 
+        noThanks3 = findViewById(R.id.noThanks3);
+        noThanks3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                back();
+            }
+        });
         setTitle("Setup Your Activities");
-        new Model(getApplicationContext()).storeBasicInformation(carerSupportRef, postcode.toString());
     }
 
+    private void back() {
+        startActivity(new Intent(this, PrimaryCareNetworkActivity.class));
+    }
 
     public void wellbeingscreen(View view){
         SharedPreferences.Editor careNetworkPreferencesEditor = careNetworkPreferences.edit();
@@ -92,12 +103,26 @@ public class SetupActivitiesActivity extends AppCompatActivity {
 
         }
 
-        careNetworkPreferencesEditor.putString(stepsTarget, steps.getText().toString());
-        careNetworkPreferencesEditor.putString(contactTarget, contact.getText().toString());
-        careNetworkPreferencesEditor.putString(carerSupportRef, carer_support_ref.getText().toString());
-        careNetworkPreferencesEditor.putString(postCode, postcode.getText().toString());
+        String userSteps = steps.getText().toString();
 
-        if (careNetworkPreferencesEditor.commit()) startActivity(new Intent(this, FirstEntryActivity.class));
+        String userContact = contact.getText().toString();
+
+        String userSupportRef = carer_support_ref.getText().toString();
+
+        String userPostcode = postcode.getText().toString();
+
+
+        if (userSteps.isEmpty() || userContact.isEmpty() || userSupportRef.isEmpty() || userPostcode.isEmpty()) {
+            Toast.makeText(this, "Please Fill In All Fields ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        careNetworkPreferencesEditor.putInt(stepsTarget, Integer.parseInt(userSteps));
+        careNetworkPreferencesEditor.putInt(contactTarget, Integer.parseInt(userContact));
+        careNetworkPreferencesEditor.putString(carerSupportRef, userSupportRef);
+        careNetworkPreferencesEditor.putString(postCode, userPostcode);
+
+        if (careNetworkPreferencesEditor.commit()) startActivity(new Intent(this, PermissionsActivity.class));
 
     }
 
