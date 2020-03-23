@@ -9,7 +9,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AsyncTask.execute{ NhsAPI.getInstance(applicationContext) }
         setContentView(R.layout.main_activity)
     }
 }

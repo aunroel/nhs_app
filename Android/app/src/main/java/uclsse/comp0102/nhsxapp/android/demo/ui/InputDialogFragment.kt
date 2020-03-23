@@ -2,10 +2,17 @@ package uclsse.comp0102.nhsxapp.android.demo.ui
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.os.AsyncTask
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import uclsse.comp0102.nhsxapp.android.demo.R
 import uclsse.comp0102.nhsxapp.api.NhsAPI
 import uclsse.comp0102.nhsxapp.api.NhsTrainingDataHolder
@@ -18,10 +25,10 @@ class InputDialogFragment : DialogFragment() {
     private lateinit var weeklyCallsNum: EditText
     private lateinit var weeklyTextsNum: EditText
     private lateinit var postCodeText: EditText
+    private lateinit var confirmButton: Button
 
-    private fun submitData(){
-        val api = NhsAPI.getInstance(context!!.applicationContext)
-        val data = NhsTrainingDataHolder().apply {
+    private val data: NhsTrainingDataHolder
+        get() = NhsTrainingDataHolder().apply {
             supportCode = supportCodeText.text.toString()
             realWellBeingScore = wellBeingScoreNum.text.toString().toInt()
             weeklySteps = weeklyStepsNum.text.toString().toInt()
@@ -29,12 +36,8 @@ class InputDialogFragment : DialogFragment() {
             weeklyMessages = weeklyTextsNum.text.toString().toInt()
             postCode = postCodeText.text.toString()
         }
-        api.record(data)
-    }
-
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        if (activity == null) throw IllegalStateException("Acticvity is empty.")
         val dialogBuilder = AlertDialog.Builder(activity)
         val inflater = requireActivity().layoutInflater
         val binding = inflater.inflate(R.layout.fragement_input_dialog, null)
@@ -44,30 +47,36 @@ class InputDialogFragment : DialogFragment() {
         weeklyCallsNum = binding.findViewById(R.id.weekly_calls_number)
         weeklyTextsNum = binding.findViewById(R.id.weekly_texts_number)
         postCodeText = binding.findViewById(R.id.post_code_text)
+        confirmButton = binding.findViewById(R.id.confirm_button)
         dialogBuilder.setView(binding)
-        dialogBuilder.setPositiveButton("Confirm"){ dialog, id ->
-            AsyncTask.execute{submitData()}
-            val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-            builder.setTitle("Data insert")
-            builder.setMessage(
-            """{ 
-                "supportCode":${supportCodeText.text},
-                "wellBeingScore":${wellBeingScoreNum.text},
-                "weeklyStepsNum":${weeklyStepsNum.text},
-                "weeklyCallsNum":${weeklyCallsNum.text},
-                "weeklyTextsNum":${weeklyTextsNum.text}, 
-                "postCodeText":${postCodeText.text}
-            }""".trimIndent())
-            builder.setPositiveButton("Okay", null)
-            builder.show()
-            dialog.dismiss()
-        }
-        dialogBuilder.setNegativeButton("Cancel"){ dialog, id ->
-            dialog.dismiss()
-        }
         return dialogBuilder.create()
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        val view = super.onCreateView(inflater, container, savedInstanceState)
+        confirmButton.setOnClickListener {
+            val nhsAPI = ViewModelProvider(this).get(NhsAPI::class.java)
+            val isSuccess = nhsAPI.record(data)
+            isSuccess.observe(this as LifecycleOwner, insertObserver)
+        }
+        return view
     }
 
 
 
+    private val insertObserver = Observer<Boolean?> {
+        val appContext = context?.applicationContext
+        if (it == null) {
+            Toast.makeText(appContext, "Loading", Toast.LENGTH_SHORT).show()
+        } else {
+            val text = "Insert Result: ${if (it) "Success" else "Failure"}"
+            Toast.makeText(appContext, text, Toast.LENGTH_LONG).show()
+            this.dismiss()
+        }
+    }
 }

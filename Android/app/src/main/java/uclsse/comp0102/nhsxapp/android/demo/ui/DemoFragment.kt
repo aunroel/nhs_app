@@ -1,14 +1,17 @@
 package uclsse.comp0102.nhsxapp.android.demo.ui
 
-import android.app.AlertDialog
-import android.os.AsyncTask
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.cancel
 import uclsse.comp0102.nhsxapp.android.demo.R
 import uclsse.comp0102.nhsxapp.api.NhsAPI
 
@@ -28,41 +31,40 @@ class DemoFragment : Fragment() {
         predictButton = binding.findViewById<Button>(R.id.predict_button)
         uploadJsonButton = binding.findViewById<Button>(R.id.upload_button)
         updateModelButton = binding.findViewById<Button>(R.id.update_model)
+        return binding.rootView
+    }
+
+    override fun onDestroyView() {
+        viewLifecycleOwner.lifecycleScope.cancel()
+        super.onDestroyView()
+    }
+
+    override fun onStart() {
+        super.onStart()
         val appContext = context!!.applicationContext
-        val nhsAPI = NhsAPI.getInstance(appContext)
+        val nhsAPI = ViewModelProvider(this).get(NhsAPI::class.java)
         insertButton.setOnClickListener {
             InputDialogFragment().show(childFragmentManager, "Input Dialog")
         }
         predictButton.setOnClickListener {
-            val traniningScore = nhsAPI.getTrainingScore(1000, 1000,1000)
-            val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-            builder.setTitle("Predict Result")
-            builder.setMessage("$traniningScore")
-            builder.setPositiveButton("Okay", null)
-            builder.show()
+            val trainingScore = nhsAPI.getTrainingScore()
+            trainingScore.observe(viewLifecycleOwner, Observer {result ->
+                val text = result ?: "Loading"
+                Toast.makeText(appContext, "Predict Score: $text", Toast.LENGTH_SHORT).show()
+            })
+            nhsAPI.updateTrainingScore()
         }
         uploadJsonButton.setOnClickListener {
-            val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-            builder.setTitle("Upload Result")
-            builder.setMessage("Success")
-            builder.setPositiveButton("Okay", null)
-            builder.show()
-            AsyncTask.execute{
-                nhsAPI.uploadJsonNow()
-            }
+            nhsAPI.uploadJsonNow().observe(viewLifecycleOwner, Observer {isSuccess ->
+                val text = if (isSuccess == null) "Loading" else if(isSuccess) "Done" else "FAIL"
+                Toast.makeText(appContext, "Upload Result: $text", Toast.LENGTH_SHORT).show()
+            })
         }
-        updateModelButton.setOnClickListener {
-            val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-            builder.setTitle("Upload Result")
-            builder.setMessage("SUCCESS")
-            builder.setPositiveButton("Okay", null)
-            builder.show()
-            AsyncTask.execute{
-                nhsAPI.updateTfModelNow()
-            }
+        updateModelButton.setOnClickListener{
+            nhsAPI.uploadJsonNow().observe(viewLifecycleOwner, Observer { isSuccess ->
+                val text = if (isSuccess == null) "Loading" else if(isSuccess) "Done" else "FAIL"
+                Toast.makeText(appContext, "Upload Result: $text", Toast.LENGTH_SHORT).show()
+            })
         }
-        return binding.rootView
     }
-
-
 }
