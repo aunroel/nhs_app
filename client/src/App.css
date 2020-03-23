@@ -2,6 +2,7 @@ html {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  height: 100%;
 }
 *,
 *:before,
@@ -24,28 +25,5 @@ body {
   font-family: "Spartan";
   background-color: var(--secondary-background-color);
   margin: 0;
-}
-
-/* Scroolbar tricks */
-
-html {
-  --scrollbarBG: #cfd8dc;
-  --thumbBG: #90a4ae;
-  /* overflow: hidden; */
-}
-body::-webkit-scrollbar {
-  width: 11px;
-}
-body {
-  scrollbar-width: thin;
-  scrollbar-color: var(--thumbBG) var(--scrollbarBG);
-  overflow: auto;
-}
-body::-webkit-scrollbar-track {
-  background: var(--scrollbarBG);
-}
-body::-webkit-scrollbar-thumb {
-  background-color: var(--thumbBG);
-  border-radius: 6px;
-  border: 3px solid var(--scrollbarBG);
+  min-height: 100%;
 }

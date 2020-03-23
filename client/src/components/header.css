@@ -26,7 +26,7 @@
 }
 
 .header-button {
-  font-size: 1.2em;
+  font-size: 1.1em;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,7 +36,7 @@
   height: 100%;
   text-decoration: none;
   color: var(--primary-color);
-  transition: 300ms ease-out;
+  transition: 200ms;
 }
 
 .header-button:hover {

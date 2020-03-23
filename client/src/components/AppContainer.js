@@ -6,8 +6,8 @@ const flexBox = {
   position: "absolute",
   display: "flex",
   justifyContent: "center",
-  height: "100%",
-  width: "100%"
+  width: "100%",
+  minHeight: "100%"
 };
 
 const Container = ({ children }) => {

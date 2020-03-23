@@ -1,11 +1,10 @@
 .container {
   width: 90%;
-  height: 100%;
   max-width: 1260px;
+  min-height: 100%;
 }
 
 .content-box {
   background-color: var(--primary-color);
-  height: 100%;
   padding: 20px;
 }
