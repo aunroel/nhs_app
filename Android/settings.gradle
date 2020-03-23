@@ -1,2 +1,2 @@
 rootProject.name='Android'
-include ':app', ':api', ':undergrate'
+include ':app', ':api', ':undergrad'
