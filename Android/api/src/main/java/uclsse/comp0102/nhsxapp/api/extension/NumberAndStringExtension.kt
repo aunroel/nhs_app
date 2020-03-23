@@ -5,16 +5,16 @@ import com.google.gson.internal.LazilyParsedNumber
 
 @Suppress("UNCHECKED_CAST")
 fun <T: Any> Any.convertTo(type: Class<T>): T {
-    val value = this.toString()
+    if (type == String::class.java) return this.toString() as T 
+    this as Number
     return when (type) {
-        String::class.java -> value
-        Double::class.java -> value.toDouble()
-        Float::class.java -> value.toFloat()
-        Short::class.java -> value.toShort()
-        Int::class.java -> value.toInt()
-        Long::class.java -> value.toLong()
-        Byte::class.java -> value.toByte()
-        LazilyParsedNumber::class -> LazilyParsedNumber(value)
+        Double::class.java -> this.toDouble()
+        Float::class.java -> this.toFloat()
+        Short::class.java -> this.toShort()
+        Int::class.java -> this.toInt()
+        Long::class.java -> this.toLong()
+        Byte::class.java -> this.toByte()
+        LazilyParsedNumber::class -> LazilyParsedNumber(this.toString())
         else -> throw UnsupportedOperationException("A unsupported number type ${type::class}")
     } as T
 }
@@ -31,15 +31,3 @@ infix fun Number.plus(other: Number): Number {
         else -> throw UnsupportedOperationException("A unsupported number type ${this::class.java}")
     }
 }
-
-val numberClassTypesList = listOf(
-    Double::class.java, Float::class.java,
-    Short::class.java, Int::class.java, Long::class.java,
-    Byte::class.java, LazilyParsedNumber::class
-)
-val Any.isNumber: Boolean
-    get() = this::class.java in numberClassTypesList
-
-val stringClassType = String::class.java
-val Any.isString: Boolean
-    get() = this::class.java == stringClassType

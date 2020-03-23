@@ -6,7 +6,8 @@ import uclsse.comp0102.nhsxapp.api.files.local.LocalRecord
 import java.io.IOException
 import java.net.URL
 
-/** An abstract class provides a basic framework for storing data,
+/**
+ * An abstract class provides a basic framework for storing data,
  * accessing the last modified time, last update time and last upload
  * time of a file.
  * to be implemented by class JsonFile, class ModelFile, and class RegistrationFile
@@ -27,14 +28,15 @@ abstract class AbsOnlineFile(
     val lastUpdateTime: Long
         get() = localRecord.lastUpdateTime
 
-    // Functions about the local record
-    /** read content
+    /**
+     * read content of the file
      */
     fun readBytes(): ByteArray {
         return localRecord.content
     }
 
-    /** write content to the record
+    /**
+     * write content to the record
      * modify the last modified timestamp
      */
     fun writeBytes(bytes: ByteArray) {

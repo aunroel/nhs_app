@@ -2,14 +2,15 @@ package uclsse.comp0102.nhsxapp.api.extension
 
 import java.io.File
 import java.net.URL
+import kotlin.text.Regex.Companion.escapeReplacement
 
 fun String.formatSubDir(): String {
-    return this.replace("//", "/")
-        .removeSurrounding("/")
+    val validStr = this.replace("//", "/").removeSurrounding("/")
+    return escapeReplacement(validStr)
 }
 
 fun String.toURL(): URL {
-    return URL(this)
+    return URL(escapeReplacement(this))
 }
 
 fun File.createNewFileWithDirIfNotExist() {
