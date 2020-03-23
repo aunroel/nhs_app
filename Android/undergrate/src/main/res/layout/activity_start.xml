@@ -68,7 +68,7 @@
 
             android:text="Start"
 
-            android:textColor="@color/White"
+            android:textColor="#37468B"
             android:textSize="18dp"
 
             />

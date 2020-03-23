@@ -22,6 +22,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 import com.uk.ac.ucl.carefulai.ui.AppActivity;
+import com.uk.ac.ucl.carefulai.ui.home.HomeFragment;
 
 
 import androidx.core.app.NotificationCompat;
@@ -55,11 +56,6 @@ public class ThePedometerService extends Service implements SensorEventListener 
     private final Handler handler = new Handler();
 
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
-
-    int counter = 0;
-
-    SharedPreferences preferences2;
-
 
     //---- Setup for providers
     Context context;
@@ -136,8 +132,6 @@ public class ThePedometerService extends Service implements SensorEventListener 
 
         //methods for adding up steps and getting accelerometer values
 
-
-
         servicestatus = false;
 
 
@@ -185,7 +179,7 @@ public class ThePedometerService extends Service implements SensorEventListener 
                 // Call the method that broadcasts data to the Activity
                 broadcastSensorValue();
 
-                editor.putInt("oldstep", dataPreferences.getInt("stepcount", 0)); //Set old step count to last value of stepcount
+                editor.putInt("oldstep", dataPreferences.getInt("stepcount", 0)); //Set old step count to old value of stepcount
 
                 editor.putInt("stepcount", newstepcount + oldstepcount);
 
@@ -269,7 +263,7 @@ public class ThePedometerService extends Service implements SensorEventListener 
 
                 final Handler handler = new Handler();
 
-                final SharedPreferences.Editor editor = dataPreferences.edit();
+                //final SharedPreferences.Editor editor = dataPreferences.edit();
 
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -282,8 +276,9 @@ public class ThePedometerService extends Service implements SensorEventListener 
                         int week = (int) myDb.getThisWeekNumber();
                         Log.v("week is: ", String.valueOf(week));
                         myDb.insertScore(String.valueOf(week), score);
-                        editor.putString("score", String.valueOf(score));
-                        editor.apply();
+
+                        startDataSending(dataPreferences);
+
                         Intent openmainpage = new Intent(getApplicationContext(), AppActivity.class);
                         openmainpage.putExtra("origin", "alarm");
                         openmainpage.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -293,5 +288,20 @@ public class ThePedometerService extends Service implements SensorEventListener 
                 }, 3000);
         }
     };
+
+    private void startDataSending(SharedPreferences dataPreferences) {
+
+        boolean remoteSharing = dataPreferences.getBoolean("remoteSharing", false);
+
+        if (remoteSharing) {
+            String url = "http://178.79.172.202:8080/androidData";
+
+            PostRequest postRequest = new PostRequest(url, this);
+
+            Thread thread = new Thread(postRequest);
+
+            thread.start();
+        }
+    }
 
 }

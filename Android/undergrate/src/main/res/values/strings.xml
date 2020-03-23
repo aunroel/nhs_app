@@ -7,10 +7,9 @@
     <string name="title_config">My Care Network</string>
 
 
-
-    <string name="config_name"> Name </string>
-    <string name="config_number"> Contact No. </string>
-    <string name="config_title"> Your Care Network </string>
+    <string name="config_name"> Name: </string>
+    <string name="config_number"> Contact no: </string>
+    <string name="config_title"> Your support network and apps </string>
     <string name="config_editButton"> Save Changes </string>
 
 
@@ -23,12 +22,12 @@
         Occasionally it will nudge you to keep in contact with people you like to speak to, or to
         pursue activities with them. It will also make you aware of new local groups with similar
         interests to yourself. \n\n
-        If you consent to this, enter your first name below then click \'Save\'
+        If you consent to this, click \'Save\'
     </string>
 
     <string name="setup_text1">
-        Set up your primary care network on the next three screens.
-        Do this initially with your carer support worker. \n Once saved you can change these at any time.\n\n
+        Set up your primary care network on the next three screens. \n
+        Do this initially with your carer support worker. Once saved you can change these at any time.\n
         Who do you like to talk to?
     </string>
 
@@ -59,6 +58,11 @@
     \n in your App.</string>
 
     <string name="clickonlogos"> Click on the logos below to access local Internet resources on the internet and apps </string>
+
+    <string name="local_networks"> Local Networks that work for you</string>
+
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

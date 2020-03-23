@@ -18,7 +18,7 @@ public class StartActivity extends AppCompatActivity {
     }
 
     public void permissionsscreen(View view) {
-        startActivity(new Intent(this, PermissionsActivity.class));
+        startActivity(new Intent(this, InitialInfoActivity.class));
     }
 
 }

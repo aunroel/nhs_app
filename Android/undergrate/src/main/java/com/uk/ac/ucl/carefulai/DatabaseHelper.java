@@ -7,6 +7,9 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "User_data.db";
@@ -88,10 +91,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getAllEntries() {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("SELECT " + COL_2 + ", " + COL_3 + ", " + COL_4 + ", " + COL_5 + " FROM " + TABLE_NAME + ";", null);
+        Cursor res = db.rawQuery("SELECT " + COL_1 + ", "+ COL_2 + ", " + COL_3 + ", " + COL_4 + ", " + COL_5 + " FROM " + TABLE_NAME + ";", null);
         return res;
     }
 
+    public Cursor getLastLine() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("SELECT " + COL_2 + ", " + COL_3 + ", " + COL_4 + ", " + COL_5 + ", " + COL_6 + ", " + "FROM" + TABLE_NAME + " ORDER BY " + COL_1 + " DESC LIMIT 1;", null);
+    }
+
+    public void clearDatabase() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NAME, null, null);
+//        db.execSQL("CREATE TABLE " + TABLE_NAME + " (WEEK_NUM INTEGER PRIMARY KEY AUTOINCREMENT, STEPS_COUNTED INTEGER, CALLS_COUNT INTEGER, TEXTS_COUNT INTEGER, SCORE INTEGER, USER_SCORE INTEGER)");
+    }
     public boolean isdbempty(){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NAME, null);
