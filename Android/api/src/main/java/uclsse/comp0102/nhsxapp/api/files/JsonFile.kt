@@ -6,11 +6,12 @@ import com.google.gson.reflect.TypeToken
 import uclsse.comp0102.nhsxapp.api.files.online.HttpClient
 import java.net.URL
 import uclsse.comp0102.nhsxapp.api.extension.*
+import java.lang.reflect.Field
 
-/** A subclass of the OnlineFile
-  * also encapsulate the google json class,
-  * so that the class is able to convert instances of data class to json string,
-  * able to send these data to server.
+/**
+ * The class is A subclass of the OnlineFile and it also encapsulates the google json class,
+ * so that the class is able to convert instances of data class to json string, as well as
+ * to send these data to server.
  */
 class JsonFile(onHost: URL, subDirWithName: String, appContext: Context) :
     AbsOnlineFile(onHost, subDirWithName, appContext) {
@@ -46,47 +47,60 @@ class JsonFile(onHost: URL, subDirWithName: String, appContext: Context) :
     }
 
     /**
-     * implementation for converting between
-     * different classes and json string
-     */
+     * read json file from local and convert it to string.
+     **/
     fun readStr(): String{
         return readBytes().toString(utf8Charset)
     }
 
+    /**
+     * write the json string into local .
+     **/
     fun writeStr(strData: String){
         writeBytes(strData.toByteArray(utf8Charset))
     }
 
 
+    /**
+     * The method will return an instance of expected class according to the data stored in
+     * the json file.
+     **/
     fun <T : Any> readObject(type: Class<T>): T {
         return fromStrToObject(readStr(), type)
     }
 
+    /**
+     * The method will store an object into the json file. It will overwrite current data in the
+     * file
+     **/
     fun writeObject(objData:Any) {
         writeStr(fromObjectToStr(objData))
     }
 
 
+    /**
+     * The method will store an object into a json file. Compared with writeObject, it will merger
+     * the current data into the file with the data in the object.
+     */
     fun mergeObject(inputObjData:Any){
         val curJsonStr = readStr()
         val inputJsonStr = fromObjectToStr(inputObjData)
         val curDataMap = jGson.fromJson(curJsonStr, mapType) as Map<String, Any>
         val inputDataMap = jGson.fromJson(inputJsonStr, mapType) as Map<String, Any>
         val newMap = (curDataMap.keys + inputDataMap.keys).associateWith {
-            val newValue = jsonPropertyMerge(curDataMap[it], inputDataMap[it])
-            it to newValue
+            jsonPropertyMerge(curDataMap[it], inputDataMap[it])
         }
         val newMapJsonStr = jGson.toJson(newMap, mapType)
         writeStr(newMapJsonStr)
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun <T:Any>jsonPropertyMerge(first: T?, second: T?): T?{
         if (first == null) return second
         if (second == null) return null
-        @Suppress("UNCHECKED_CAST")
-        return when {
-            first.isString -> if(second == "") first else second
-            first.isNumber -> ((first as Number) plus (second as Number)) as T
+        return when(first) {
+            is String -> if(first != "") first else second
+            is Number -> ((first as Number) plus (second as Number)) as T
             else -> throw UnsupportedClassVersionError("only for string and number")
         }
     }
@@ -97,7 +111,7 @@ class JsonFile(onHost: URL, subDirWithName: String, appContext: Context) :
         type.declaredFields.forEachWithAccess {
             val annotation = it.getDeclaredAnnotation(JsonData::class.java)
             val value = if (annotation != null) dataMap[annotation.name] else null
-            if (value != null) it.set(tmpObject, value.convertTo(type))
+            if (value != null) it.set(tmpObject, value.convertTo(it.type))
         }
         return tmpObject
     }

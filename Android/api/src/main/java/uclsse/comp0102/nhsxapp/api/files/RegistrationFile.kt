@@ -10,7 +10,7 @@ import kotlin.random.Random
 
 /** Registration File manage the unique id of the user,
   * it will check if the user has already registered
-  * on the server. If not, it will randomly generate a
+  * on the server. If not, it will randomly generate an
   * uID by the SHA256 algorithm and sent the uID to
   * the server for registration.
  */
