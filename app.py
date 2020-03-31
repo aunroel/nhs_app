@@ -1,10 +1,3 @@
-from nhs_app.models.user_model import User
-from nhs_app.forms.user_forms import UserLogin, UserRegister
-from nhs_app.resource.project import Dashboard, Homepage, ApiDoc
-from nhs_app.resource.ml_resource import MLDownload, MLTrainingResource, ModelAvailability
-from nhs_app.resource.user import UserLogout
-from nhs_app.resource.node import NodeRegister
-from nhs_app.resource.update_aggregator import Aggregator
 import os
 from flask import send_from_directory
 from flask import Flask, render_template, url_for, redirect, flash, request, make_response
@@ -16,7 +9,6 @@ from flask_bootstrap import Bootstrap
 from config import Config
 from werkzeug.urls import url_parse
 
-
 app = Flask(__name__)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
@@ -26,6 +18,13 @@ login.login_view = 'login'
 api = Api(app)
 bootstrap = Bootstrap(app)
 
+from nhs_app.models.user_model import User
+from nhs_app.forms.user_forms import UserLogin, UserRegister
+from nhs_app.resource.project import Dashboard, Homepage, ApiDoc
+from nhs_app.resource.ml_resource import MLDownload, MLTrainingResource, ModelAvailability
+from nhs_app.resource.user import UserLogout
+from nhs_app.resource.node import NodeRegister
+from nhs_app.resource.update_aggregator import Aggregator
 
 api.add_resource(Homepage, '/index', '/', endpoint='index')
 api.add_resource(Aggregator, '/update/<string:uid>', endpoint='update')
