@@ -31,7 +31,13 @@ const mockModel = {
   ]
 };
 
-const modelNames = ["Mock model 1", "Mock model 2", "Mock model 3"];
+const modelNames = [
+  "updated model",
+  "First basic model",
+  "Mock model 1",
+  "Mock model 2",
+  "Mock model 3"
+];
 
 const ModelList = () => {
   const [searchValue, setSearchValue] = useState(null);

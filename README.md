@@ -52,13 +52,16 @@ pip install -r requirements.txt
 
 ##### PowerShell
 
+Run `.\initFlask.ps1` or:
+
 ```
 py -3 -m venv flaskenv
 flaskenv\Scripts\activate
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### Run
+### Run the server
 
 Make sure that you have the '.env' file in the project root directory with all the entries filled with values.
 In order to run the project for local development, please switch to the 'develop' branch.

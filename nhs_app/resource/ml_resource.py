@@ -49,4 +49,3 @@ class ModelAvailability(Resource):
             return make_response(render_template('model_ready.html', code=200), 200, headers)
         else:
             return make_response(render_template('model_ready.html', code=404), 404, headers)
-

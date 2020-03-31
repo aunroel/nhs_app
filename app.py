@@ -1,3 +1,10 @@
+from nhs_app.models.user_model import User
+from nhs_app.forms.user_forms import UserLogin, UserRegister
+from nhs_app.resource.project import Dashboard, Homepage, ApiDoc
+from nhs_app.resource.ml_resource import MLDownload, MLTrainingResource, ModelAvailability
+from nhs_app.resource.user import UserLogout
+from nhs_app.resource.node import NodeRegister
+from nhs_app.resource.update_aggregator import Aggregator
 import os
 from flask import send_from_directory
 from flask import Flask, render_template, url_for, redirect, flash, request, make_response
@@ -18,14 +25,6 @@ login = LoginManager(app)
 login.login_view = 'login'
 api = Api(app)
 bootstrap = Bootstrap(app)
-
-from nhs_app.resource.update_aggregator import Aggregator
-from nhs_app.resource.node import NodeRegister
-from nhs_app.resource.user import UserLogout
-from nhs_app.resource.ml_resource import MLDownload, MLTrainingResource, ModelAvailability
-from nhs_app.resource.project import Dashboard, Homepage, ApiDoc
-from nhs_app.forms.user_forms import UserLogin, UserRegister
-from nhs_app.models.user_model import User
 
 
 api.add_resource(Homepage, '/index', '/', endpoint='index')
@@ -98,5 +97,4 @@ def favicon():
 if __name__ == '__main__':
     db.init_app(app)
     app.run(port=5000, debug=True)
-
 
