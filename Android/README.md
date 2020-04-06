@@ -2,11 +2,7 @@
 
 ## 1. Description
 
-This is a part of UCL NHSX prject, including an android package provding a series of APIs, an app for demonstrating them, and a NHSX app integrated with the package.  
-
-As to these two apps, please see this [document](./).  
-
-As for the APIs on Android sides, it provides Android applications with capabilities of object converting and json file uploading, as well as, the Tensorflow model updating and local predicting.
+It is a part of UCL NHSX prject. To be more specific, it is the APIs on Android sides, which provides Android applications with capabilities of object converting and json file uploading, as well as, the Tensorflow model updating and local predicting.
 
 Besides, the project depends on the open library below.
 
@@ -62,7 +58,7 @@ dependencies {
 
 ### 3.1 NhsAPI
 
-There is a viewmodel class NhsAPI providing a series of functions for the NHS Android application to record personal data and to calculate the wellbeing score. Besides, it completely follows the design of the MVVM, so that any android application using the design pattern can simply integrate with the class
+We provide a class NhsAPI, which provide a series of functions for the NHS Android application to record personal data and to calculate the wellbeing score. Besides, it completely follows the design of the MVVM, so that any android application, which uses the design pattern (recommended by Google), can simply integrate with the class
 
 #### 3.1.1 Initiation
 
@@ -98,7 +94,7 @@ The class provides a method for recording data, which accepts the instance of an
 fun record(data: Any): LiveData<Boolean> 
 ```
 
-To use the method, it is essential to specify which data are needed  by an annotation. `@JsonFile.JsonData(name = "expected name in json file")`.  
+To use the method, it is essential to specify which data are needed by an annotation. `@JsonFile.JsonData(name = "expected name in json file")`.  
 For the Kotlin developer, it looks likes:
 
 ```Kotlin
@@ -135,7 +131,7 @@ nhsAPI.record(new Data())
 If an instance of the `Data` class is passed into the method, the `field_01` and `field_02` will be stored into josn file as the code below: 
 
 ```json
-{"field01": 100, "field_02": 100, "field_03": 100}
+{"stepCount": 100, 'callCount': 100, 'msgCount': 100}
 ```
 
 #### 3.1.2 Training Score
@@ -198,21 +194,12 @@ startJsonUploadTask()
 startModelDownloadTask()
 ```
 
-## 4. Design
+## 3. Design
 
-### 4.1 Overall
-As to the design, the package completely follows the "MVVM", aka "Model View ViewModel" design pattern, in which there are three different kinds of classes: the "Model" class for data handling; the "View" class for UI updating; the "ViewModel" class for data sharing between both views with models and different views. The pattern enforces the single responsibility principle to certain extents, therefore it makes the package highly-integratable for the Android applications, which is the main reason why we choose the pattern. And besides, it is released and officially recommended by Google, therefore it is reasonable to believe that the pattern will be the main-stream of the architecture of Android application.  
+The basic deign the package is as the diagram below: 
 
-To be more relative to the package, Figure below shows an overall structure of the package. It implements both the "Model" and the "ViewModel": the former is responsible for the basic functionalities including the HTTP requests generating and sending, as well as the machine learning predicting; the latter encapsulates all model classes, and provides app developers with a series of interfaces for storing the personal information of app users, calculating the well-being score, and managing periodical file update and download tasks.
+![mermaid-diagram-20200323015042](media/15835666487300/mermaid-diagram-20200323015042.svg)
 
-![complete-classes-diagram](document/imgs/complete_classes_diagram.png)
+The detail of the filesystem looks like the diagram below
 
-### 4.2 Model Part 
-
-In terms of the model part, it is completely isolated to the bussiness domain of NHSX, therefore it is highly-reusable for other projects, which have similar requirements. the "OnlineFile" class rewrites the "Java.File" class, which provides an interface to persistently store binary data by the "DatabaseRecorder" class, and it is also an abstract class specifying two abstract methods about networking. Therefore its subclasses, "JsonFile", "ModelFile" and "RegisterFile", not only are responsible for Json string converting, Machine learning predicting and registering respectively, but also implements file updating and uploading by the "HttpClient" class. There is also a factory class, "OnlineFileFinder", for creating the "OnlineFile" by reflection mechanism. Finally, the "DatabaseRecorder" and "HttpClient" are wrapper classes encapsulating two outside libraries: "AndroidX.room" and "Retrofits2".  
-
-![model-classes-diagram](document/imgs/model_classes_diagram.png)
-
-### 4.3 ViewModel Part 
-
-![viewmodel-classes-diagram](document/imgs/viewmodel_classes_diagram.png)
+![mermaid-diagram-20200323020723](media/15835666487300/mermaid-diagram-20200323020723.svg)
