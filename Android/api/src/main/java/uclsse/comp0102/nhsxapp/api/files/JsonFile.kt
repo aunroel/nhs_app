@@ -25,6 +25,8 @@ class JsonFile(onHost: URL, subDirWithName: String, appContext: Context) :
     private val utf8Charset = Charsets.UTF_8
     private val mapType = object : TypeToken<MutableMap<String, Any>>() {}.type
 
+    private var isDifferentialPrivacyRequired: Boolean = false
+
 
     init {
         if (readBytes().isEmpty())
@@ -36,7 +38,34 @@ class JsonFile(onHost: URL, subDirWithName: String, appContext: Context) :
      */
     override fun uploadCore() {
         val client = HttpClient(hostAddress)
-        client.uploadByPost(readStr(), targetDir)
+        val curJsonStr = readStr()
+        if (! isDifferentialPrivacyRequired)
+            client.uploadByPost(curJsonStr, targetDir)
+        else readJsonWithDifferentialPrivacy(0.2).forEach{
+            client.uploadByPost(it, targetDir)
+        }
+    }
+
+    fun useDifferentialPrivacy(value: Boolean){
+        isDifferentialPrivacyRequired = value
+    }
+
+    private fun readJsonWithDifferentialPrivacy(range:Double): List<String>{
+        val resMapList = mutableListOf<String>()
+        val curDataMap = jGson.fromJson(readStr(), mapType) as Map<String, Any>
+        repeat(10){
+            val differentialPrivacyMap = curDataMap.map { (key, value) ->
+                if(value is Int){
+                    val maxVal = (value * (1-range)).toInt()
+                    val minVal = (value * (1+range)).toInt()
+                    key to (minVal .. maxVal).random()
+                }else{
+                    (key to value)
+                }
+            }
+            resMapList.add(jGson.toJson(differentialPrivacyMap, mapType))
+        }
+        return resMapList
     }
 
     /**
