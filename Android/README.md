@@ -94,7 +94,7 @@ The class provides a method for recording data, which accepts the instance of an
 fun record(data: Any): LiveData<Boolean> 
 ```
 
-To use the method, it is essential to specify which data are needed  by an annotation. `@JsonFile.JsonData(name = "expected name in json file")`.  
+To use the method, it is essential to specify which data are needed by an annotation. `@JsonFile.JsonData(name = "expected name in json file")`.  
 For the Kotlin developer, it looks likes:
 
 ```Kotlin
@@ -131,7 +131,7 @@ nhsAPI.record(new Data())
 If an instance of the `Data` class is passed into the method, the `field_01` and `field_02` will be stored into josn file as the code below: 
 
 ```json
-{'field_01': value, 'field_02': value, 'field_03': value}
+{"stepCount": 100, 'callCount': 100, 'msgCount': 100}
 ```
 
 #### 3.1.2 Training Score
