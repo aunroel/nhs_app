@@ -43,7 +43,7 @@ class ModelFile(
     }
 
     override fun uploadCore() {
-        TODO("Not yet implemented")
+        TODO("Does not support Federated Machine Learning currently")
     }
 
     /** prediction using the tfl model

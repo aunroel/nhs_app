@@ -6,7 +6,7 @@ import uclsse.comp0102.nhsxapp.api.files.JsonFile
 /**
  * # 1. Description:
  * The class is used to specify the data will used in the json file, the annotation
- * @JsonFile.JsonData tells the json file class which data needs to be stored and their name in the
+ * @JsonFile.JsonData tells the json file class which data need to be stored and their name in the
  * json file.
  */
 class NhsTrainingDataHolder {

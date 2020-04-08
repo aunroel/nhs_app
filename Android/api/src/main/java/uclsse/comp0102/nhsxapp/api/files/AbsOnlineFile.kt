@@ -19,7 +19,7 @@ abstract class AbsOnlineFile(
     // the local record of the data.
     private val localRecord:LocalRecord = LocalRecord(subDirWithName, appContext)
 
-    // data in the data record
+    // data in the data recorder
     val lastModifiedTime: Long
         get() = localRecord.lastModifiedTime
     val lastUploadTime: Long
