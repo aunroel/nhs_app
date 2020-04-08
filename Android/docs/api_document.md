@@ -130,7 +130,7 @@ nhsAPI.record(new Data())
 If an instance of the `Data` class is passed into the method, the `field_01` and `field_02` will be stored into josn file as the code below: 
 
 ```json
-{"field01": 100, "field_02": 100, "field_03": 100}
+{"stepCount": 100, "callCount": 100, "msgCount": 100}
 ```
 
 #### 3.1.2 Training Score
