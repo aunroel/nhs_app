@@ -3,18 +3,21 @@ package uclsse.comp0102.nhsxapp.api.files
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import uclsse.comp0102.nhsxapp.api.extension.convertTo
+import uclsse.comp0102.nhsxapp.api.extension.declaredJsonFields
+import uclsse.comp0102.nhsxapp.api.extension.forEachWithAccess
+import uclsse.comp0102.nhsxapp.api.extension.plus
 import uclsse.comp0102.nhsxapp.api.files.online.HttpClient
 import java.net.URL
-import uclsse.comp0102.nhsxapp.api.extension.*
-import java.lang.reflect.Field
 
 /**
  * The class is A subclass of the OnlineFile and it also encapsulates the google json class,
  * so that the class is able to convert instances of data class to json string, as well as
  * to send these data to server.
  */
-class JsonFile(onHost: URL, subDirWithName: String, appContext: Context) :
-    AbsOnlineFile(onHost, subDirWithName, appContext) {
+class JsonFile(
+    onHost: URL, subDirWithName: String, appContext: Context
+) : AbsOnlineFile(onHost, subDirWithName, appContext) {
 
     // Basic fields for posting
     private val hostAddress: URL = onHost
@@ -33,6 +36,10 @@ class JsonFile(onHost: URL, subDirWithName: String, appContext: Context) :
             writeStr("{}")
     }
 
+    fun useDifferentialPrivacy(value: Boolean){
+        isDifferentialPrivacyRequired = value
+    }
+
     /**
      * upload the json file to server
      */
@@ -44,10 +51,6 @@ class JsonFile(onHost: URL, subDirWithName: String, appContext: Context) :
         else readJsonWithDifferentialPrivacy(0.2).forEach{
             client.uploadByPost(it, targetDir)
         }
-    }
-
-    fun useDifferentialPrivacy(value: Boolean){
-        isDifferentialPrivacyRequired = value
     }
 
     private fun readJsonWithDifferentialPrivacy(range:Double): List<String>{
