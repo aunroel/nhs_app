@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="JSON_FILE_SUB_DIR">/update/</string>
-    <string name="TFL_FILE_SUB_DIR">/model/</string>
-    <string name="REGISTER_FILE_PATH">/node</string>
-</resources>
