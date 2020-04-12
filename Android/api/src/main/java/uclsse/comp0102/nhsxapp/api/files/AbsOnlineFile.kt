@@ -12,7 +12,7 @@ import java.net.URL
  * time of a file.
  * to be implemented by class JsonFile, class ModelFile, and class RegistrationFile
  */
-abstract class AbsOnlineFile(
+abstract class AbsOnlineFile (
     onHost: URL, subDirWithName: String, appContext: Context
 ) {
 

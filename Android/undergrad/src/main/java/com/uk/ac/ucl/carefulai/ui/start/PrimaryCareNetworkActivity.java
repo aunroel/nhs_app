@@ -10,18 +10,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.uk.ac.ucl.carefulai.R;
 import com.uk.ac.ucl.carefulai.ui.SearchContactActivity;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 public class PrimaryCareNetworkActivity extends AppCompatActivity {
 
-    public static final String myPreference = "careNetwork";
+    public static final String myPreference = "careNetwork"; //care network data stored under this shared preference
+    //list of keys for care network contacts for shared preferences
     public static final String firstContactName = "nameKey1";
     public static final String secondContactName = "nameKey2";
     public static final String thirdContactName = "nameKey3";
@@ -30,15 +27,13 @@ public class PrimaryCareNetworkActivity extends AppCompatActivity {
     public static final String thirdContactPhone = "phoneKey3";
     private static final String userName = "userName";
 
-    private TextView name1, phone1, name2, phone2, name3, phone3;
+    private TextView name1, phone1, name2, phone2, name3, phone3; //text views for each field
 
-    private EditText name;
+    private EditText name; //user's name
 
-    private SharedPreferences careNetworkPreferences;
+    private SharedPreferences careNetworkPreferences; //shared preferences to store the user's chosen contacts
 
-    private ArrayList<TextView> values;
-
-    private Button nothanks2;
+    private Button nothanks2; //back button used in back() method
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +42,10 @@ public class PrimaryCareNetworkActivity extends AppCompatActivity {
 
         name = (EditText) findViewById(R.id.userName);
 
+        // get each TextView from the layout
+        // similar onClickListeners for each TextView, opens the SearchContactActivity to allow the user to select a contact
+        // intent extra contactID marks which TextView is being edited
+        // intent extra isSetupCN marks whether the editing is occurring from the setup flow or the main flow, as the same layout is used for both
         name1 = findViewById(R.id.name1);
         name1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +112,10 @@ public class PrimaryCareNetworkActivity extends AppCompatActivity {
         careNetworkPreferences = getApplicationContext().getSharedPreferences(myPreference,
                 Context.MODE_PRIVATE);
 
+        //check if there already exists any saved data in careNetworkPreferences for each TextView, if so, display it
+        //else default to default string as appropriate
+        //needed for when the setup flow is triggered again from the main flow
+
         if (careNetworkPreferences.contains(userName)) {
             name.setText(careNetworkPreferences.getString(userName, ""));
         }
@@ -158,6 +161,8 @@ public class PrimaryCareNetworkActivity extends AppCompatActivity {
         }
 
         nothanks2 = findViewById(R.id.noThanks2);
+
+        //sets onClickListener for noThanks2 button
         nothanks2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,73 +172,26 @@ public class PrimaryCareNetworkActivity extends AppCompatActivity {
         setTitle("Setup Your Primary Care Network");
     }
 
-    private void back() {
+    private void back() { //go back to the InitialInfoActivity
         startActivity(new Intent(this, InitialInfoActivity.class));
     }
 
 
-    public void activityscreen(View view){
+    public void activityscreen(View view){ //proceed to SetupActivitesActivity when 'Save' is clicked (onClick attribute set in res)
+
         SharedPreferences.Editor careNetworkPreferencesEditor = careNetworkPreferences.edit();
 
-        values = new ArrayList<TextView>() {{ add(name1); add(name2); add(name3); add(phone1); add(phone2); add(phone3); }};
+        String nameString = name.getText().toString(); //get the user's name
 
-        ArrayList<String[]> addedNames = new ArrayList<>();
-
-        int i = 1;
-        int j = 1;
-        int k = 0;
-        int l = 0;
-
-
-        for (TextView editText : values) {
-            String value = editText.getText().toString();
-
-
-            boolean b = value.isEmpty() || value.contains("Name") || value.contains("Phone");
-            if (i < 4) {
-                if (b) {
-                    Toast.makeText(this, "Please Fill In All Fields", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                String[] contact = { value, ""};
-                addedNames.add(i - 1, contact);
-                careNetworkPreferencesEditor.putString("nameKey" + i, value);
-                i++;
-            }
-            else if (j < 4) {
-                if (b) {
-                    Toast.makeText(this, "Please Fill In All Fields", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                String[] contact = { addedNames.get(j - 1)[0], value};
-                addedNames.remove(j - 1);
-                addedNames.add(j - 1, contact);
-                careNetworkPreferencesEditor.putString("phoneKey" + j, value);
-                j++;
-            }
-            else {
-                break;
-            }
-        }
-
-        Set<String[]> set = new HashSet<>(addedNames);
-
-        if(set.size() < addedNames.size()){
-            Toast.makeText(this, "Please Select Three Unique Contacts", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String nameString = name.getText().toString();
-
+        //ensure that there is a name put into the app
         if (nameString.isEmpty()) {
-            Toast.makeText(this, "Please Input Your Name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please Input Your Name", Toast.LENGTH_SHORT).show(); //inform the user that they need to put in a name
             return;
         }
 
-        careNetworkPreferencesEditor.putString(userName, nameString);
+        careNetworkPreferencesEditor.putString(userName, nameString); //put the name to sharedpreferences
 
+        //if the commit is successful, start the activity setup
         if (careNetworkPreferencesEditor.commit()) startActivity(new Intent(this, SetupActivitiesActivity.class));
 
     }

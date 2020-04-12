@@ -12,15 +12,15 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.uk.ac.ucl.carefulai.R;
 import com.uk.ac.ucl.carefulai.ui.AppActivity;
 
 import java.util.ArrayList;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-
+//message template to get support with a frequently chosen activity in SendActivity()
 public class ActivitySupportActivity extends AppCompatActivity {
 
     private SharedPreferences careNetworkPreferences;

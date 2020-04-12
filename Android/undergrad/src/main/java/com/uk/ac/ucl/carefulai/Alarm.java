@@ -1,25 +1,22 @@
 package com.uk.ac.ucl.carefulai;
 
+//TODO: comment this
+
 import android.app.AlarmManager;
-import android.app.Application;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
-import java.util.Calendar;
-import java.util.Date;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import uclsse.comp0102.nhsxapp.api.NhsAPI;
-import uclsse.comp0102.nhsxapp.api.NhsTrainingDataHolder;
+import java.util.Calendar;
+import java.util.Date;
 
 import static java.lang.StrictMath.abs;
 
@@ -42,20 +39,24 @@ public class Alarm extends BroadcastReceiver {
 
     private Date intervaldate;
 
+    private Model model;
+
     private final String myPreferences = "dataPreference";
 
     @Override
-    public void onReceive(final Context context, Intent intent) {
+    public void onReceive(Context context, Intent intent) {
 
-        if (intent.getBooleanExtra("mainIntent", false)) {
+        Log.d("Alarm", "!");
+
+        if ("MAIN_ALARM".equals(intent.getAction())) {
             mainIntent(context, intent);
         }
 
-        else if (intent.getBooleanExtra("twoDayIntent", false)) {
+        else if ("DAILY_ALARM".equals(intent.getAction())) {
             twoDayIntent(context, intent);
         }
 
-        else if (intent.getBooleanExtra("dailyIntent", false)) {
+        else if ("TWO_DAY_ALARM".equals(intent.getAction())) {
             dailyIntent(context, intent);
         }
 
@@ -83,16 +84,19 @@ public class Alarm extends BroadcastReceiver {
             Date currentdate = new Date(System.currentTimeMillis());
             ///etc.
             if ((currentdate.compareTo(intervaldate) < 0)) {  // if the phone is turned on before the next alarm, no data insertion/classification has been missed.
-                Intent newintent = new Intent(context, Alarm.class);
+                String action2 = "DAILY_ALARM";
 
-                newintent.putExtra("dailyIntent", true);
+                Intent dailyIntent = new Intent(action2,null,  context, Alarm.class);
 
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                dailyIntent.putExtra("dailyIntent", true);
+
+                PendingIntent dailyPendingIntent = PendingIntent.getBroadcast(
                         context,
                         0,
-                        newintent,
+                        dailyIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
-                alarmManager.setRepeating(AlarmManager.RTC, startedtime, 1000*60*60*24, pendingIntent); //just re-establish the alarm for the scheduled time as it is, because it's in the future
+
+                alarmManager.setRepeating(AlarmManager.RTC, startedtime,1000*60*60*24, dailyPendingIntent); //just re-establish the alarm for the scheduled time as it is, because it's in the future
                 Log.v("Alarm will go off at: ", String.valueOf(intervaldate));
                 return;
             }
@@ -108,16 +112,19 @@ public class Alarm extends BroadcastReceiver {
                 long newtime = d.getTimeInMillis();
                 Date newdate = new Date(newtime);
                 //Log.v("miss, new long is:", String.valueOf(newtime));
-                Intent newintent = new Intent(context, Alarm.class);
+                String action2 = "DAILY_ALARM";
 
-                newintent.putExtra("dailyIntent", true);
+                Intent dailyIntent = new Intent(action2,null,  context, Alarm.class);
 
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                dailyIntent.putExtra("dailyIntent", true);
+
+                PendingIntent dailyPendingIntent = PendingIntent.getBroadcast(
                         context,
                         0,
-                        newintent,
+                        dailyIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
-                alarmManager.setRepeating(AlarmManager.RTC, newtime, 1000*60*60*24, pendingIntent);
+
+                alarmManager.setRepeating(AlarmManager.RTC, newtime,1000*60*60*24, dailyPendingIntent);
                 Log.d("missed, alarm set for:", String.valueOf(newdate));
             }
         }
@@ -146,7 +153,6 @@ public class Alarm extends BroadcastReceiver {
     }
 
 
-
     private void twoDayIntent(final Context context, Intent intent) {
         this.context = context;
 
@@ -166,18 +172,21 @@ public class Alarm extends BroadcastReceiver {
             Date currentdate = new Date(System.currentTimeMillis());
             ///etc.
             if ((currentdate.compareTo(intervaldate) < 0)) {  // if the phone is turned on before the next alarm, no data insertion/classification has been missed.
-                Intent newintent = new Intent(context, Alarm.class);
+                String action3 = "TWO_DAY_ALARM";
 
-                newintent.putExtra("twoDayIntent", true);
+                Intent twoDayIntent = new Intent(action3, null, context, Alarm.class);
 
-                newintent.putExtra("twoDayStepCount", dataPreferences.getInt("stepcount" , 0));
+                twoDayIntent.putExtra("twoDayIntent", true);
 
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                twoDayIntent.putExtra("twoDayStepCount", dataPreferences.getInt("stepcount" , 0));
+
+                PendingIntent twoDayPendingIntent = PendingIntent.getBroadcast(
                         context,
                         0,
-                        newintent,
+                        twoDayIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
-                alarmManager.setRepeating(AlarmManager.RTC, startedtime, 1000*60*60*24*7, pendingIntent); //just re-establish the alarm for the scheduled time as it is, because it's in the future
+
+                alarmManager.setRepeating(AlarmManager.RTC, startedtime, 1000*60*60*24*2, twoDayPendingIntent);//just re-establish the alarm for the scheduled time as it is, because it's in the future
                 Log.v("Alarm will go off at: ", String.valueOf(intervaldate));
                 return;
             }
@@ -193,18 +202,21 @@ public class Alarm extends BroadcastReceiver {
                 long newtime = d.getTimeInMillis();
                 Date newdate = new Date(newtime);
                 //Log.v("miss, new long is:", String.valueOf(newtime));
-                Intent newintent = new Intent(context, Alarm.class);
+                String action3 = "TWO_DAY_ALARM";
 
-                newintent.putExtra("twoDayIntent", true);
+                Intent twoDayIntent = new Intent(action3, null, context, Alarm.class);
 
-                newintent.putExtra("twoDayStepCount", dataPreferences.getInt("stepcount" , 0));
+                twoDayIntent.putExtra("twoDayIntent", true);
 
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                twoDayIntent.putExtra("twoDayStepCount", dataPreferences.getInt("stepcount" , 0));
+
+                PendingIntent twoDayPendingIntent = PendingIntent.getBroadcast(
                         context,
                         0,
-                        newintent,
+                        twoDayIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
-                alarmManager.setRepeating(AlarmManager.RTC, newtime, 1000*60*60*24*2, pendingIntent);
+
+                alarmManager.setRepeating(AlarmManager.RTC, newtime, 1000*60*60*24*2, twoDayPendingIntent);
                 Log.d("missed, alarm set for:", String.valueOf(newdate));
             }
         }
@@ -248,16 +260,19 @@ public class Alarm extends BroadcastReceiver {
             Date currentdate = new Date(System.currentTimeMillis());
             ///etc.
             if ((currentdate.compareTo(intervaldate) < 0)) {  // if the phone is turned on before the next alarm, no data insertion/classification has been missed.
-                Intent newintent = new Intent(context, Alarm.class);
+                String action1 = "MAIN_ALARM";
 
-                newintent.putExtra("mainIntent", true);
+                Intent mainIntent = new Intent(action1, null, context, Alarm.class);
 
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                mainIntent.putExtra("mainIntent", true);
+
+                PendingIntent mainPendingIntent = PendingIntent.getBroadcast(
                         context,
                         0,
-                        newintent,
+                        mainIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
-                alarmManager.setRepeating(AlarmManager.RTC, startedtime, 1000*60*60*24*7, pendingIntent); //just re-establish the alarm for the scheduled time as it is, because it's in the future
+
+                alarmManager.setRepeating(AlarmManager.RTC, startedtime,1000*60, mainPendingIntent); //just re-establish the alarm for the scheduled time as it is, because it's in the future
                 Log.v("Alarm will go off at: ", String.valueOf(intervaldate));
                 return;
             }
@@ -273,21 +288,34 @@ public class Alarm extends BroadcastReceiver {
                 long newtime = d.getTimeInMillis();
                 Date newdate = new Date(newtime);
                 //Log.v("miss, new long is:", String.valueOf(newtime));
-                Intent newintent = new Intent(context, Alarm.class);
-                newintent.putExtra("mainIntent", true);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                String action1 = "MAIN_ALARM";
+
+                Intent mainIntent = new Intent(action1, null, context, Alarm.class);
+
+                mainIntent.putExtra("mainIntent", true);
+
+                PendingIntent mainPendingIntent = PendingIntent.getBroadcast(
                         context,
                         0,
-                        newintent,
+                        mainIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
-                alarmManager.setRepeating(AlarmManager.RTC, newtime, 1000*60*60*24*7, pendingIntent);
+
+                alarmManager.setRepeating(AlarmManager.RTC, newtime,1000*60, mainPendingIntent);
                 Log.d("missed, alarm set for:", String.valueOf(newdate));
             }
             Intent toAlarm = new Intent("ALARM_INTENT");
             LocalBroadcastManager.getInstance(context).sendBroadcast(toAlarm);
         }
 
+
         myDb = new DatabaseHelper(context);
+
+        /* START CODE FOR MODEL */
+        model = new Model(context);
+        model.recordThisWeekData();
+        /* END CODE FOR MODEL */
+
+        LiveData<Integer> liveScore;
 
         Cursor res = myDb.getAllData();
 
@@ -303,16 +331,42 @@ public class Alarm extends BroadcastReceiver {
 
             editor.apply();
 
-            int steps = lifeDataUpdate.getStepsCount();
-            int calls = lifeDataUpdate.getCurrentCallsCount();
-            int msgs = lifeDataUpdate.getMessageCount();
-            new DataStorageHelper().record(steps, calls, msgs);
+            /* START OF MODIFICATION ABOUT MODEL */
+            liveScore = model.calculateScore(
+                    abs(lifeDataUpdate.getStepsCount()),
+                    abs(lifeDataUpdate.getCurrentCallsCount()),
+                    abs(lifeDataUpdate.getMessageCount())
+            );
+            Model.OneTimeObserver<Integer> scoreUpdateObserver = new Model.OneTimeObserver<Integer>() {
+                @Override void onChangedCore(Integer score) {
 
-            boolean isInserted = myDb.insertData(steps, calls, msgs);
+                    SharedPreferences dataPreferences =
+                            context.getSharedPreferences(myPreferences, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor dataEditor = dataPreferences.edit();
 
-            if (isInserted) {
-                Toast.makeText(context, "Data Inserted - Score Prediction in Progress!", Toast.LENGTH_LONG).show();
-            }
+                    boolean isTwoWeekWarning =
+                            dataPreferences.getBoolean("twoWeekWarning", false);
+                    if (isTwoWeekWarning && score <= 2) {
+                        dataEditor.putBoolean("twoWeekNudge", true);
+                    } else if (score <= 2) {
+                        dataEditor.putBoolean("twoWeekWarning", true);
+                    }
+                    dataEditor.putInt("recentScore", score);
+                    dataEditor.apply();
+
+                    boolean isInserted = myDb.insertData(
+                            lifeDataUpdate.getStepsCount(),
+                            lifeDataUpdate.getCurrentCallsCount(),
+                            lifeDataUpdate.getMessageCount()
+                    );
+                    if (isInserted) {
+                        String predictingNotice = "Data Inserted - Score Prediction in Progress!";
+                        Toast.makeText(context, predictingNotice, Toast.LENGTH_LONG).show();
+                    }
+                }
+            };
+            liveScore.observe(scoreUpdateObserver, scoreUpdateObserver);
+            /*END OF MODIFY ABOUT MODEL*/
         }
         else {
 
@@ -330,87 +384,51 @@ public class Alarm extends BroadcastReceiver {
 
                 editor.apply();
 
-                int steps = lifeDataUpdate.getStepsCount();
-                int calls = lifeDataUpdate.getCurrentCallsCount();
-                int msgs = lifeDataUpdate.getMessageCount();
-                new DataStorageHelper().record(steps, calls, msgs);
+                /* START OF MODIFICATION ABOUT MODEL */
+                liveScore = model.calculateScore(
+                        abs(lifeDataUpdate.getStepsCount()),
+                        abs(lifeDataUpdate.getCurrentCallsCount()),
+                        abs(lifeDataUpdate.getMessageCount())
+                );
+                Model.OneTimeObserver<Integer> scoreUpdateObserver = new Model.OneTimeObserver<Integer>() {
+                    @Override
+                    void onChangedCore(Integer score) {
 
-                boolean isInserted = myDb.insertData(steps, calls, msgs);
+                        SharedPreferences dataPreferences =
+                                context.getSharedPreferences(myPreferences, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor dataEditor = dataPreferences.edit();
+                        boolean isTwoWeekWarning =
+                                dataPreferences.getBoolean("twoWeekWarning", false);
+                        if (isTwoWeekWarning && score <= 2) {
+                            dataEditor.putBoolean("twoWeekNudge", true);
+                        } else if (score <= 2) {
+                            dataEditor.putBoolean("twoWeekWarning", true);
+                        } else {
+                            dataEditor.putBoolean("twoWeekWarning", false);
+                            dataEditor.putBoolean("twoWeekNudge", false);
+                        }
+                        dataEditor.putInt("recentScore", score);
+                        dataEditor.apply();
 
-                if (isInserted) {
-                    Toast.makeText(context, "Data Inserted - Score Prediction in Progress!", Toast.LENGTH_LONG).show();
-                }
-
+                        boolean isInserted = myDb.insertData(
+                                lifeDataUpdate.getStepsCount(),
+                                lifeDataUpdate.getCurrentCallsCount(),
+                                lifeDataUpdate.getMessageCount()
+                        );
+                        if (isInserted) {
+                            String predictingNotice = "Data Inserted - Score Prediction in Progress!";
+                            Toast.makeText(context, predictingNotice, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                };
+                liveScore.observe(scoreUpdateObserver, scoreUpdateObserver);
+                /*END OF MODIFY ABOUT MODEL*/
             }
         }
         Intent toAlarm = new Intent("ALARM_INTENT");
         LocalBroadcastManager.getInstance(context).sendBroadcast(toAlarm);
     }
 
-
-    private class DataStorageHelper {
-
-        private static final String SCORE_KEY = "recentScore";
-        private static final String TWO_WEEK_WARN_KEY = "twoWeekWarning";
-        private static final String TWO_WEEK_NUDGE_KEY = "twoWeekWarning";
-        private static final String M_PREFERENCE = "dataPreference";
-        private static final int CONTEXT_MODEL = Context.MODE_PRIVATE;
-
-        private NhsAPI nhsAPI;
-        private SharedPreferences dataPreferences;
-
-        private LiveData<Integer> liveScore;
-        private LiveData<Boolean> liveRecordResult;
-
-        DataStorageHelper(){
-            dataPreferences = context.getSharedPreferences(M_PREFERENCE, CONTEXT_MODEL);
-            Application application = (Application) context.getApplicationContext();
-            nhsAPI = new NhsAPI(application);
-            liveScore = nhsAPI.getTrainingScore();
-        }
-
-
-        void record(int steps, int calls, int msgs){
-            NhsTrainingDataHolder dataHolder = new NhsTrainingDataHolder();
-            dataHolder.setWeeklySteps(steps);
-            dataHolder.setWeeklyCalls(calls);
-            dataHolder.setWeeklyMessages(msgs);
-            liveRecordResult = nhsAPI.record(dataHolder);
-            liveRecordResult.observeForever(isRecordFinishedObserver);
-            liveScore = nhsAPI.getTrainingScore();
-            liveScore.observeForever(scoreObserver);
-        }
-
-        private Observer<Integer> scoreObserver = new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer score) {
-                liveScore.removeObserver(scoreObserver);
-                SharedPreferences.Editor dataEditor = dataPreferences.edit();
-                boolean isTwoWeekWarning = dataPreferences.getBoolean(TWO_WEEK_WARN_KEY, false);
-                if(score>2){
-                    dataEditor.putBoolean(TWO_WEEK_WARN_KEY, false);
-                    dataEditor.putBoolean(TWO_WEEK_NUDGE_KEY, false);
-                } else if (isTwoWeekWarning) {
-                    dataEditor.putBoolean(TWO_WEEK_NUDGE_KEY, true);
-                } else {
-                    dataEditor.putBoolean(TWO_WEEK_WARN_KEY, true);
-                }
-                dataEditor.putInt(SCORE_KEY, score);
-                dataEditor.apply();
-            }
-        };
-
-        private Observer<Boolean> isRecordFinishedObserver = new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                liveRecordResult.removeObserver(isRecordFinishedObserver);
-                nhsAPI.uploadJsonNow();
-                nhsAPI.updateTfModelNow();
-                nhsAPI.updateTrainingScore();
-            }
-        };
-
-    }
 
 }
 

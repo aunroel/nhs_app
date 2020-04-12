@@ -13,7 +13,6 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,22 +21,19 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.uk.ac.ucl.carefulai.MainActivity;
+
 import com.uk.ac.ucl.carefulai.R;
 import com.uk.ac.ucl.carefulai.ui.AppActivity;
 import com.uk.ac.ucl.carefulai.ui.SearchContactActivity;
-import com.uk.ac.ucl.carefulai.ui.home.HomeFragment;
 
 import java.util.ArrayList;
 
-
+//Fragment for Care Network tab on main flow
 public class ConfigFragment extends Fragment {
 
-    private TextView name1, phone1, name2, phone2, name3, phone3;
+    private TextView name1, phone1, name2, phone2, name3, phone3; //TextViews for names and phone numbers of care network
 
+    //image views for each of the apps and website links
     private ImageView torfaenLink;
     private ImageView carersTrustLink;
     private ImageView dewisLink;
@@ -47,16 +43,19 @@ public class ConfigFragment extends Fragment {
     private ImageView whatsappLink;
     private ImageView alzheimersLink;
     private ImageView headspaceLink;
+
+    //image views for the call and message buttons for each care network contact
     private ImageView callContact1, callContact2, callContact3, textContact1, textContact2, textContact3;
 
-    private Button saveButton;
+    private Button saveButton; //save care network changes button
 
     //private FloatingActionButton editButton;
 
-    private SharedPreferences careNetworkPreferences;
+    private SharedPreferences careNetworkPreferences; //used to get the currently saved care network details
 
-    private static final String myPreference = "careNetwork";
+    private static final String myPreference = "careNetwork"; //key for the care network preferences list
 
+    //keys for the care network details in careNetworkPreferences
     private static final String firstContactName = "nameKey1";
 
     private static final String secondContactName = "nameKey2";
@@ -75,8 +74,11 @@ public class ConfigFragment extends Fragment {
 
         careNetworkPreferences = root.getContext().getSharedPreferences(myPreference, Context.MODE_PRIVATE);
 
+        // get each TextView from the layout
+        // similar onClickListeners for each TextView, opens the SearchContactActivity to allow the user to select a contact
+        // intent extra contactID marks which TextView is being edited
         name1 = root.findViewById(R.id.config_name1);
-        name1.setText(careNetworkPreferences.getString(firstContactName, ""));
+        name1.setText(careNetworkPreferences.getString(firstContactName, "Contact 1"));
         name1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,7 +87,7 @@ public class ConfigFragment extends Fragment {
         });
 
         name2 = root.findViewById(R.id.config_name2);
-        name2.setText(careNetworkPreferences.getString(secondContactName, ""));
+        name2.setText(careNetworkPreferences.getString(secondContactName, "Contact 2"));
         name2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,7 +96,7 @@ public class ConfigFragment extends Fragment {
         });
 
         name3 = root.findViewById(R.id.config_name3);
-        name3.setText(careNetworkPreferences.getString(thirdContactName, ""));
+        name3.setText(careNetworkPreferences.getString(thirdContactName, "Contact 3"));
         name3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,7 +105,7 @@ public class ConfigFragment extends Fragment {
         });
 
         phone1 = root.findViewById(R.id.config_phone1);
-        phone1.setText(careNetworkPreferences.getString(firstContactPhone, ""));
+        phone1.setText(careNetworkPreferences.getString(firstContactPhone, "Number 1"));
         phone1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,7 +114,7 @@ public class ConfigFragment extends Fragment {
         });
 
         phone2 = root.findViewById(R.id.config_phone2);
-        phone2.setText(careNetworkPreferences.getString(secondContactPhone, ""));
+        phone2.setText(careNetworkPreferences.getString(secondContactPhone, "Number 2"));
         phone2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,7 +123,7 @@ public class ConfigFragment extends Fragment {
         });
 
         phone3= root.findViewById(R.id.config_phone3);
-        phone3.setText(careNetworkPreferences.getString(thirdContactPhone, ""));
+        phone3.setText(careNetworkPreferences.getString(thirdContactPhone, "Number 3"));
         phone3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -156,6 +158,8 @@ public class ConfigFragment extends Fragment {
         });
          */
 
+        //get each web info image link from the layout
+        //set the onClickListener to the appropriate web url to open in the native browser
         torfaenLink = root.findViewById(R.id.torfaenLink);
 
         torfaenLink.setOnClickListener(new View.OnClickListener() {
@@ -221,6 +225,9 @@ public class ConfigFragment extends Fragment {
             }
         });
 
+        //get each app image link from the layout
+        //set the onClickListener to open the app if installed, or redirect to the Play Store page for that app
+
         whatsappLink = root.findViewById(R.id.whatsappApp);
 
         whatsappLink.setOnClickListener(new View.OnClickListener() {
@@ -253,6 +260,9 @@ public class ConfigFragment extends Fragment {
 
 
         final Activity activity = this.getActivity();
+
+        //get each call and message icon from layout
+        //set the appropriate onClickListener with the care network detail from the displayed TextView
 
         callContact1 = root.findViewById(R.id.callContact1);
         callContact1.setOnClickListener(new View.OnClickListener() {
@@ -306,53 +316,55 @@ public class ConfigFragment extends Fragment {
         return root;
     }
 
+    //used to dial a phone number, used as the onClickListener for each call icon
     private void dialContactPhone(final String phoneNumber) {
-        if (phoneNumber.equals("") || !phoneNumber.isEmpty()) {
+        if (phoneNumber.equals("") || !phoneNumber.isEmpty()) { //ensure the phone number isnt an empty string
             startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
         }
-        else {
+        else { //notify the user that the phone number is invalid
             Toast.makeText(this.getActivity(), "Failed to make call, invalid phone number", Toast.LENGTH_LONG).show();
         }
     }
 
+    //used to text a phone number, used as the onClickListener for each message icon
     private void textContact(final String phoneNumber, final Context context, final Activity activity) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Send Text Message");
+        AlertDialog.Builder builder = new AlertDialog.Builder(context); //pop up dialog for the user to input the text message
+        builder.setTitle("Send Text Message"); //dialog title
 
-// Set up the input
+// Set up the text input
         final EditText input = new EditText(context);
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+// Specify the type of input expected;
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
 
-// Set up the buttons
+// Set up the send button in the dialog
         builder.setPositiveButton("Send", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String message = input.getText().toString();
-                if (!phoneNumber.equals("") || !message.equals("")) {
+                String message = input.getText().toString(); //get the user's text message
+                if (!phoneNumber.equals("") || !message.equals("")) { //ensure the phone number and message arent empty strings
                     try {
-                        SmsManager smsManager = SmsManager.getDefault();
-                        smsManager.sendTextMessage(phoneNumber,null, message,null,null);
-                        Toast.makeText(activity, "To: " + phoneNumber + ", " + message, Toast.LENGTH_LONG).show();
+                        SmsManager smsManager = SmsManager.getDefault(); //get the default device messaging service
+                        smsManager.sendTextMessage(phoneNumber,null, message,null,null); //send the message
+                        Toast.makeText(activity, "To: " + phoneNumber + ", " + message, Toast.LENGTH_LONG).show(); //display the message sent as a toast to the user
                     }
                     catch (Exception e){
-                        Toast.makeText(activity, "SMS Failed to Send, Please try again", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, "SMS Failed to Send, Please try again", Toast.LENGTH_SHORT).show(); //if fail, notify user
                     }
                 }
                 else {
-                    Toast.makeText(activity, "Failed to send text message, check details / message and try again", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "Failed to send text message, check details / message and try again", Toast.LENGTH_LONG).show(); //invalid phone number or message, notify user
                 }
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+                dialog.cancel(); //cancel button
             }
         });
 
-        builder.show();
+        builder.show(); //show the dialog
     }
 
 
@@ -374,15 +386,19 @@ public class ConfigFragment extends Fragment {
 
      */
 
+    //saves the changes to the care network to sharedpreferences and then opens AppActivity
     private void saveChanges(SharedPreferences careNetworkPreferences) {
 
+        //editor for careNetworkPreferences
         SharedPreferences.Editor careNetworkPreferencesEditor = careNetworkPreferences.edit();
 
+        //list of TextViews with new details
         ArrayList<TextView> values = new ArrayList<TextView>() {{ add(name1); add(name2); add(name3); add(phone1); add(phone2); add(phone3); }};
 
         int i = 1;
         int j = 1;
 
+        //iterate through the TextViews and add the values to careNetworkPreferences
         for (TextView editText : values) {
             String value = editText.getText().toString();
 
@@ -399,8 +415,10 @@ public class ConfigFragment extends Fragment {
             }
         }
 
+        //commit changes
         careNetworkPreferencesEditor.commit();
 
+        //start AppActivity
         startActivity(new Intent(this.getActivity(), AppActivity.class));
     }
 

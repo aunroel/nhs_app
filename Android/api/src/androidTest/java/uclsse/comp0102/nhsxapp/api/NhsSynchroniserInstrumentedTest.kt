@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 
-class BackgroundTest {
+class NhsSynchroniserInstrumentedTest {
     private lateinit var context: Context
 
     @Before

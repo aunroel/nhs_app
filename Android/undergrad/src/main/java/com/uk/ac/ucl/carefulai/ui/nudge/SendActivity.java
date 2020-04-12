@@ -18,9 +18,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.uk.ac.ucl.carefulai.R;
 import com.uk.ac.ucl.carefulai.ui.AppActivity;
@@ -31,40 +33,27 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import me.everything.providers.android.telephony.Mms;
-
-import static me.everything.providers.android.telephony.Sms.uri;
-
+//creates the template message to send to chosen care network contact
 public class SendActivity extends AppCompatActivity {
 
-    private SharedPreferences careNetworkPreferences;
+    private SharedPreferences careNetworkPreferences; //used to get the care network contact options
 
-    private SharedPreferences dataPreferences;
+    private SharedPreferences dataPreferences; //used to keep track of the activity support nudge
 
-    private TextView contactHistory1, contactHistory2, contactHistory3;
-
-    private Switch includeDiary;
+    private Switch includeDiary; //switch to let user choose whether to include their wellbeing diary or not
 
 
-    private static final String firstContactName = "nameKey1";
+    private EditText name, timeField, dateField; //the user's name, and the time and date they would like to meet
 
-    private static final String secondContactName = "nameKey2";
+    private Button dateButton, timeButton; //buttons to open the time and date picker dialogs
 
-    private static final String thirdContactName = "nameKey3";
+    private int mYear, mMonth, mDay, mHour, mMinute; //date and time values
 
-    private EditText name, timeField, dateField;
-
-    private Button dateButton, timeButton;
-
-    private int mYear, mMonth, mDay, mHour, mMinute;
-
-    private String chosenActivity, chosenContact, chosenStatus, userName, phoneNumber;
+    private String chosenActivity, chosenContact, chosenStatus, userName, phoneNumber; //used to construct the message in sendSMS()
 
     private static final String myPreference = "careNetwork";
 
-    private ArrayList<String> statusList = new ArrayList<String>() {{ add("doing great!"); add("ok"); add("a bit down"); }};
+    private ArrayList<String> statusList = new ArrayList<String>() {{ add("doing great!"); add("ok"); add("a bit down"); }}; //user wellbeing options
 
 
     @Override
@@ -85,11 +74,11 @@ public class SendActivity extends AppCompatActivity {
         timeField = findViewById(R.id.timeField);
 
 
-        populateActivitySpinner(careNetworkPreferences);
+        populateActivitySpinner(careNetworkPreferences); //add the activity options to the template
 
-        populateContactSpinner(careNetworkPreferences);
+        populateContactSpinner(careNetworkPreferences); //add the care network contact options to the template
 
-        populateStatusSpinner();
+        populateStatusSpinner(); //add the wellbeing options to the template
 
         Button sendButton = (Button) findViewById(R.id.sendSMS);
         sendButton.setOnClickListener(new View.OnClickListener()
@@ -99,7 +88,7 @@ public class SendActivity extends AppCompatActivity {
             {
                 sendSMS(dataPreferences);
             }
-        });
+        }); //set onClick for send button to sendSMS()
 
 
         dateButton = (Button) findViewById(R.id.dateButton);
@@ -115,14 +104,14 @@ public class SendActivity extends AppCompatActivity {
             public void onClick(View view) {
                 dateButton();
             }
-        });
+        }); //set onClick for date button to dateButton() which opens the DatePickerDialog
 
         timeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 timeButton();
             }
-        });
+        }); //set onClick for time button to timeButton() which opens the TimePickerDialog
 
         includeDiary = findViewById(R.id.includeWellBeingDiary);
 
@@ -175,7 +164,7 @@ public class SendActivity extends AppCompatActivity {
 
         ArrayList<String> activities = new ArrayList<>();
 
-        for (int i = 1; i < 4; i++) {
+        for (int i = 1; i < 4; i++) { //get the activities from careNetworkPreferences
             activities.add(careNetworkPreferences.getString("activityKey" + i, ""));
         }
 
@@ -281,7 +270,7 @@ public class SendActivity extends AppCompatActivity {
         });
     }
 
-    private boolean isNullOrEmpty(ArrayList<String> strings) {
+    private boolean isNullOrEmpty(ArrayList<String> strings) { //helper function to check if fields are empty
 
         for (int i = 0; i < strings.size(); i++) {
 
@@ -296,10 +285,11 @@ public class SendActivity extends AppCompatActivity {
         return false;
     }
 
-    private Uri getImageUri(Context inContext, Bitmap inImage) {
+    private Uri getImageUri(Context inContext, Bitmap inImage, String title) {
+
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, title, null);
         return Uri.parse(path);
     }
 
@@ -379,13 +369,16 @@ public class SendActivity extends AppCompatActivity {
             Bitmap steps = graphAttachments.getStepsGraph();
             Bitmap calls = graphAttachments.getCallsGraph();
 
+
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.putExtra("sms_body", textMessage);
-            intent.putExtra(Intent.EXTRA_STREAM, getImageUri(this, steps));
-            intent.putExtra(Intent.EXTRA_STREAM, getImageUri(this, calls));
+            intent.putExtra("address",phoneNumber);
+            intent.putExtra(Intent.EXTRA_STREAM, getImageUri(this, steps, "StepsGraph"));
+            intent.putExtra(Intent.EXTRA_STREAM, getImageUri(this, calls, "CallsGraph"));
             intent.setType("image/jpeg");
             startActivity(intent);
+            Toast.makeText(this, "To: " + phoneNumber + ", " + textMessage, Toast.LENGTH_LONG).show();
             startActivity(new Intent(this, AppActivity.class));
         }
 

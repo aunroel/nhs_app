@@ -1,8 +1,8 @@
-package com.uk.ac.ucl.carefulai;
+package uclsse.comp0102.nhsxapp.api;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Example local unit test, which will execute on the development machine (host).

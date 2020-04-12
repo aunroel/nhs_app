@@ -24,7 +24,7 @@ class NhsFileRepository private constructor(appContext: Context){
      * */
     companion object {
         private var instance: NhsFileRepository? = null
-        fun getInstance(appContext: Context): NhsFileRepository{
+        @Synchronized fun getInstance(appContext: Context): NhsFileRepository{
             instance = instance ?: NhsFileRepository(appContext)
             return instance!!
         }
@@ -73,5 +73,7 @@ class NhsFileRepository private constructor(appContext: Context){
     fun getModelFile() : ModelFile {
         return modelFile
     }
+
+
 
 }

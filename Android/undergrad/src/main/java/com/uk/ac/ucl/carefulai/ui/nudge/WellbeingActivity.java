@@ -7,25 +7,28 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.uk.ac.ucl.carefulai.DatabaseHelper;
 import com.uk.ac.ucl.carefulai.LifeDataUpdate;
 import com.uk.ac.ucl.carefulai.R;
 import com.uk.ac.ucl.carefulai.ui.AppActivity;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
+//collects the user's indication of their wellbeing score
 public class WellbeingActivity extends AppCompatActivity {
 
-    private SeekBar simpleSeekBar;
+    private SeekBar simpleSeekBar; //seekbar to collect the score
 
-    private SharedPreferences dataPreferences;
+    private SharedPreferences dataPreferences; //used to fetch the model calculated score
 
-    private DatabaseHelper myDb;
+    private DatabaseHelper myDb; //used to insert the user's indication
 
-    private LifeDataUpdate lifeDataUpdate;
+    private LifeDataUpdate lifeDataUpdate; //after complete, reset the data to initial state for the next week
 
-    private final String myPreferences = "dataPreference";
+    private final String myPreferences = "dataPreference"; //get the dataPreference key-value list
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,13 +39,13 @@ public class WellbeingActivity extends AppCompatActivity {
 
         myDb = new DatabaseHelper(this);
 
-        int score = dataPreferences.getInt("recentScore", 0);
+        int score = dataPreferences.getInt("recentScore", 0); //recently calculated score in Alarm class
 
         simpleSeekBar = findViewById(R.id.wellbeingSeekBar);
 
-        simpleSeekBar.setProgress(score);
+        simpleSeekBar.setProgress(score); //set the default value to the model score
 
-        simpleSeekBar.setMax(10);
+        simpleSeekBar.setMax(10); //max of ten
 
         lifeDataUpdate = new LifeDataUpdate(this);
 
@@ -53,7 +56,7 @@ public class WellbeingActivity extends AppCompatActivity {
         saveUserScore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveUserScore(myDb, lifeDataUpdate);
+                saveUserScore(myDb, lifeDataUpdate); //save button onClickListener, saves user score to DB, resets LifeDataUpdate, and returns to AppActivity
             }
         });
 
@@ -61,15 +64,15 @@ public class WellbeingActivity extends AppCompatActivity {
 
     private void saveUserScore(DatabaseHelper myDb, LifeDataUpdate lifeDataUpdate) {
 
-        int userScore = simpleSeekBar.getProgress();
+        int userScore = simpleSeekBar.getProgress(); //get the user input
 
-        int week = (int) myDb.getThisWeekNumber();
+        int week = (int) myDb.getThisWeekNumber(); //get this week number
 
-        myDb.insertUserScore(String.valueOf(week),userScore);
+        myDb.insertUserScore(String.valueOf(week),userScore); //insert the userScore into the DB (used to calculate error rate in PostRequest)
 
-        lifeDataUpdate.saveDataToInitialState();
+        lifeDataUpdate.saveDataToInitialState(); //reset LifeDataUpdate
 
-        startActivity(new Intent(this, AppActivity.class));
+        startActivity(new Intent(this, AppActivity.class)); //return to AppActivity
 
     }
 }
