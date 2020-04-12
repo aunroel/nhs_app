@@ -53,30 +53,19 @@ class InputDialogFragment : DialogFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-
         val view = super.onCreateView(inflater, container, savedInstanceState)
         confirmButton.setOnClickListener {
+            Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
             val nhsAPI = ViewModelProvider(this).get(NhsAPI::class.java)
-            val isSuccess = nhsAPI.record(data)
-            isSuccess.observe(this as LifecycleOwner, insertObserver)
+            nhsAPI.record(data).observe(this as LifecycleOwner, Observer{
+                val appContext = context?.applicationContext
+                val text = "Insert Result: ${if (it) "Success" else "Failure"}"
+                Toast.makeText(appContext, text, Toast.LENGTH_LONG).show()
+                this.dismiss()
+            })
         }
         return view
-    }
-
-
-
-    private val insertObserver = Observer<Boolean?> {
-        val appContext = context?.applicationContext
-        if (it == null) {
-            Toast.makeText(appContext, "Loading", Toast.LENGTH_SHORT).show()
-        } else {
-            val text = "Insert Result: ${if (it) "Success" else "Failure"}"
-            Toast.makeText(appContext, text, Toast.LENGTH_LONG).show()
-            this.dismiss()
-        }
     }
 }

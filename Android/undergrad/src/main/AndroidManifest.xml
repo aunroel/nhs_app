@@ -92,6 +92,20 @@
         <service
             android:name=".ThePedometerService"
             android:enabled="true" />
+
+        <receiver android:name="com.uk.ac.ucl.carefulai.BootBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.uk.ac.ucl.carefulai.Alarm"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--String for JsonFile file-->
+    <string name="TEST_VM_POSTCODE">N95</string>
+    <string name="TEST_VM_SUPPORT_CODE">Therapist</string>
+    <integer name="TEST_VM_MSGS_NUM">200</integer>
+    <integer name="TEST_VM_CALLS_NUM">200</integer>
+    <integer name="TEST_VM_STEPS_NUM">50000</integer>
+    <integer name="TEST_VM_WELLBEING_REAL">8</integer>
+
+</resources>

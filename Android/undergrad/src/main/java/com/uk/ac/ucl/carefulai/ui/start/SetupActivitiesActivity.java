@@ -6,19 +6,19 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
-
-import com.uk.ac.ucl.carefulai.R;
-
-
-import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.uk.ac.ucl.carefulai.R;
+
+import java.util.ArrayList;
+
 public class SetupActivitiesActivity extends AppCompatActivity {
 
-    private static final String myPreference = "careNetwork";
+    private static final String myPreference = "careNetwork"; //care network data stored under this shared preference
+    //list of keys for care network activities and target data for shared preferences
     private static final String firstActivity = "activityKey1";
     private static final String secondActivity = "activityKey2";
     private static final String thirdActivity = "activityKey3";
@@ -27,28 +27,36 @@ public class SetupActivitiesActivity extends AppCompatActivity {
     private static final String carerSupportRef = "carer_support_ref";
     private static final String postCode = "postcode";
 
-    private Button noThanks3;
-    TextView activity1, activity2, activity3, steps, contact, carer_support_ref, postcode;
+    private Button noThanks3; //back button used in back() method
+
+    EditText activity1, activity2, activity3, steps, contact, carer_support_ref, postcode; //text views for each field
 
     SharedPreferences careNetworkPreferences;
 
-    private ArrayList<TextView> values;
+    private ArrayList<EditText> values;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome_page_fragment_3);
 
-        activity1 = (TextView) findViewById(R.id.activity1);
-        activity2 = (TextView) findViewById(R.id.activity2);
-        activity3 = (TextView) findViewById(R.id.activity3);
-        steps = (TextView) findViewById(R.id.steps);
-        contact = (TextView) findViewById(R.id.contact);
-        carer_support_ref = (TextView) findViewById(R.id.carer_support_ref);
-        postcode = (TextView) findViewById(R.id.postcode);
+        // get each text field from the layout
 
+        activity1 = (EditText) findViewById(R.id.activity1);
+        activity2 = (EditText) findViewById(R.id.activity2);
+        activity3 = (EditText) findViewById(R.id.activity3);
+        steps = (EditText) findViewById(R.id.steps);
+        contact = (EditText) findViewById(R.id.contact);
+        carer_support_ref = (EditText) findViewById(R.id.carer_support_ref);
+        postcode = (EditText) findViewById(R.id.postcode);
+
+        // careNetworkPreferences used to store Care Network data
         careNetworkPreferences = getApplicationContext().getSharedPreferences(myPreference,
                 Context.MODE_PRIVATE);
+
+        //check if there already exists any saved data in careNetworkPreferences for each EditText, if so, display it
+        //else default to default string as appropriate
+        //needed for when the setup flow is triggered again from the main flow
 
         if (careNetworkPreferences.contains(firstActivity)) {
             activity1.setText(careNetworkPreferences.getString(firstActivity, ""));
@@ -73,6 +81,7 @@ public class SetupActivitiesActivity extends AppCompatActivity {
         }
 
         noThanks3 = findViewById(R.id.noThanks3);
+        //sets onClickListener for noThanks3 button
         noThanks3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,14 +95,15 @@ public class SetupActivitiesActivity extends AppCompatActivity {
         startActivity(new Intent(this, PrimaryCareNetworkActivity.class));
     }
 
-    public void wellbeingscreen(View view){
+    public void wellbeingscreen(View view){ //onClick method for 'Save' button in UI; saves the data to careNetworkPreferences, and go to next activity
+
         SharedPreferences.Editor careNetworkPreferencesEditor = careNetworkPreferences.edit();
 
-        values = new ArrayList<TextView>() {{ add(activity1); add(activity2); add(activity3); }};
+        values = new ArrayList<EditText>() {{ add(activity1); add(activity2); add(activity3); }};
 
         int i = 1;
 
-        for (TextView textView : values) {
+        for (EditText textView : values) { //iterate through each activity, and label each activity activityKey + i with its value
 
             String value = textView.getText().toString();
 
@@ -103,25 +113,28 @@ public class SetupActivitiesActivity extends AppCompatActivity {
 
         }
 
-        String userSteps = steps.getText().toString();
+        String userSteps = steps.getText().toString(); //steps target
 
-        String userContact = contact.getText().toString();
+        String userContact = contact.getText().toString(); //contacts target
 
-        String userSupportRef = carer_support_ref.getText().toString();
+        String userSupportRef = carer_support_ref.getText().toString(); //support reference code
 
-        String userPostcode = postcode.getText().toString();
+        String userPostcode = postcode.getText().toString(); //postcode
 
 
-        if (userSteps.isEmpty() || userContact.isEmpty() || userSupportRef.isEmpty() || userPostcode.isEmpty()) {
+        if (userSteps.isEmpty() || userContact.isEmpty() || userSupportRef.isEmpty() || userPostcode.isEmpty()) { //required fields
             Toast.makeText(this, "Please Fill In All Fields ", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        //store targets, support ref, and postcode in careNetworkPreferences
 
         careNetworkPreferencesEditor.putInt(stepsTarget, Integer.parseInt(userSteps));
         careNetworkPreferencesEditor.putInt(contactTarget, Integer.parseInt(userContact));
         careNetworkPreferencesEditor.putString(carerSupportRef, userSupportRef);
         careNetworkPreferencesEditor.putString(postCode, userPostcode);
 
+        //commit then go to PermissionsActivity
         if (careNetworkPreferencesEditor.commit()) startActivity(new Intent(this, PermissionsActivity.class));
 
     }

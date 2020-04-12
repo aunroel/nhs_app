@@ -7,16 +7,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.uk.ac.ucl.carefulai.ui.AppActivity;
 import com.uk.ac.ucl.carefulai.ui.start.StartActivity;
 
 import java.util.Calendar;
 import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
+//Checks permissions when the app is started to check whether the app is being launched for the first time or not
 public class MainActivity extends AppCompatActivity {
 
     private static final int STORAGE_CODE = 999;
@@ -27,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        //a check to see if the app has already been set up (i.e. if Usage Stats have been enabled) - if not, launch the welcome page
+        //similar code to InitialInfoActivity statslaunch
         final UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
         Calendar beginCal = Calendar.getInstance();
         beginCal.add((Calendar.MINUTE), -60*24*7);
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
                     NECESSARY_PERMISSIONS, REQUEST_CODE_ASK_PERMISSIONS);
         }
 
+        //if permissions are not enabled, go to setup flow (StartActivity)
         if (hasSMSPermission != PackageManager.PERMISSION_GRANTED &&
                 hasCallLogPermission2 != PackageManager.PERMISSION_GRANTED &&
                 hasCallLogPermission != PackageManager.PERMISSION_GRANTED &&
@@ -74,10 +77,12 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, StartActivity.class);
             startActivity(intent);
         }
+        //if usage stats are empty, go to setup flow (StartActivity)
         if (queryUsageStats.size() == 0) {
             Intent intent = new Intent(this, StartActivity.class);
             startActivity(intent);
         }
+        //otherwise go to main flow (AppActivity)
         else {
             startActivity(new Intent(this, AppActivity.class));
         }

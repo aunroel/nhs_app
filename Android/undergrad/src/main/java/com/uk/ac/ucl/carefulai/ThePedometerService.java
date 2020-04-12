@@ -1,5 +1,7 @@
 package com.uk.ac.ucl.carefulai;
 
+//TODO: comment this
+
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -21,12 +23,12 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
-import com.uk.ac.ucl.carefulai.ui.AppActivity;
-import com.uk.ac.ucl.carefulai.ui.home.HomeFragment;
-
 
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.uk.ac.ucl.carefulai.ui.AppActivity;
+import com.uk.ac.ucl.carefulai.ui.home.HomeFragment;
 
 public class ThePedometerService extends Service implements SensorEventListener {
     private SensorManager mSensorManager;
@@ -49,7 +51,7 @@ public class ThePedometerService extends Service implements SensorEventListener 
 
 
     private static final String TAG = "StepService";
-    public static final String BROADCAST_ACTION = "com.example.jakesetton.myfirstapp.mybroadcast";
+    public static final String BROADCAST_ACTION = "com.uk.ac.ucl.carefulai.pedometerbroadcast";
 
     Intent intent = new Intent(BROADCAST_ACTION);
 
@@ -103,7 +105,7 @@ public class ThePedometerService extends Service implements SensorEventListener 
         }
 
         if(getSystemService(Context.SENSOR_SERVICE)!=null){
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);}
+            mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);}
 
 
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
@@ -159,6 +161,7 @@ public class ThePedometerService extends Service implements SensorEventListener 
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
             int detectSteps = (int) event.values[0];
+            HomeFragment.homeSteps++;
             curdetectedsteps += detectSteps;
         }
         if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
@@ -259,33 +262,35 @@ public class ThePedometerService extends Service implements SensorEventListener 
         @Override
         public void onReceive(Context context, Intent intent) {
 
-                final Context c = context;
+            final Context c = context;
 
-                final Handler handler = new Handler();
+            final Handler handler = new Handler();
 
-                //final SharedPreferences.Editor editor = dataPreferences.edit();
+            //final SharedPreferences.Editor editor = dataPreferences.edit();
 
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run () {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run () {
 
-                        score = dataPreferences.getInt("recentScore", 0);
+                    score = dataPreferences.getInt("recentScore", 0);
 
-                        Log.v("Score is: ", String.valueOf(score));
-                        // to insert the new week's score after new week's data is inserted, we have to update the score value in the new line of the db
-                        int week = (int) myDb.getThisWeekNumber();
-                        Log.v("week is: ", String.valueOf(week));
-                        myDb.insertScore(String.valueOf(week), score);
+                    Log.v("Score is: ", String.valueOf(score));
+                    // to insert the new week's score after new week's data is inserted, we have to update the score value in the new line of the db
+                    int week = (int) myDb.getThisWeekNumber();
+                    Log.v("week is: ", String.valueOf(week));
+                    myDb.insertScore(String.valueOf(week), score);
 
-                        startDataSending(dataPreferences);
+                    startDataSending(dataPreferences);
 
-                        Intent openmainpage = new Intent(getApplicationContext(), AppActivity.class);
-                        openmainpage.putExtra("origin", "alarm");
-                        openmainpage.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        c.startActivity(openmainpage);
+                    HomeFragment.homeSteps = 0;
 
-                    }
-                }, 3000);
+                    Intent openmainpage = new Intent(getApplicationContext(), AppActivity.class);
+                    openmainpage.putExtra("origin", "alarm");
+                    openmainpage.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    c.startActivity(openmainpage);
+
+                }
+            }, 3000);
         }
     };
 

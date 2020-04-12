@@ -136,12 +136,11 @@
         android:layout_height="0dp"
         android:background="@drawable/button_light_blue_round"
         android:backgroundTint="#FFFFFF"
-        android:onClick="statslaunch"
         android:text="SAVE"
         android:textColor="#37468B"
         app:layout_constraintBottom_toTopOf="@+id/guideline28"
         app:layout_constraintEnd_toStartOf="@+id/guideline41"
-        app:layout_constraintStart_toStartOf="@+id/guideline40"
+        app:layout_constraintStart_toStartOf="@+id/guideline116"
         app:layout_constraintTop_toTopOf="@+id/guideline27" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -166,6 +165,13 @@
         app:layout_constraintGuide_end="16dp" />
 
     <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline116"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="149dp" />
+
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -185,25 +191,11 @@
         app:layout_constraintVertical_bias="0.0">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline33"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_end="117dp" />
-
-        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline34"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="38dp" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline35"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_end="214dp" />
+            app:layout_constraintGuide_begin="16dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline36"
@@ -217,66 +209,31 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:fontFamily="@font/lato_bold"
-            android:text="As needed move the Black Button up or down the scale to log how you well you feel."
+            android:text="As needed move the Black Button up or down the scale to log how you well you feel.\n\n On the scale  \n(0=lowest score, \n 10=highest score).\n \nThen click SAVE. This will create a diary entry in your App"
             android:textAlignment="textStart"
             android:textColor="@color/Black"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline35"
-            app:layout_constraintEnd_toStartOf="@+id/guideline38"
-            app:layout_constraintStart_toStartOf="@+id/guideline39"
-            app:layout_constraintTop_toTopOf="@+id/guideline34" />
-
-        <TextView
-            android:id="@+id/textView30"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:fontFamily="@font/lato_bold"
-            android:text="On the scale  (0=lowest score,  10=highest score)."
-            android:textAlignment="textStart"
-            android:textColor="@color/Black"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline33"
-            app:layout_constraintEnd_toStartOf="@+id/guideline42"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/guideline39"
-            app:layout_constraintTop_toTopOf="@+id/guideline35"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/textView31"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:fontFamily="@font/lato_bold"
-            android:text="Then click SAVE. This will create a diary entry in your App"
-            android:textColor="@color/Black"
-            android:textSize="18sp"
+            android:textSize="14sp"
+            app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@+id/guideline36"
             app:layout_constraintEnd_toStartOf="@+id/guideline38"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/guideline39"
-            app:layout_constraintTop_toTopOf="@+id/guideline33"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toTopOf="@+id/guideline34"
+            app:layout_constraintVertical_bias="0.0" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline38"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="92dp" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline42"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="142dp" />
+            app:layout_constraintGuide_end="47dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline39"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="85dp" />
+            app:layout_constraintGuide_begin="41dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -302,17 +259,10 @@
         app:layout_constraintGuide_end="43dp" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline40"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="155dp" />
-
-    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline41"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="67dp" />
+        app:layout_constraintGuide_end="63dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

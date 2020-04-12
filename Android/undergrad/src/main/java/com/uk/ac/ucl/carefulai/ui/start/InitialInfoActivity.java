@@ -12,17 +12,16 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.uk.ac.ucl.carefulai.R;
 import com.uk.ac.ucl.carefulai.ui.AppActivity;
 
 import java.util.Calendar;
 import java.util.List;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 public class InitialInfoActivity extends AppCompatActivity {
 
@@ -35,28 +34,29 @@ public class InitialInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.welcome_page_fragment_1);
+        setContentView(R.layout.welcome_page_fragment_1); //return to previous screen
         setTitle("Welcome to Careful AI!");
 
-        dataPreferences = this.getSharedPreferences("dataPreference", Context.MODE_PRIVATE);
+        dataPreferences = this.getSharedPreferences("dataPreference", Context.MODE_PRIVATE); //used in back() function to check if this activity was launched from setup or from AppActivity
 
-        noThanks1 = findViewById(R.id.noThanks1);
+        noThanks1 = findViewById(R.id.noThanks1); //maps to noThanks1 button in welcome_page_fragment_1
         noThanks1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 back(dataPreferences);
             }
-        });
+        }); //sets back() function as onClickListener
     }
 
-    private void back(SharedPreferences dataPreferences)
+    private void back(SharedPreferences dataPreferences) //callback function for noThanks1
     {
-        if (dataPreferences.getBoolean("isTracking", false)) {
-            startActivity(new Intent(this, AppActivity.class));
+        if (dataPreferences.getBoolean("isTracking", false)) { //isTracking is set in PermissionsActivity, and is required to finish the setup
+            startActivity(new Intent(this, AppActivity.class)); //must be in main flow, so go back to AppActivity
             return;
         }
-        startActivity(new Intent(this, StartActivity.class));
+        startActivity(new Intent(this, StartActivity.class)); //else back to StartActivity
     }
+    //launches Settings on the device to enable permissions
     public void statslaunch() {
 
         int hasSMSPermission = checkSelfPermission(Manifest.permission.READ_SMS);
@@ -120,9 +120,11 @@ public class InitialInfoActivity extends AppCompatActivity {
             Toast.makeText(InitialInfoActivity.this, "Please enable all permissions in order to use this app!", Toast.LENGTH_LONG).show();
             ActivityCompat.requestPermissions(InitialInfoActivity.this, new String[]{Manifest.permission.READ_SMS, Manifest.permission.RECEIVE_SMS, Manifest.permission.SEND_SMS, Manifest.permission.READ_CALL_LOG, Manifest.permission.PACKAGE_USAGE_STATS, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_CONTACTS},
                     REQUEST_CODE_ASK_PERMISSIONS);
-            statslaunch();
         } else {
             startActivity(new Intent(this, PrimaryCareNetworkActivity.class));
         }
     }
 }
+
+
+

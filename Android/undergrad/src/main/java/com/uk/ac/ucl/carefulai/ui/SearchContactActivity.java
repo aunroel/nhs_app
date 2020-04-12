@@ -2,49 +2,40 @@ package com.uk.ac.ucl.carefulai.ui;
 
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.Menu;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
-import com.uk.ac.ucl.carefulai.R;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+
+import com.uk.ac.ucl.carefulai.R;
 
 
 public class SearchContactActivity extends AppCompatActivity {
 
-    private SearchView searchView;
-    private ListView contactsList;
-    private SharedPreferences careNetworkPreferences;
-    private Intent intent;
+    private SearchView searchView; //the SearchView that holds the adapter that allows the user to search for contacts
+    private Intent intent; //intent used to create the activity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.contacts_search_layout);
 
-        contactsList = findViewById(R.id.contact_list);
+        setContentView(R.layout.contacts_search_layout); //sets the layout
 
-        careNetworkPreferences = this.getSharedPreferences("careNetwork", 0);
 
-        intent = getIntent();
+        intent = getIntent(); //fetches the intent that searches the activity
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search_menu, menu);
+        getMenuInflater().inflate(R.menu.search_menu, menu); //dropdown menu for the contacts
 
-        searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSubmitButtonEnabled(true);
-        searchView.setOnQueryTextListener(onQueryTextListener);
+        searchView = (SearchView) menu.findItem(R.id.search).getActionView(); //gets the search button
+        searchView.setSubmitButtonEnabled(false); //enables search button
+        searchView.setOnQueryTextListener(onQueryTextListener); //sets the suggestion adapter defined below to the search view
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -52,40 +43,17 @@ public class SearchContactActivity extends AppCompatActivity {
     private SearchView.OnQueryTextListener onQueryTextListener =
             new SearchView.OnQueryTextListener() {
                 @Override
-                public boolean onQueryTextSubmit(String query) {
-//                    Cursor contacts = getListOfContactNames(query);
-//                    String[] cursorColumns = {
-//                            ContactsContract.Contacts.DISPLAY_NAME_PRIMARY };
-//                    int[] viewIds = {R.id.tv_name};
-//
-//                    SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(
-//                            SearchContactActivity.this,
-//                            R.layout.contact_item_layout,
-//                            contacts,
-//                            cursorColumns,
-//                            viewIds,
-//                            0);
-//
-//                    contactsList.setAdapter(simpleCursorAdapter);
-//                    contactsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                        @Override
-//                        public void onItemClick(AdapterView<?> adapterView,
-//                                                View view, int i, long l) {
-//                            //get contact details and display
-//                            TextView nameField = view.findViewById(R.id.tv_name);
-//                            TextView phoneField = view.findViewById(R.id.tv_phone);
-//                            submitContact(careNetworkPreferences, nameField.getText().toString(), phoneField.getText().toString());
-//                        }
-//                    });
+                public boolean onQueryTextSubmit(String query) { //needed for any onQueryTextListener, no submit button so just return
                     return true;
                 }
 
                 @Override
-                public boolean onQueryTextChange(String newText) {
-                    Cursor contacts = getListOfContactNames(newText);
+                public boolean onQueryTextChange(String newText) { //suggestions as the user types
+                    Cursor contacts = getListOfContactNames(newText); //cursor that iterates through native contacts, defined below
+                    //ContactsAdaptor defined in separate class, renders each option and does the onClick, need intent to get contactId and isSetupCN
                     ContactsAdapter cursorAdapter = new ContactsAdapter
                             (SearchContactActivity.this, contacts, searchView, intent);
-                    searchView.setSuggestionsAdapter(cursorAdapter);
+                    searchView.setSuggestionsAdapter(cursorAdapter); //set the adaptor to the search view
                     return true;
                 }
             };
@@ -95,6 +63,9 @@ public class SearchContactActivity extends AppCompatActivity {
         Cursor cur = null;
         ContentResolver cr = getContentResolver();
 
+        //list of fields required for each contact, ID and LOOKUP_KEY required to internally iterate through the native list
+        // the display name and number given to front end
+
         String[] mProjection =
                 {
                         ContactsContract.CommonDataKinds.Identity._ID,
@@ -103,16 +74,15 @@ public class SearchContactActivity extends AppCompatActivity {
                         ContactsContract.CommonDataKinds.Phone.NUMBER
                 };
 
-        Uri uri = ContactsContract.CommonDataKinds.Contactables.CONTENT_URI;
+        Uri uri = ContactsContract.CommonDataKinds.Contactables.CONTENT_URI; //URI defining data types required for the cursor
 
-        String selection = ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME_PRIMARY + " LIKE ?";
-        String[] selectionArgs = new String[]{"%"+searchText+"%"};
+        String selection = ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME_PRIMARY + " LIKE ?"; //select by name
+        String[] selectionArgs = new String[]{"%"+searchText+"%"}; //use the user's text to search by name
 
-        cur = cr.query(uri, mProjection, selection, selectionArgs, null);
+        cur = cr.query(uri, mProjection, selection, selectionArgs, null); //query the native contacts
 
         return cur;
     }
-
 
 }
 

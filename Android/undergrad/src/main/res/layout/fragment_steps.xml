@@ -28,6 +28,7 @@
         android:background="@drawable/button_white"
         android:backgroundTint="#0CCCA8"
         android:text="Well-Being v Steps"
+        app:autoSizeTextType="none"
         app:layout_constraintBottom_toTopOf="@+id/guideline84"
         app:layout_constraintEnd_toStartOf="@+id/guideline88"
         app:layout_constraintStart_toStartOf="@+id/guideline87"
@@ -51,7 +52,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:text="Steps Taken and Well-Being"
-        android:textAlignment="viewStart"
+        android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/guideline90"
         app:layout_constraintEnd_toStartOf="@+id/guideline93"
         app:layout_constraintHorizontal_bias="0.0"
@@ -173,7 +174,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="110dp" />
+        app:layout_constraintGuide_begin="88dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline85"
@@ -201,7 +202,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="85dp" />
+        app:layout_constraintGuide_end="74dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline96"

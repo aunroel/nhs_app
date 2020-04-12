@@ -1,9 +1,7 @@
 package uclsse.comp0102.nhsxapp.android.demo
 
-import android.os.AsyncTask
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import uclsse.comp0102.nhsxapp.api.NhsAPI
 
 class MainActivity : AppCompatActivity() {
 
@@ -11,4 +9,5 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
     }
+
 }

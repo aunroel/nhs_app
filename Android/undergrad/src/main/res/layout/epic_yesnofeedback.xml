@@ -184,13 +184,6 @@
         app:layout_constraintVertical_bias="0.0">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline33"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_end="117dp" />
-
-        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline34"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -202,80 +195,38 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_end="214dp" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline36"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_end="16dp" />
+            app:layout_constraintGuide_end="61dp" />
 
         <TextView
             android:id="@+id/textView29"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:fontFamily="@font/lato_bold"
-            android:text="As needed move the Black Button up or down the scale to log how you well you feel."
+            android:isScrollContainer="true"
+            android:text="As needed move the Black Button up or down the scale to log how you well you feel. \n\n On the scale \n (0=lowest score, \n 10=highest score).\n\nThen click SAVE. This will create a diary entry in your App"
             android:textAlignment="textStart"
             android:textColor="@color/Black"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/guideline35"
             app:layout_constraintEnd_toStartOf="@+id/guideline38"
-            app:layout_constraintStart_toStartOf="@+id/guideline39"
-            app:layout_constraintTop_toTopOf="@+id/guideline34" />
-
-        <TextView
-            android:id="@+id/textView30"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:fontFamily="@font/lato_bold"
-            android:text="On the scale  (0=lowest score,  10=highest score)."
-            android:textAlignment="textStart"
-            android:textColor="@color/Black"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline33"
-            app:layout_constraintEnd_toStartOf="@+id/guideline42"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline39"
-            app:layout_constraintTop_toTopOf="@+id/guideline35"
+            app:layout_constraintTop_toTopOf="@+id/guideline34"
             app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/textView31"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:fontFamily="@font/lato_bold"
-            android:text="Then click SAVE. This will create a diary entry in your App"
-            android:textColor="@color/Black"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline36"
-            app:layout_constraintEnd_toStartOf="@+id/guideline38"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/guideline39"
-            app:layout_constraintTop_toTopOf="@+id/guideline33"
-            app:layout_constraintVertical_bias="1.0" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline38"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="92dp" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline42"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="142dp" />
+            app:layout_constraintGuide_end="55dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline39"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="85dp" />
+            app:layout_constraintGuide_begin="59dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -284,21 +235,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="149dp" />
+        app:layout_constraintGuide_end="121dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline27"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="139dp" />
+        app:layout_constraintGuide_end="113dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline28"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="95dp" />
+        app:layout_constraintGuide_end="67dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline40"

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">NHS Demo App</string>
-    <string name="HOST_ADDRESS">https://www.sse-wellbeing.team/</string>
+    <string name="HOST_ADDRESS">http://10.0.2.2:5000/</string>
+    <string name="HOST_ADDRESS_BAK">https://www.sse-wellbeing.team/</string>
 </resources>

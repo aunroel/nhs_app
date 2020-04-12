@@ -9,6 +9,6 @@ abstract class AbsFilePeriodicalDownloadTask(
 
 
     override suspend fun doWork(): Result {
-        return if (targetFile!!.update()) Result.success() else Result.retry()
+        return if (targetFile.update()) Result.success() else Result.retry()
     }
 }

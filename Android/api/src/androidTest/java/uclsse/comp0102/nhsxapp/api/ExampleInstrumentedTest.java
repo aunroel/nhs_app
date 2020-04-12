@@ -1,4 +1,4 @@
-package com.uk.ac.ucl.carefulai;
+package uclsse.comp0102.nhsxapp.api;
 
 import android.content.Context;
 
@@ -24,5 +24,4 @@ public class ExampleInstrumentedTest {
 
         assertEquals("com.uk.ac.ucl.carefulai", appContext.getPackageName());
     }
-
 }

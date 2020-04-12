@@ -7,9 +7,7 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-
+//SQLite database storing collected user data
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "User_data.db";
@@ -38,7 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertData(int stepscount, int callscount,int textcount) {
+    public boolean insertData(int stepscount, int callscount,int textcount) { //insert step call and text data
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_2, stepscount);
@@ -54,7 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public boolean insertScore(String week, int score) {
+    public boolean insertScore(String week, int score) { //insert the model calculated score
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_5, score);
@@ -62,7 +60,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean insertUserScore(String week, int score) {
+    public boolean insertUserScore(String week, int score) { //insert the user defined score
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_6, score);
@@ -70,41 +68,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public long getThisWeekNumber() {
+    public long getThisWeekNumber() { //get the most recent week number (i.e. number of entries)
         SQLiteDatabase db = this.getWritableDatabase();
         long count = DatabaseUtils.queryNumEntries(db, TABLE_NAME);
         db.close();
         return count;
     }
 
-    public Cursor getAllData() {
+    public Cursor getAllData() { //get the sum total of every data column
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery("SELECT SUM(" + COL_2 + "), SUM(" + COL_3 + "), + SUM(" + COL_4 + "),+ SUM(" + COL_5 + "), + SUM(" + COL_6 + "), " + "FROM" + TABLE_NAME + " ORDER BY " + COL_1 + " DESC LIMIT 1;", null);
         return res;
     }
 
-    public Cursor getScore() {
+    public Cursor getScore() { //get the most recent score
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery("SELECT " + COL_5 + " FROM " + TABLE_NAME, null);
         return res;
     }
 
-    public Cursor getAllEntries() {
+    public Cursor getAllEntries() { //return all the data from the database
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery("SELECT " + COL_1 + ", "+ COL_2 + ", " + COL_3 + ", " + COL_4 + ", " + COL_5 + " FROM " + TABLE_NAME + ";", null);
         return res;
     }
 
-    public Cursor getLastLine() {
+    public Cursor getLastLine() { //get the last line of data from the database
         SQLiteDatabase db = this.getWritableDatabase();
         return db.rawQuery("SELECT " + COL_2 + ", " + COL_3 + ", " + COL_4 + ", " + COL_5 + ", " + COL_6 + ", " + "FROM" + TABLE_NAME + " ORDER BY " + COL_1 + " DESC LIMIT 1;", null);
     }
 
-    public void clearDatabase() {
+    public void clearDatabase() { //clear database data
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_NAME, null, null);
 //        db.execSQL("CREATE TABLE " + TABLE_NAME + " (WEEK_NUM INTEGER PRIMARY KEY AUTOINCREMENT, STEPS_COUNTED INTEGER, CALLS_COUNT INTEGER, TEXTS_COUNT INTEGER, SCORE INTEGER, USER_SCORE INTEGER)");
     }
+
     public boolean isdbempty(){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NAME, null);
