@@ -1,4 +1,4 @@
-package uclsse.comp0102.nhsxapp.api.tasks.tasks
+package uclsse.comp0102.nhsxapp.api.synchronise.tasks
 
 import android.content.Context
 import androidx.work.CoroutineWorker

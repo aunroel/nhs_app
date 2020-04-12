@@ -3,10 +3,9 @@ package uclsse.comp0102.nhsxapp.api
 import android.content.Context
 import androidx.work.WorkerParameters
 import uclsse.comp0102.nhsxapp.api.files.AbsOnlineFile
-import uclsse.comp0102.nhsxapp.api.tasks.PeriodicalTaskStarter
-import uclsse.comp0102.nhsxapp.api.tasks.tasks.AbsFilePeriodicalDownloadTask
-import uclsse.comp0102.nhsxapp.api.tasks.tasks.AbsFilePeriodicalUploadTask
-import java.time.DayOfWeek
+import uclsse.comp0102.nhsxapp.api.synchronise.PeriodicalTaskStarter
+import uclsse.comp0102.nhsxapp.api.synchronise.tasks.AbsFilePeriodicalDownloadTask
+import uclsse.comp0102.nhsxapp.api.synchronise.tasks.AbsFilePeriodicalUploadTask
 import java.time.Duration
 
 /**

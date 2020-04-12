@@ -74,13 +74,4 @@ open class LocalRecord(idStr: String, appContext: Context) {
             record.data = value
             database.dataAccessor.update(record)
         }
-
-    fun refreshCache(){
-        val idStr = record.identifierStr
-        record = database.dataAccessor.get(idStr)!!
-    }
-
-
-
-
 }

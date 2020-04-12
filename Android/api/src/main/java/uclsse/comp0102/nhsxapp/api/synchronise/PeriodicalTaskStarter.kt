@@ -1,9 +1,9 @@
-package uclsse.comp0102.nhsxapp.api.tasks
+package uclsse.comp0102.nhsxapp.api.synchronise
 
 import android.content.Context
 import androidx.work.*
 import androidx.work.BackoffPolicy.LINEAR
-import uclsse.comp0102.nhsxapp.api.tasks.tasks.AbsOnlineFilePeriodicalTask
+import uclsse.comp0102.nhsxapp.api.synchronise.tasks.AbsOnlineFilePeriodicalTask
 import java.time.Duration
 import java.time.Duration.ofDays
 import androidx.work.ExistingPeriodicWorkPolicy.REPLACE as REPLACE_PERIODIC_POLICY
