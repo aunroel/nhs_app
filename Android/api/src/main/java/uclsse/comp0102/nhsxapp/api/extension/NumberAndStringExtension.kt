@@ -18,16 +18,3 @@ fun <T: Any> Any.convertTo(type: Class<T>): T {
         else -> throw UnsupportedOperationException("A unsupported number type ${type::class}")
     } as T
 }
-
-infix fun Number.plus(other: Number): Number {
-    return when (this) {
-        is Float,
-        is Double -> this.toFloat() + other.toFloat()
-        is Short,
-        is Int -> this.toInt() + other.toInt()
-        is Long -> this.toLong() + other.toLong()
-        is Byte -> this.toByte() + other.toByte()
-        is LazilyParsedNumber -> this.toFloat() + other.toFloat()
-        else -> throw UnsupportedOperationException("A unsupported number type ${this::class.java}")
-    }
-}

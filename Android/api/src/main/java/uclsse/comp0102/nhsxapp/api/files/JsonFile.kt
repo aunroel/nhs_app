@@ -6,7 +6,6 @@ import com.google.gson.reflect.TypeToken
 import uclsse.comp0102.nhsxapp.api.extension.convertTo
 import uclsse.comp0102.nhsxapp.api.extension.declaredJsonFields
 import uclsse.comp0102.nhsxapp.api.extension.forEachWithAccess
-import uclsse.comp0102.nhsxapp.api.extension.plus
 import uclsse.comp0102.nhsxapp.api.files.online.HttpClient
 import java.net.URL
 
@@ -29,6 +28,7 @@ class JsonFile(
     private val mapType = object : TypeToken<MutableMap<String, Any>>() {}.type
 
     private var isDifferentialPrivacyRequired: Boolean = false
+    private var differentialPrivacyRange: Double = 0.2
 
 
     init {
@@ -36,8 +36,9 @@ class JsonFile(
             writeStr("{}")
     }
 
-    fun useDifferentialPrivacy(value: Boolean){
+    fun useDifferentialPrivacy(value: Boolean, range: Double = 0.0){
         isDifferentialPrivacyRequired = value
+        differentialPrivacyRange = range
     }
 
     /**
@@ -48,12 +49,13 @@ class JsonFile(
         val curJsonStr = readStr()
         if (! isDifferentialPrivacyRequired)
             client.uploadByPost(curJsonStr, targetDir)
-        else readJsonWithDifferentialPrivacy(0.2).forEach{
+        else readJsonWithDifferentialPrivacy().forEach{
             client.uploadByPost(it, targetDir)
         }
     }
 
-    private fun readJsonWithDifferentialPrivacy(range:Double): List<String>{
+    private fun readJsonWithDifferentialPrivacy(): List<String>{
+        val range = differentialPrivacyRange
         val resMapList = mutableListOf<String>()
         val curDataMap = jGson.fromJson(readStr(), mapType) as Map<String, Any>
         repeat(10){
@@ -107,34 +109,6 @@ class JsonFile(
      **/
     fun writeObject(objData:Any) {
         writeStr(fromObjectToStr(objData))
-    }
-
-
-    /**
-     * The method will store an object into a json file. Compared with writeObject, it will merger
-     * the current data into the file with the data in the object.
-     */
-    fun mergeObject(inputObjData:Any){
-        val curJsonStr = readStr()
-        val inputJsonStr = fromObjectToStr(inputObjData)
-        val curDataMap = jGson.fromJson(curJsonStr, mapType) as Map<String, Any>
-        val inputDataMap = jGson.fromJson(inputJsonStr, mapType) as Map<String, Any>
-        val newMap = (curDataMap.keys + inputDataMap.keys).associateWith {
-            jsonPropertyMerge(curDataMap[it], inputDataMap[it])
-        }
-        val newMapJsonStr = jGson.toJson(newMap, mapType)
-        writeStr(newMapJsonStr)
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    private fun <T:Any>jsonPropertyMerge(first: T?, second: T?): T?{
-        if (first == null) return second
-        if (second == null) return null
-        return when(first) {
-            is String -> if(first != "") first else second
-            is Number -> ((first as Number) plus (second as Number)) as T
-            else -> throw UnsupportedClassVersionError("only for string and number")
-        }
     }
 
     private fun <T : Any> fromStrToObject(dataStr: String, type: Class<T>): T{

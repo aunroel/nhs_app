@@ -77,7 +77,7 @@ abstract class AbsOnlineFile (
     fun upload(): Boolean{
         return try{
             uploadCore()
-            localRecord.lastUpdateTime = System.currentTimeMillis()
+            localRecord.lastUploadTime = System.currentTimeMillis()
             true
         }catch (e: IOException){
             e.printStackTrace()
