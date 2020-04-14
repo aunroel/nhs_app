@@ -36,9 +36,11 @@ from nhs_app.resource.ml_resource import MLDownload, MLTrainingResource, ModelAv
 from nhs_app.resource.user import UserLogout
 from nhs_app.resource.node import NodeRegister
 from nhs_app.resource.update_aggregator import Aggregator
-from nhs_app.resource.auth import auth
+from nhs_app.api.auth import auth
+from nhs_app.api.data import data
 
 app.register_blueprint(auth, url_prefix = '/api/auth')
+app.register_blueprint(data, url_prefix = '/api/data')
 
 api.add_resource(Homepage, '/index', '/', endpoint='index')
 api.add_resource(Aggregator, '/update/<string:uid>', endpoint='update')
@@ -49,6 +51,9 @@ api.add_resource(Dashboard, '/dashboard', endpoint='dashboard')
 api.add_resource(MLDownload, '/model', endpoint='model')
 api.add_resource(MLTrainingResource, '/train', endpoint='train')
 api.add_resource(ModelAvailability, '/available', endpoint='available')
+
+
+
 # api.add_resource()
 
 # @app.route('/login', methods=['GET', 'POST'])
