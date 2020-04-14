@@ -37,6 +37,11 @@ const Header = () => {
               buttonText="Model Upload"
               currentUrl={currentUrl}
             />
+            <LinkButton
+              linkUrl="/dataViewer"
+              buttonText="Data Viewer"
+              currentUrl={currentUrl}
+            />
             {isDev() ? (
               <LinkButton
                 className="dim"

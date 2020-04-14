@@ -1,6 +1,7 @@
-from sqlalchemy import func
+from sqlalchemy import func, desc
 
 from app import db
+import json
 
 
 class UpdateAggregator(db.Model):
@@ -23,14 +24,14 @@ class UpdateAggregator(db.Model):
         self.postCode = post_code
 
     def __str__(self):
-        return {
+        return json.dumps({
             'supportCode':     self.supportCode,
             'wellBeingScore': self.wellBeingScore,
             'weeklySteps':     self.weeklySteps,
             'weeklyCalls':     self.weeklyCalls,
             'errorRate':       self.errorRate,
             'postCode':        self.postCode
-        }
+        })
 
     def save_to_db(self):
         db.session.add(self)
@@ -45,11 +46,16 @@ class UpdateAggregator(db.Model):
         return cls.query.all()
 
     @classmethod
+    def find_latest(cls, howMany=10):
+        return cls.query.order_by(cls.id.desc()).limit(howMany).all()
+
+    @classmethod
     def find_by_id(cls, _id):
         return cls.query.filter_by(id=_id).first()
 
     @classmethod
     def count_table_rows(cls):
         return db.session.execute(
-            db.session.query(cls).statement.with_only_columns([func.count()]).order_by(None)
+            db.session.query(cls).statement.with_only_columns(
+                [func.count()]).order_by(None)
         ).scalar()

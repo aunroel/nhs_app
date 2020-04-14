@@ -10,12 +10,23 @@ import json
 from app import config
 from webargs.flaskparser import use_args, use_kwargs
 from auth.main import login_required
+from nhs_app.models.update_aggregator_model import UpdateAggregator
 
 
 data = Blueprint("data", __name__)
 
-@data.route('/getData', methods=["POST"])
-@login_required
-def test(userData):
-    userId = userData['id']
-    return str(userId)
+
+@data.route('/', methods=["GET"])
+# @login_required
+def getData():
+    data = UpdateAggregator.find_latest(howMany=10)
+
+    numberOfEntries = UpdateAggregator.count_table_rows()
+
+    data = [str(d) for d in data]
+
+    return jsonify({
+        "numberOfEntries": numberOfEntries,
+        "data": data
+    })
+
