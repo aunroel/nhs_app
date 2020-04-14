@@ -27,26 +27,27 @@ class User(UserMixin, db.Model):
             'type': self.user_type
         }
 
-    def encode_auth_token(self):
+    def encode_auth_token(self, user_id):
         """
         Generates the Auth Token
         :return: string
         """
-        try:
-            user_id = self.id
-            payload = {
-                'exp': datetime.datetime.utcnow() + \
-                    datetime.timedelta(seconds=config['JWT_TOKEN_EXPIRY_S']),
-                'iat': datetime.datetime.utcnow(),
-                'sub': user_id
+        payload = {
+            'exp': datetime.datetime.utcnow() + \
+                datetime.timedelta(seconds=config['JWT_TOKEN_EXPIRY_S']),
+            'iat': datetime.datetime.utcnow(),
+            'user': {
+                "id": user_id
             }
-            return jwt.encode(
-                payload,
-                config.get('SECRET_KEY'),
-                algorithm='HS256'
-            )
-        except Exception as e:
-            return e
+        }
+        
+        return jwt.encode(
+            payload,
+            config['SECRET_KEY'],
+            algorithm='HS256'
+        ).decode('utf-8')
+
+       
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

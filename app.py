@@ -98,6 +98,7 @@ def login(email, password):
         print(str(e))
         return jsonify( { 'error' : str(e) } )
 
+
 @app.route('/register', methods=['GET', 'POST'])
 def registero():
     if current_user.is_authenticated:
@@ -142,13 +143,7 @@ def register(username, email, password, password2):
 
         user.save_to_db()
 
-        encoded_jwt = jwt.encode({
-            "user" : {
-                "id": user.id,
-            },
-            "exp" : datetime.datetime.utcnow() + \
-                datetime.timedelta(seconds=app.config['JWT_TOKEN_EXPIRY_S'])
-        }, app.config['SECRET_KEY'], algorithm='HS256')
+        encoded_jwt = user.encode_auth_token(user.id)
 
         return jsonify({'token': encoded_jwt})
          
