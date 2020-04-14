@@ -27,11 +27,14 @@ class User(UserMixin, db.Model):
             'type': self.user_type
         }
 
-    def encode_auth_token(self, user_id):
+    def encode_auth_token(self):
         """
         Generates the Auth Token
         :return: string
         """
+
+        user_id = self.id
+
         payload = {
             'exp': datetime.datetime.utcnow() + \
                 datetime.timedelta(seconds=config['JWT_TOKEN_EXPIRY_S']),

@@ -83,16 +83,12 @@ def login(email, password):
     try :
         user = User.find_by_email(email)
 
-        if not user or not check_password_hash(user.password, password):
+        if user is None or not user.check_password(password):
             raise ValidationError('User or password are incorrect')
 
-        encoded_jwt = jwt.encode({
-            "user" : {
-                "id": user.id,
-            },
-            "exp" : datetime.datetime.utcnow() + \
-                datetime.timedelta(seconds=app.config['JWT_TOKEN_EXPIRY_S'])
-        }, app.config['SECRET_KEY'], algorithm='HS256')
+        encoded_jwt = user.encode_auth_token()
+
+        return jsonify({'token': encoded_jwt})
 
     except ValidationError as e:
         print(str(e))
@@ -114,10 +110,13 @@ def registero():
 
     return render_template('register.html', form=form)
 
+
 @app.route('/api/auth/test', methods=["POST"])
 @login_required
-def test(userId):
-    return userId
+def test(userData):
+    userId = userData['id']
+    return str(userId)
+
 
 @app.route('/api/auth/register', methods=['POST'])
 @use_kwargs({
@@ -139,12 +138,12 @@ def register(username, email, password, password2):
         
         user = User(username = username, 
                     email = email, 
-                    password = generate_password_hash(password),
+                    password = password,
                     user_type = False)
 
         user.save_to_db()
 
-        encoded_jwt = user.encode_auth_token(user.id)
+        encoded_jwt = user.encode_auth_token()
 
         return jsonify({'token': encoded_jwt})
          
