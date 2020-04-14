@@ -56,16 +56,18 @@ class InputDialogFragment : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-        confirmButton.setOnClickListener {
-            Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
-            val nhsAPI = ViewModelProvider(this).get(NhsAPI::class.java)
-            nhsAPI.record(data).observe(this as LifecycleOwner, Observer{
-                val appContext = context?.applicationContext
-                val text = "Insert Result: ${if (it) "Success" else "Failure"}"
-                Toast.makeText(appContext, text, Toast.LENGTH_LONG).show()
-                this.dismiss()
-            })
-        }
+        confirmButton.setOnClickListener(onClickSubmitButton)
         return view
+    }
+
+    private val onClickSubmitButton = View.OnClickListener {
+        Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
+        val nhsAPI = ViewModelProvider(this).get(NhsAPI::class.java)
+        nhsAPI.record(data).observe(this as LifecycleOwner, Observer{
+            val appContext = context?.applicationContext
+            val text = "Insert Result: ${if (it) "Success" else "Failure"}"
+            Toast.makeText(appContext, text, Toast.LENGTH_LONG).show()
+            this.dismiss()
+        })
     }
 }

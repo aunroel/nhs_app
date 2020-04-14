@@ -57,8 +57,7 @@ class DemoFragment : Fragment() {
 
     private val onClickPredictButton = View.OnClickListener {
         Toast.makeText(appContext, "Loading", Toast.LENGTH_SHORT).show()
-        val trainingScore = nhsAPI.getTrainingScoreFromRecords()
-        trainingScore.observe(viewLifecycleOwner, Observer {result ->
+        nhsAPI.getTrainingScoreFromRecords().observe(viewLifecycleOwner, Observer {result ->
             Toast.makeText(appContext, "Predict Score: $result", Toast.LENGTH_SHORT).show()
         })
     }
