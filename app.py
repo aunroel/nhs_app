@@ -18,7 +18,6 @@ import datetime
 
 
 
-
 app = Flask(__name__)
 app.config.from_object(Config)
 config = app.config
@@ -30,6 +29,7 @@ login.login_view = 'login'
 api = Api(app)
 bootstrap = Bootstrap(app)
 
+from auth.main import login_required
 from nhs_app.models.user_model import User
 from nhs_app.forms.user_forms import UserLogin, UserRegister
 from nhs_app.resource.project import Dashboard, Homepage, ApiDoc
@@ -115,8 +115,9 @@ def registero():
     return render_template('register.html', form=form)
 
 @app.route('/api/auth/test', methods=["POST"])
-def test():
-    pass
+@login_required
+def test(userId):
+    return userId
 
 @app.route('/api/auth/register', methods=['POST'])
 @use_kwargs({
