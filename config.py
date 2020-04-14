@@ -33,6 +33,9 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = generate_db_uri(USER, PASSWORD, HOST, PORT, DB_NAME)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    # JWT
+    SECRET_KEY = "flyingavocados"
+    JWT_TOKEN_EXPIRY_S = 3600000
 
 class ProductionConfig(Config):
     DEBUG = False
@@ -44,7 +47,7 @@ class StagingConfig(Config):
     USER = os.environ.get("STAGING_DB_USER")
     PASSWORD = os.environ.get("STAGING_DB_PSWD")
     HOST = os.environ.get("STAGING_DB_HOST")
-    PORT = 3306
+    PORT = 3306 
     DB_NAME = os.environ.get("STAGING_DB_NAME")
     SQLALCHEMY_DATABASE_URI = generate_db_uri(USER, PASSWORD, HOST, PORT, DB_NAME)
 

@@ -1,6 +1,8 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from app import db, login
+from app import db, login, config
+import datetime
+import jwt
 
 
 class User(UserMixin, db.Model):
@@ -24,6 +26,27 @@ class User(UserMixin, db.Model):
             'email': self.email,
             'type': self.user_type
         }
+
+    def encode_auth_token(self):
+        """
+        Generates the Auth Token
+        :return: string
+        """
+        try:
+            user_id = self.id
+            payload = {
+                'exp': datetime.datetime.utcnow() + \
+                    datetime.timedelta(seconds=config['JWT_TOKEN_EXPIRY_S']),
+                'iat': datetime.datetime.utcnow(),
+                'sub': user_id
+            }
+            return jwt.encode(
+                payload,
+                config.get('SECRET_KEY'),
+                algorithm='HS256'
+            )
+        except Exception as e:
+            return e
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

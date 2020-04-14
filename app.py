@@ -1,6 +1,6 @@
 import os
 from flask import send_from_directory
-from flask import Flask, render_template, url_for, redirect, flash, request, make_response
+from flask import Flask, render_template, url_for, redirect, flash, request, make_response, jsonify
 from flask_wtf.csrf import CSRFProtect
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -9,14 +9,19 @@ from flask_restful import Api
 from flask_bootstrap import Bootstrap
 from config import Config
 from werkzeug.urls import url_parse
+from werkzeug.security import generate_password_hash, check_password_hash
 from webargs import fields, validate, ValidationError
 from webargs.flaskparser import use_args, use_kwargs
 import jwt
 import json
+import datetime
+
+
 
 
 app = Flask(__name__)
 app.config.from_object(Config)
+config = app.config
 # csrf = CSRFProtect(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -45,7 +50,7 @@ api.add_resource(ModelAvailability, '/available', endpoint='available')
 
 
 @app.route('/login', methods=['GET', 'POST'])
-def login():
+def logino():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
 
@@ -68,8 +73,33 @@ def login():
     return render_template('login.html', form=form)
 
 
+@app.route('/api/auth/login', methods=["POST"])
+@use_kwargs({
+    "email": fields.Email(required=True),
+    "password": fields.Str(required=True), 
+})
+def login(email, password):
+
+    try :
+        user = User.find_by_email(email)
+
+        if not user or not check_password_hash(user.password, password):
+            raise ValidationError('User or password are incorrect')
+
+        encoded_jwt = jwt.encode({
+            "user" : {
+                "id": user.id,
+            },
+            "exp" : datetime.datetime.utcnow() + \
+                datetime.timedelta(seconds=app.config['JWT_TOKEN_EXPIRY_S'])
+        }, app.config['SECRET_KEY'], algorithm='HS256')
+
+    except ValidationError as e:
+        print(str(e))
+        return jsonify( { 'error' : str(e) } )
+
 @app.route('/register', methods=['GET', 'POST'])
-def register():
+def registero():
     if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
     
@@ -83,23 +113,19 @@ def register():
 
     return render_template('register.html', form=form)
 
+@app.route('/api/auth/test', methods=["POST"])
+def test():
+    pass
 
-
-@app.route('/api/register', methods=['POST'])
+@app.route('/api/auth/register', methods=['POST'])
 @use_kwargs({
     "username": fields.Str(required=True), 
     "email": fields.Email(required=True),
     "password": fields.Str(required=True), 
     "password2": fields.Str(required=True), 
     })
-def registera(username, email, password, password2):
-    try:
-
-        user = User(username=username, 
-                    email=email, 
-                    password=password,
-                    user_type=False)
-
+def register(username, email, password, password2):
+    try: 
         if User.find_by_email(email):
             raise ValidationError('Email already in use. Please use different email address')
 
@@ -108,17 +134,32 @@ def registera(username, email, password, password2):
 
         if password != password2:
             raise ValidationError("Password and Repeated Password must match")
+        
+        user = User(username = username, 
+                    email = email, 
+                    password = generate_password_hash(password),
+                    user_type = False)
 
         user.save_to_db()
-        encoded_jwt = jwt.encode({
-            "username": username,
-            "email": email 
-        }, 'secret', algorithm='HS256')
 
-        return encoded_jwt
+        encoded_jwt = jwt.encode({
+            "user" : {
+                "id": user.id,
+            },
+            "exp" : datetime.datetime.utcnow() + \
+                datetime.timedelta(seconds=app.config['JWT_TOKEN_EXPIRY_S'])
+        }, app.config['SECRET_KEY'], algorithm='HS256')
+
+        return jsonify({'token': encoded_jwt})
+         
         
     except ValidationError as e:
-        return str(e)
+        return jsonify( { 'error' : str(e) } )
+
+    except Exception as e:
+        print(str(e))
+        return jsonify( { 'error' : "An error occurred saving the user to the database " } ), 500
+
 
 
 @app.errorhandler(404)
