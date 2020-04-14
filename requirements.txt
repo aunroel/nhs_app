@@ -15,7 +15,6 @@ Flask-Migrate==2.5.2
 Flask-RESTful==0.3.8
 Flask-SQLAlchemy==2.4.1
 Flask-WTF==0.14.3
-Flask-JWT==0.3.2
 gast==0.2.2
 google-auth==1.11.2
 google-auth-oauthlib==0.4.1
@@ -40,6 +39,7 @@ pathlib2==2.3.5
 protobuf==3.11.3
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
+pyjwt==1.7.1
 PyMySQL==0.9.3
 pyparsing==2.4.6
 python-dateutil==2.8.1
@@ -60,6 +60,7 @@ tensorflow-estimator==2.1.0
 termcolor==1.1.0
 urllib3==1.25.8
 visitor==0.1.3
+webargs==6.0.0
 Werkzeug==1.0.0
 wrapt==1.12.1
 WTForms==2.2.1

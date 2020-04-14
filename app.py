@@ -1,6 +1,7 @@
 import os
 from flask import send_from_directory
 from flask import Flask, render_template, url_for, redirect, flash, request, make_response
+from flask_wtf.csrf import CSRFProtect
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager, current_user, login_user
@@ -8,9 +9,15 @@ from flask_restful import Api
 from flask_bootstrap import Bootstrap
 from config import Config
 from werkzeug.urls import url_parse
+from webargs import fields, validate, ValidationError
+from webargs.flaskparser import use_args, use_kwargs
+import jwt
+import json
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
+# csrf = CSRFProtect(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
@@ -45,7 +52,9 @@ def login():
     form = UserLogin()
     if form.validate_on_submit():
         user = User.find_by_username(form.username.data)
-        if user is None or not user.check_password(form.password.data) or user.user_type != 1:
+        if user is None \
+            or not user.check_password(form.password.data):
+            # or user.user_type != 1:
             flash('Invalid username or password')
             return redirect(url_for('login'))
 
@@ -63,7 +72,7 @@ def login():
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
-
+    
     form = UserRegister()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data, user_type=False,
@@ -73,6 +82,43 @@ def register():
         return redirect(url_for('index'))
 
     return render_template('register.html', form=form)
+
+
+
+@app.route('/api/register', methods=['POST'])
+@use_kwargs({
+    "username": fields.Str(required=True), 
+    "email": fields.Email(required=True),
+    "password": fields.Str(required=True), 
+    "password2": fields.Str(required=True), 
+    })
+def registera(username, email, password, password2):
+    try:
+
+        user = User(username=username, 
+                    email=email, 
+                    password=password,
+                    user_type=False)
+
+        if User.find_by_email(email):
+            raise ValidationError('Email already in use. Please use different email address')
+
+        if User.find_by_username(username):
+            raise ValidationError('Username already exists. Please choose another')
+
+        if password != password2:
+            raise ValidationError("Password and Repeated Password must match")
+
+        user.save_to_db()
+        encoded_jwt = jwt.encode({
+            "username": username,
+            "email": email 
+        }, 'secret', algorithm='HS256')
+
+        return encoded_jwt
+        
+    except ValidationError as e:
+        return str(e)
 
 
 @app.errorhandler(404)
