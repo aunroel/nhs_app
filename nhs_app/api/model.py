@@ -14,6 +14,7 @@ from nhs_app.models.update_aggregator_model import UpdateAggregator
 from werkzeug.utils import secure_filename
 import os
 from datetime import datetime
+from nhs_app.machine_learning.ml_model import ML
 
 
 modelRouter = Blueprint("model", __name__)
@@ -30,11 +31,15 @@ def upload():
     # Model saving
     path_prefix = config['UPLOADED_MODELS_PATH']
     filename_prefix = config['UPLOADED_MODEL_FILENAME_PREFIX']
-    path = path_prefix + filename_prefix + secure_filename(f.filename)
 
-    if os.path.isfile(path):
-        d_string = datetime.now().strftime("%d.%m.%Y-%H.%M")
-        path = path[:-3] + "-t-" + d_string + '.h5'
+    filename = filename_prefix + secure_filename(f.filename)
+    path = path_prefix + filename
+
+    d_string = datetime.now().strftime("%d.%m.%Y-%H.%M.%S")
+    path = path[:-3] + "-t-" + d_string + '.h5'
 
     f.save(path)
+
+    ML().load(filename[:-3]).convert_to_lite_and_save()
+
     return 'ok'

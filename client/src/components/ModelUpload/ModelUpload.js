@@ -87,10 +87,17 @@ const ModelUpload = () => {
       <UploadButton onClick={upload} enabled={fileReadyToUpload} />
       <br />
       {uploadStatus === uploadStatuses.PENDING ? (
-        <h3 className="yellow">Model is being uploaded...</h3>
+        <>
+          <h3 className="yellow">
+            Model is being uploaded and converted to TF Lite...{" "}
+          </h3>
+          <h5>This may take up to 15 seconds</h5>
+        </>
       ) : null}
       {uploadStatus === uploadStatuses.DONE ? (
-        <h3 className="green">Model uploaded successfully</h3>
+        <h3 className="green">
+          Model uploaded and converted to TF Lite successfully
+        </h3>
       ) : null}
       {uploadStatus === uploadStatuses.ERROR ? (
         <h3 className="red">

@@ -217,10 +217,10 @@ class ML:
                     '/error_distribution_' + t_string + '.png')
         plt.clf()
 
-    def convert_to_lite_and_save(self):
+    def convert_to_lite_and_save(self, path=None):
         converter = tf.lite.TFLiteConverter.from_keras_model(self.model)
         tflite_model = converter.convert()
-        d_string = datetime.now().strftime('%d_%m_%y')
+        d_string = datetime.now().strftime("%d.%m.%Y-%H.%M.%S")
 
         if os.path.isfile('models/lite/latest_converted_model.tflite'):
             os.rename(r'models/lite/latest_converted_model.tflite',
