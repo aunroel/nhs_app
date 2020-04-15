@@ -1,64 +1,102 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable react/jsx-boolean-value */
 import React, { useState } from "react";
+import axios from "axios";
 import { UploadButton } from "./subcomponents/UploadButton";
-import { ChooseFileButton } from "./subcomponents/ChooseFileButton";
 import "./_modelUpload.css";
-import PreviewBox from "./subcomponents/PreviewBox";
 
-/**
- * TODO
- *  - remove the temporary testing format and put in
- *    actual TF/PyT model
- *  - add button to download .py input/output template
- *    (with a possiblity to upload trained model parameters)
- *    and a script enabling to download data locally
- *
- *  - add server side model file parsing validation
- *  -
- */
+const uploadStatuses = {
+  NONE: "NONE",
+  PENDING: "PENDING",
+  DONE: "DONE",
+  ERROR: "ERROR",
+};
 
 const ModelUpload = () => {
   const [fileProperties, setFileProperties] = useState({
-    fileText: null,
-    fileIsJSONFormat: null
+    fileIsH5: null,
   });
 
-  const handleFiles = async event => {
-    const file = event.target.files[0];
+  const [file, setFile] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState(uploadStatuses.NONE);
 
-    const isFormatValid = file.type === "application/json";
+  const handleFiles = async (event) => {
+    const f = event.target.files[0];
+    setFile(f);
+    setUploadStatus(uploadStatuses.NONE);
+
+    console.log(f);
+    const isFormatValid = f.name.indexOf(".h5") > -1;
 
     if (!isFormatValid) {
       setFileProperties({
-        fileText: null,
-        fileIsJSONFormat: false
+        fileIsH5: false,
       });
       return;
     }
 
-    const jsonFile = JSON.constructor(file);
-    const jsonAsString = await jsonFile.text();
-
     setFileProperties({
-      fileText: jsonAsString,
-      fileIsJSONFormat: true
+      fileIsH5: true,
     });
   };
 
-  const fileIsChosen = fileProperties.fileIsJSONFormat != null;
-  const fileIsReadyToUpload = fileIsChosen && fileProperties.fileIsJSONFormat;
+  const fileIsChosen = fileProperties.fileIsH5 != null;
+  const fileReadyToUpload = fileProperties.fileIsH5 === true;
 
-  const upload = () => {};
+  const upload = async (e) => {
+    setUploadStatus(uploadStatuses.PENDING);
 
-  const previewBoxProps = { ...fileProperties, fileIsChosen };
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("tf_model", file);
+
+    try {
+      const res = await axios.post("/api/model/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (res.status === 200) {
+        setUploadStatus(uploadStatuses.DONE);
+      } else {
+        setUploadStatus(uploadStatuses.ERROR);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div>
       <h2>Model Upload</h2>
-      <ChooseFileButton onChoice={handleFiles} />
+      <div style={{ display: "flex" }}>
+        <input type="file" id="modelFileUpload" onChange={handleFiles} />
+      </div>
       <br />
-      <PreviewBox {...previewBoxProps} />
+      {fileIsChosen ? (
+        fileProperties.fileIsH5 === true ? (
+          <h3>Model is ready to upload</h3>
+        ) : (
+          <h3 className="red">File with he model must be .h5 format.</h3>
+        )
+      ) : (
+        <h3>Please choose a .h5 file to upload.</h3>
+      )}
       <br />
-      <UploadButton onClick={upload} enabled={fileIsReadyToUpload} />
+      <UploadButton onClick={upload} enabled={fileReadyToUpload} />
+      <br />
+      {uploadStatus === uploadStatuses.PENDING ? (
+        <h3 className="yellow">Model is being uploaded...</h3>
+      ) : null}
+      {uploadStatus === uploadStatuses.DONE ? (
+        <h3 className="green">Model uploaded successfully</h3>
+      ) : null}
+      {uploadStatus === uploadStatuses.ERROR ? (
+        <h3 className="red">
+          An error has occured during the upload. Please try again
+        </h3>
+      ) : null}
     </div>
   );
 };

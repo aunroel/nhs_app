@@ -2,8 +2,8 @@ import os
 from flask import send_from_directory, make_response, render_template
 from flask_restful import Resource, reqparse
 from nhs_app.models.mobile_model import Node
-from flask_login import login_required
 from nhs_app.machine_learning.ml_model import ML
+from flask_login import login_required
 
 
 _user_parser = reqparse.RequestParser()

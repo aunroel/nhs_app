@@ -7,3 +7,15 @@
   padding: 1em;
   overflow: auto;
 }
+
+.red {
+  color: red;
+}
+
+.green {
+  color: rgb(0, 209, 17);
+}
+
+.yellow {
+  color: gold;
+}

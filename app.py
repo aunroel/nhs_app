@@ -17,7 +17,6 @@ import json
 import datetime
 
 
-
 app = Flask(__name__)
 app.config.from_object(Config)
 config = app.config
@@ -28,19 +27,21 @@ login.login_view = 'login'
 api = Api(app)
 bootstrap = Bootstrap(app)
 
-# from auth.main import login_required
-from nhs_app.models.user_model import User
-from nhs_app.forms.user_forms import UserLogin, UserRegister
-from nhs_app.resource.project import Dashboard, Homepage, ApiDoc
-from nhs_app.resource.ml_resource import MLDownload, MLTrainingResource, ModelAvailability
-from nhs_app.resource.user import UserLogout
-from nhs_app.resource.node import NodeRegister
-from nhs_app.resource.update_aggregator import Aggregator
-from nhs_app.api.auth import auth
+from nhs_app.api.model import modelRouter
 from nhs_app.api.data import data
+from nhs_app.api.auth import auth
+from nhs_app.resource.update_aggregator import Aggregator
+from nhs_app.resource.node import NodeRegister
+from nhs_app.resource.user import UserLogout
+from nhs_app.resource.ml_resource import MLDownload, MLTrainingResource, ModelAvailability
+from nhs_app.resource.project import Dashboard, Homepage, ApiDoc
+from nhs_app.forms.user_forms import UserLogin, UserRegister
+from nhs_app.models.user_model import User
+# from auth.main import login_required
 
-app.register_blueprint(auth, url_prefix = '/api/auth')
-app.register_blueprint(data, url_prefix = '/api/data')
+app.register_blueprint(auth, url_prefix='/api/auth')
+app.register_blueprint(data, url_prefix='/api/data')
+app.register_blueprint(modelRouter, url_prefix='/api/model')
 
 api.add_resource(Homepage, '/index', '/', endpoint='index')
 api.add_resource(Aggregator, '/update/<string:uid>', endpoint='update')
@@ -51,7 +52,6 @@ api.add_resource(Dashboard, '/dashboard', endpoint='dashboard')
 api.add_resource(MLDownload, '/model', endpoint='model')
 api.add_resource(MLTrainingResource, '/train', endpoint='train')
 api.add_resource(ModelAvailability, '/available', endpoint='available')
-
 
 
 # api.add_resource()
@@ -80,14 +80,11 @@ api.add_resource(ModelAvailability, '/available', endpoint='available')
 #     return render_template('login.html', form=form)
 
 
-
-
-
 # @app.route('/register', methods=['GET', 'POST'])
 # def registero():
 #     if current_user.is_authenticated:
 #         return redirect(url_for('dashboard'))
-    
+
 #     form = UserRegister()
 #     if form.validate_on_submit():
 #         user = User(username=form.username.data, email=form.email.data, user_type=False,
@@ -97,11 +94,6 @@ api.add_resource(ModelAvailability, '/available', endpoint='available')
 #         return redirect(url_for('index'))
 
 #     return render_template('register.html', form=form)
-
-
-
-
-
 
 
 
@@ -126,4 +118,3 @@ def favicon():
 if __name__ == '__main__':
     db.init_app(app)
     app.run(port=5000, debug=True)
-
