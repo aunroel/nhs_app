@@ -35,15 +35,16 @@ const DataViewer = () => {
       }
     };
     getData();
-  }, []);
+  });
 
   return (
     <div>
       <h1> The Aggregator </h1>
       {numberOfEntries ? (
         <>
-          <h3>Total entries: {numberOfEntries}</h3>
-          <h5>Latest {Math.min(numberOfEntries, 10)} entries:</h5>
+          <h2>Total entries: {numberOfEntries}</h2>
+          <br />
+          <h3>Latest {Math.min(numberOfEntries, 10)} entries:</h3>
           <DataTable data={tableData} />
         </>
       ) : (

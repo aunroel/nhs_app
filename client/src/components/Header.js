@@ -20,7 +20,7 @@ const Header = () => {
   return (
     <div className="header-container">
       <div className="flex-box-vert-align">
-        <Logo style={{ flex: 1 }} />
+        {/* <Logo style={{ flex: 1 }} /> */}
         <div
           className="flex-box-vert-align overflow-y"
           style={{ flex: 4, justifyContent: "space-between" }}
@@ -42,16 +42,16 @@ const Header = () => {
               buttonText="Data Viewer"
               currentUrl={currentUrl}
             />
-            {isDev() ? (
+            {/* {isDev() ? (
               <LinkButton
                 className="dim"
                 linkUrl="/test"
                 buttonText="[Dev] Debugging Test"
                 currentUrl={currentUrl}
               />
-            ) : null}
+            ) : null} */}
           </div>
-          <div
+          {/* <div
             className="flex-box-vert-align"
             style={{ justifyContent: "flex-end" }}
           >
@@ -65,7 +65,7 @@ const Header = () => {
               buttonText="Sign up"
               currentUrl={currentUrl}
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

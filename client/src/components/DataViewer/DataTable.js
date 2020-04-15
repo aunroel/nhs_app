@@ -10,6 +10,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import PropTypes from "prop-types";
+import idGen from "../../utils/idGenerator";
 
 const useStyles = makeStyles({
   table: {
@@ -48,7 +49,7 @@ const DataTable = ({ data }) => {
             <TableRow key={entry.id}>
               {Object.values(entry).map((val) => {
                 return (
-                  <TableCell component="th" scope="row">
+                  <TableCell key={idGen()} component="th" scope="row">
                     {val}
                   </TableCell>
                 );

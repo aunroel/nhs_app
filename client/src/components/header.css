@@ -7,8 +7,10 @@
 
 .flex-box-vert-align {
   display: flex;
-  align-items: center;
+  justify-content: space-between;
+  align-items: space;
   height: 100%;
+  width: 100%;
 }
 
 .overflow-y {
@@ -28,6 +30,7 @@
 .header-button {
   font-size: 1.1em;
   display: flex;
+  width: 100%;
   align-items: center;
   justify-content: center;
   text-align: center;
