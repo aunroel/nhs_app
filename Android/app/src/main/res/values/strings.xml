@@ -2,4 +2,7 @@
     <string name="app_name">NHS Demo App</string>
     <string name="HOST_ADDRESS">http://10.0.2.2:5000/</string>
     <string name="HOST_ADDRESS_BAK">https://www.sse-wellbeing.team/</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

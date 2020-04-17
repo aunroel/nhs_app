@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#A3CDF2</color>
+
+    <color name="colorPrimaryDark">#005EB8</color>
+    <color name="colorAccent">#006747</color>
+    <color name="colorDarkGreen">#037011</color>
+    <color name="colorBlue">#1300FF</color>
+    <color name="colorDarkRed">#A42A00</color>
+    <color name="Black">#000000</color>
+    <color name="White">#ffffff</color>
+    <color name="colorNHSGreen">#009639</color>
+    <color name="colorNHSGreenTint">#64009639</color>
+    <color name="navibarlight">#88009655</color>
+    <color name="navibardark">#907c99b4</color>
+    <color name="WhiteTrans">#80ffffff</color>
+    <color name="navibar">#CFE2F3</color>
+
+    <color name="colorNHSPurple">#330072</color>
+    <color name="colorNHSLightYellow">#FAE100</color>
+    <color name="colorNHSOrange">#ED8B00</color>
+    <color name="colorNHSYellow">#FFB81C</color>
+    <color name="colorNHSDarkBlue">#003087</color>
+
+    <color name="deepgreen">#d9f2e6</color>
+
+    <color name="steelblue">#88005eb8</color>
+
+    <color name="colorDarkGreenTint">#64037011</color>
+    <color name="colorNHSDarkBlueTint">#64003087</color>
+    <color name="colorLightGreen">#78BE20</color>
+    <color name="colorLightGreenTint">#6478be20</color>
+    <color name="colorNHSOrangeTint">#64ed8b00</color>
+    <color name="colorPrimaryDarkTint">#64005eb8</color>
+    <color name="colorTransparent">#00ffffff</color>
+
+</resources>

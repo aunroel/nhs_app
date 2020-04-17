@@ -1,2 +1,3 @@
 rootProject.name='Android'
 include ':app', ':api', ':undergrad'
+include ':fakeapp'
