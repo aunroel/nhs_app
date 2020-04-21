@@ -39,7 +39,7 @@ from nhs_app.resource.ml_resource import MLDownload, MLTrainingResource, ModelAv
 from nhs_app.resource.project import Dashboard, Homepage, ApiDoc
 from nhs_app.forms.user_forms import UserLogin, UserRegister
 from nhs_app.models.user_model import User
-from nhs_app.models.uploaded_model import UploadedModelMeta
+from nhs_app.models.uploaded_ml_model import UploadedMLModelMeta
 # from auth.main import login_required
 
 

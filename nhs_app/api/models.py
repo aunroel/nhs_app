@@ -6,7 +6,7 @@ from sqlalchemy import update
 from webargs import fields
 from webargs.flaskparser import use_args, use_kwargs
 
-from nhs_app.models.uploaded_model import UploadedModelMeta
+from nhs_app.models.uploaded_ml_model import UploadedMLModelMeta
 from nhs_app.machine_learning.ml_model import ML
 from nhs_app.file_system.ml_model_filename_builder import \
     build_uploaded_model_file_name, \
@@ -20,7 +20,7 @@ models = Blueprint("models", __name__)
 
 @models.route('/list', methods=["GET"])
 def model_list():
-    models = UploadedModelMeta.find_all()
+    models = UploadedMLModelMeta.find_all()
     return jsonify([str(model.to_dict()) for model in models])
 
 
@@ -30,11 +30,11 @@ def model_list():
 })
 def set_deployed(filename):
 
-    model_meta = UploadedModelMeta.find_by_filename(filename)
+    model_meta = UploadedMLModelMeta.find_by_filename(filename)
     if not model_meta:
         return "No model with name found", 400
 
-    UploadedModelMeta.set_deployed_by_filename(filename)
+    UploadedMLModelMeta.set_deployed_by_filename(filename)
 
     return "Update successful"
 
@@ -59,7 +59,7 @@ def upload():
     json_summary = model.to_json()
 
     # Save to db
-    model_meta = UploadedModelMeta(filename, json_summary)
+    model_meta = UploadedMLModelMeta(filename, json_summary)
     model_meta.save_to_db()
 
     return 'Model saved successfully'

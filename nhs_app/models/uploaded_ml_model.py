@@ -2,8 +2,8 @@ from app import db, config
 import datetime
 
 
-class UploadedModelMeta(db.Model):
-    __tablename__ = 'UploadedModelsMeta'
+class UploadedMLModelMeta(db.Model):
+    __tablename__ = 'MLModelsMeta'
 
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(256), index=True,
