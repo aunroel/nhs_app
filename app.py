@@ -29,7 +29,7 @@ api = Api(app)
 bootstrap = Bootstrap(app)
 
 
-from nhs_app.api.model import model
+from nhs_app.api.models import models
 from nhs_app.api.data import data
 from nhs_app.api.auth import auth
 from nhs_app.resource.update_aggregator import Aggregator
@@ -45,7 +45,7 @@ from nhs_app.models.uploaded_model import UploadedModelMeta
 
 app.register_blueprint(auth, url_prefix='/api/auth')
 app.register_blueprint(data, url_prefix='/api/data')
-app.register_blueprint(model, url_prefix='/api/model')
+app.register_blueprint(models, url_prefix='/api/models')
 
 api.add_resource(Homepage, '/index', '/', endpoint='index')
 api.add_resource(Aggregator, '/update/<string:uid>', endpoint='update')

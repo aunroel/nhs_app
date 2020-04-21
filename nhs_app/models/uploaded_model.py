@@ -19,11 +19,10 @@ class UploadedModelMeta(db.Model):
 
     def to_dict(self):
         return {
-            'filename' : self.filename,
+            'filename': self.filename,
             'json_summary': self.json_summary,
             'deployed': self.deployed
         }
-
 
     def save_to_db(self):
         db.session.add(self)
@@ -46,5 +45,7 @@ class UploadedModelMeta(db.Model):
         return cls.query.filter_by(id=_id).first()
 
     @classmethod
-    def load_user(cls, _id):
-        return cls.query.get(int(_id))
+    def set_deployed_by_filename(cls, filename):
+        db.session.query(cls).update({'deployed':False})
+        db.session.query(cls).filter_by(filename=filename).update({'deployed':True})
+        db.session.commit()
