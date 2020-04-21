@@ -1,45 +1,47 @@
-from webargs import fields, validate, ValidationError
-from flask.json import jsonify
-from nhs_app.models.user_model import User
 from flask.blueprints import Blueprint
-from functools import wraps
-from flask import request, g, abort
-import jwt
-from jwt import decode, exceptions
-import json
+from flask import request, jsonify
 from app import config
-from webargs.flaskparser import use_args, use_kwargs
 from auth.main import login_required
-from nhs_app.models.update_aggregator_model import UpdateAggregator
-from werkzeug.utils import secure_filename
-import os
-from datetime import datetime
+
+from nhs_app.models.uploaded_model import UploadedModelMeta
 from nhs_app.machine_learning.ml_model import ML
+from nhs_app.file_system.ml_model_save_path_builder import \
+    build_uploaded_model_file_name, \
+    file_format_is_h5
+
+uploaded_save_dir = config['UPLOADED_MODELS_DIR']
 
 
-modelRouter = Blueprint("model", __name__)
+model = Blueprint("model", __name__)
+
+@model.route('/list', methods=["GET"])
+def model_list():
+    models = UploadedModelMeta.find_all()
+
+    return jsonify([str(model.to_dict()) for model in models])
 
 
-@modelRouter.route('/upload', methods=["POST"])
+@model.route('/upload', methods=["POST"])
 # @login_required
 def upload():
-    f = request.files['tf_model']
-    filename = f.filename
-    if filename.find(".h5", -3) == -1:
+    file = request.files['tf_model']
+
+    if not file_format_is_h5(file):
         return 'Wrong file format', 400
 
+    filename = build_uploaded_model_file_name(file.filename)
+
     # Model saving
-    path_prefix = config['UPLOADED_MODELS_PATH']
-    filename_prefix = config['UPLOADED_MODEL_FILENAME_PREFIX']
+    save_path = uploaded_save_dir + filename
+    file.save(save_path)
 
-    filename = filename_prefix + secure_filename(f.filename)
-    path = path_prefix + filename
+    # Get summary
+    model = ML().load(save_path).model
+    json_summary = model.to_json()
 
-    d_string = datetime.now().strftime("%d.%m.%Y-%H.%M.%S")
-    path = path[:-3] + "-t-" + d_string + '.h5'
+    # Save to db
+    model_meta = UploadedModelMeta(filename, json_summary)
+    model_meta.save_to_db()
 
-    f.save(path)
+    return 'Model saved successfully'
 
-    ML().load(filename[:-3]).convert_to_lite_and_save()
-
-    return 'ok'

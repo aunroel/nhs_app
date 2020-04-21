@@ -217,19 +217,15 @@ class ML:
                     '/error_distribution_' + t_string + '.png')
         plt.clf()
 
-    def convert_to_lite_and_save(self, path=None):
+    def convert_to_lite_and_save(self, filename):
         converter = tf.lite.TFLiteConverter.from_keras_model(self.model)
         tflite_model = converter.convert()
-        d_string = datetime.now().strftime("%d.%m.%Y-%H.%M.%S")
-
         if os.path.isfile('models/lite/latest_converted_model.tflite'):
             os.rename(r'models/lite/latest_converted_model.tflite',
                       r'models/lite/' + d_string + '_model.tflite')
 
         open('models/lite/latest_converted_model.tflite', 'wb').write(tflite_model)
 
-    def load(self, model_name):
-        path_prefix = config['UPLOADED_MODELS_PATH']
-        path = path_prefix + model_name + ".h5"
+    def load(self, path):
         self.model = tf.keras.models.load_model(path)
         return self

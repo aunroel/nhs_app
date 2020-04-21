@@ -1,6 +1,7 @@
 import os
 from flask import send_from_directory
-from flask import Flask, render_template, url_for, redirect, flash, request, make_response, jsonify
+from flask import Flask, render_template, url_for, redirect, flash, request, \
+    make_response, jsonify
 from flask_wtf.csrf import CSRFProtect
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -27,7 +28,8 @@ login.login_view = 'login'
 api = Api(app)
 bootstrap = Bootstrap(app)
 
-from nhs_app.api.model import modelRouter
+
+from nhs_app.api.model import model
 from nhs_app.api.data import data
 from nhs_app.api.auth import auth
 from nhs_app.resource.update_aggregator import Aggregator
@@ -37,11 +39,13 @@ from nhs_app.resource.ml_resource import MLDownload, MLTrainingResource, ModelAv
 from nhs_app.resource.project import Dashboard, Homepage, ApiDoc
 from nhs_app.forms.user_forms import UserLogin, UserRegister
 from nhs_app.models.user_model import User
+from nhs_app.models.uploaded_model import UploadedModelMeta
 # from auth.main import login_required
+
 
 app.register_blueprint(auth, url_prefix='/api/auth')
 app.register_blueprint(data, url_prefix='/api/data')
-app.register_blueprint(modelRouter, url_prefix='/api/model')
+app.register_blueprint(model, url_prefix='/api/model')
 
 api.add_resource(Homepage, '/index', '/', endpoint='index')
 api.add_resource(Aggregator, '/update/<string:uid>', endpoint='update')
@@ -54,7 +58,6 @@ api.add_resource(MLTrainingResource, '/train', endpoint='train')
 api.add_resource(ModelAvailability, '/available', endpoint='available')
 
 
-# api.add_resource()
 
 # @app.route('/login', methods=['GET', 'POST'])
 # def logino():
