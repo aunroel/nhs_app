@@ -2,46 +2,28 @@ import React from "react";
 import "./model-list.css";
 import { Line } from "react-chartjs-2";
 
-const data = {
-  // labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange", "ff"],
-  labels: Array(10).fill(""),
-  datasets: [
-    {
-      label: "Training accuracy",
-      // data: [12, 19, 3, 5, 2, 3],
-      data: [0.1, 0.48, 0.67, 0.74, 0.78, 0.82, 0.85, 0.85, 0.85, 0.85],
-      backgroundColor: [
-        "rgba(255, 99, 132, 0.0)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(255, 206, 86, 0.2)",
-        "rgba(75, 192, 192, 0.2)",
-        "rgba(153, 102, 255, 0.2)",
-        "rgba(255, 159, 64, 0.2)"
-      ],
-      borderColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
-        "rgba(75, 192, 192, 1)",
-        "rgba(153, 102, 255, 1)",
-        "rgba(255, 159, 64, 1)"
-      ],
-      borderWidth: 1
-    }
-  ]
-};
-
 const options = {
-  legend: {
-    display: false
+  scales: {
+    yAxes: [
+      {
+        display: true,
+        ticks: {
+          suggestedMin: 0, // minimum will be 0, unless there is a lower value.
+          suggestedMax: 10,
+          // OR //
+          beginAtZero: true, // minimum value will be 0.
+        },
+      },
+    ],
+    xAxes: [
+      {
+        scaleLabel: {
+          display: true,
+          labelString: "epoch",
+        },
+      },
+    ],
   },
-  tooltips: {
-    callbacks: {
-      label: function(tooltipItem) {
-        return tooltipItem.yLabel;
-      }
-    }
-  }
 };
 
 export const ModelBox = ({ modelData }) => {
@@ -51,8 +33,10 @@ export const ModelBox = ({ modelData }) => {
         <h1 style={{ margin: 0 }}>{modelData.name}</h1>
         <br />
         <div style={{ fontSize: "1.4em" }}>
-          Test accuracy:{"  "}
-          <span style={{ fontWeight: "bold" }}>{modelData.testAccuracy}</span>
+          Test loss:{"  "}
+          <span style={{ fontWeight: "bold" }}>
+            {modelData.loss.toFixed(1)}
+          </span>
         </div>
         <br />
         <div>
@@ -61,11 +45,16 @@ export const ModelBox = ({ modelData }) => {
         </div>
         <br />
         <div>
-          Regression type:{"  "}
-          <span style={{ fontWeight: "bold" }}>{modelData.regressionType}</span>
+          Regularizer:{"  "}
+          <span style={{ fontWeight: "bold" }}>{modelData.regularizer}</span>
         </div>
         <br />
         <div>
+          Optimizer:{"  "}
+          <span style={{ fontWeight: "bold" }}>{modelData.optimizer}</span>
+        </div>
+        <br />
+        {/* <div>
           Features used{" "}
           <span style={{ fontWeight: "bold" }}>
             ({modelData.features.length + " "} total)
@@ -76,7 +65,7 @@ export const ModelBox = ({ modelData }) => {
               <li>{featureString}</li>
             ))}
           </ol>
-        </div>
+        </div> */}
       </div>
       <div className="model-box-text">
         <Line
@@ -90,8 +79,8 @@ export const ModelBox = ({ modelData }) => {
           //   backgroundColor: "rgb(255, 0,0)",
           //   borderColor: "rgb(255, 0,0)"
           // }}
-          data={data}
-          // options={options}
+          data={modelData.data}
+          options={options}
         />
       </div>
     </div>

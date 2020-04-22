@@ -39,8 +39,9 @@ class Config(object):
     JWT_TOKEN_EXPIRY_S = 3600000
 
     # Model saving
-    UPLOADED_MODELS_PATH = "./models/trained_models/"
-    UPLOADED_MODEL_FILENAME_PREFIX = "uploaded_"
+    UPLOADED_MODELS_DIR = "./models/trained_models/"
+    TFLITE_MODELS_DIR = "./models/lite/"
+    UPLOADED_MODEL_FILENAME_PREFIX = "uploaded"
 
 
 class ProductionConfig(Config):

@@ -3,6 +3,7 @@ from nhs_app.models.main_data_model import MainData
 import matplotlib.pyplot as plt
 from datetime import datetime
 import os
+# from depracated import deprecated
 import pandas as pd
 import seaborn as sns
 import tensorflow as tf
@@ -11,6 +12,8 @@ import tensorflow_docs as tfdocs
 import tensorflow_docs.plots
 import tensorflow_docs.modeling
 from app import config
+from nhs_app.file_system.ml_model_filename_builder import \
+    format_in_filename_is_h5, change_ext_from_h5_to_tflite
 
 
 class FeatureFlags(Enum):
@@ -34,7 +37,7 @@ class ML:
         self.test_labels = None
         self.normed_train_data = None
         self.normed_test_data = None
-        self.directory = 'models/'
+        self.filename = None
 
     def verify_or_create_dirs(self, folder, date):
         if not os.path.exists(self.directory + '/' + folder + '/' + date):
@@ -217,19 +220,22 @@ class ML:
                     '/error_distribution_' + t_string + '.png')
         plt.clf()
 
-    def convert_to_lite_and_save(self, path=None):
+    # def convert_to_lite_and_save(self):
+    #     converter = tf.lite.TFLiteConverter.from_keras_model(self.model)
+    #     tflite_model = converter.convert()
+
+    #     filename = change_ext_from_h5_to_tflite(filename)
+    #     save_path = tflite_model_save_dir + filename
+
+    def load_and_convert_to_lite(self, filename, load_directory, save_directory):
+        self.load(load_directory + filename)
+
         converter = tf.lite.TFLiteConverter.from_keras_model(self.model)
         tflite_model = converter.convert()
-        d_string = datetime.now().strftime("%d.%m.%Y-%H.%M.%S")
+        filename = change_ext_from_h5_to_tflite(filename)
 
-        if os.path.isfile('models/lite/latest_converted_model.tflite'):
-            os.rename(r'models/lite/latest_converted_model.tflite',
-                      r'models/lite/' + d_string + '_model.tflite')
+        open(save_directory + filename, 'wb').write(tflite_model)
 
-        open('models/lite/latest_converted_model.tflite', 'wb').write(tflite_model)
-
-    def load(self, model_name):
-        path_prefix = config['UPLOADED_MODELS_PATH']
-        path = path_prefix + model_name + ".h5"
+    def load(self, path):
         self.model = tf.keras.models.load_model(path)
         return self

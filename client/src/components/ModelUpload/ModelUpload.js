@@ -51,7 +51,7 @@ const ModelUpload = () => {
     formData.append("tf_model", file);
 
     try {
-      const res = await axios.post("/api/model/upload", formData, {
+      const res = await axios.post("/api/models/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

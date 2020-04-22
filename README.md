@@ -90,6 +90,14 @@ flask run
 
 Once you finish working on the project, run `docker-compose down` to stop the Docker container with local database.
 
+## Create MySQL database
+1. Make sure you have run `docker-compose up` to run MySQL server
+2. In Python interactive console execute:
+   ```
+   from app import db
+   db.create_all()
+   ```
+
 ### Troubleshooting
 
 #### - CUDA dll files troubleshooting on Windows
