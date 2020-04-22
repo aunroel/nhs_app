@@ -31,7 +31,7 @@ bootstrap = Bootstrap(app)
 
 from nhs_app.api.models import models
 from nhs_app.api.data import data
-# from nhs_app.api.auth import auth
+from nhs_app.api.auth import auth
 from nhs_app.resource.update_aggregator import Aggregator
 from nhs_app.resource.node import NodeRegister
 from nhs_app.resource.user import UserLogout

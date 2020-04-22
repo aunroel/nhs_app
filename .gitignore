@@ -1,5 +1,6 @@
 old stuff/README_orig.md
 .idea
+.vscode
 
 /client/node_modules
 /client/package-lock.json
