@@ -45,7 +45,12 @@ class UploadedModelMeta(db.Model):
         return cls.query.filter_by(id=_id).first()
 
     @classmethod
+    def get_deployed_filename(cls):
+        return cls.query.filter_by(deployed=True).first().filename
+
+    @classmethod
     def set_deployed_by_filename(cls, filename):
-        db.session.query(cls).update({'deployed':False})
-        db.session.query(cls).filter_by(filename=filename).update({'deployed':True})
+        db.session.query(cls).update({'deployed': False})
+        db.session.query(cls).filter_by(
+            filename=filename).update({'deployed': True})
         db.session.commit()

@@ -40,7 +40,7 @@ class Config(object):
 
     # Model saving
     UPLOADED_MODELS_DIR = "./models/trained_models/"
-    TFLITE_MODELS_DIR = "./models/lite"
+    TFLITE_MODELS_DIR = "./models/lite/"
     UPLOADED_MODEL_FILENAME_PREFIX = "uploaded"
 
 

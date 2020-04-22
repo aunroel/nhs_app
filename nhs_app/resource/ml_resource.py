@@ -33,7 +33,8 @@ class MLTrainingResource(Resource):
         ml = ML()
         ml.updated_refresh()
         ml.predict()
-        ml.convert_to_lite_and_save()
+        # TODO verify this line
+        # ml.convert_to_lite_and_save()
 
         headers = {'Content-Type': 'text/html'}
 

@@ -1,3 +1,4 @@
+from os import walk, remove
 from flask.blueprints import Blueprint
 from flask import request, jsonify
 from app import config
@@ -10,9 +11,11 @@ from nhs_app.models.uploaded_model import UploadedModelMeta
 from nhs_app.machine_learning.ml_model import ML
 from nhs_app.file_system.ml_model_filename_builder import \
     build_uploaded_model_file_name, \
-    file_format_is_h5
+    file_format_is_h5, \
+    change_ext_from_h5_to_tflite
 
 uploaded_save_dir = config['UPLOADED_MODELS_DIR']
+tflite_model_save_dir = config['TFLITE_MODELS_DIR']
 
 
 models = Blueprint("models", __name__)
@@ -32,12 +35,28 @@ def set_deployed(filename):
 
     model_meta = UploadedModelMeta.find_by_filename(filename)
     if not model_meta:
-        return "No model with name found", 400
+        return "No model with name {} found".format(filename), 400
+
+    old_depl_model_filename = UploadedModelMeta.get_deployed_filename()
+
+    ML().load_and_convert_to_lite(
+        filename,
+        uploaded_save_dir,
+        tflite_model_save_dir
+    )
 
     UploadedModelMeta.set_deployed_by_filename(filename)
 
-    return "Update successful"
+    if (old_depl_model_filename != filename):
+        try:
+            old_tflite_mdl_filename = change_ext_from_h5_to_tflite(
+                old_depl_model_filename)
+            remove(tflite_model_save_dir + old_tflite_mdl_filename)
+        except FileNotFoundError as e:
+            print("Exisiting model {} did not have a deployed version in models/lite"
+                  .format(old_tflite_mdl_filename))
 
+    return "Update successful"
 
 
 @models.route('/upload', methods=["POST"])
