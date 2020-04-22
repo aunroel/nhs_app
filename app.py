@@ -31,7 +31,7 @@ bootstrap = Bootstrap(app)
 
 from nhs_app.api.models import models
 from nhs_app.api.data import data
-from nhs_app.api.auth import auth
+# from nhs_app.api.auth import auth
 from nhs_app.resource.update_aggregator import Aggregator
 from nhs_app.resource.node import NodeRegister
 from nhs_app.resource.user import UserLogout
@@ -58,45 +58,43 @@ api.add_resource(MLTrainingResource, '/train', endpoint='train')
 api.add_resource(ModelAvailability, '/available', endpoint='available')
 
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
 
-# @app.route('/login', methods=['GET', 'POST'])
-# def logino():
-#     if current_user.is_authenticated:
-#         return redirect(url_for('index'))
+    form = UserLogin()
+    if form.validate_on_submit():
+        user = User.find_by_username(form.username.data)
+        if user is None  or not user.check_password(form.password.data):
+            # or user.user_type != 1:
+            flash('Invalid username or password')
+            return redirect(url_for('login'))
 
-#     form = UserLogin()
-#     if form.validate_on_submit():
-#         user = User.find_by_username(form.username.data)
-#         if user is None \
-#             or not user.check_password(form.password.data):
-#             # or user.user_type != 1:
-#             flash('Invalid username or password')
-#             return redirect(url_for('login'))
+        login_user(user, remember=form.remember_me.data)
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('index')
 
-#         login_user(user, remember=form.remember_me.data)
-#         next_page = request.args.get('next')
-#         if not next_page or url_parse(next_page).netloc != '':
-#             next_page = url_for('index')
+        return redirect(next_page)
 
-#         return redirect(next_page)
-
-#     return render_template('login.html', form=form)
+    return render_template('login.html', form=form)
 
 
-# @app.route('/register', methods=['GET', 'POST'])
-# def registero():
-#     if current_user.is_authenticated:
-#         return redirect(url_for('dashboard'))
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+  if current_user.is_authenticated:
+    return redirect(url_for('dashboard'))
 
-#     form = UserRegister()
-#     if form.validate_on_submit():
-#         user = User(username=form.username.data, email=form.email.data, user_type=False,
-#                     password=form.password.data)
-#         user.save_to_db()
-#         flash('Congratulations, registration completed. System admin will review and approve your permissions shortly.')
-#         return redirect(url_for('index'))
+    form = UserRegister()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data, user_type=False,
+                    password=form.password.data)
+        user.save_to_db()
+        flash('Congratulations, registration completed. System admin will review and approve your permissions shortly.')
+        return redirect(url_for('index'))
 
-#     return render_template('register.html', form=form)
+    return render_template('register.html', form=form)
 
 
 
