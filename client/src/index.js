@@ -29,11 +29,11 @@ const styles = (theme) => ({
   },
 });
 
-const Appp = withStyles(styles)(App);
+// const Appp = withStyles(styles)(App);
 ReactDOM.render(
   <StoreProvider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      <Appp />
+      <App />
     </PersistGate>
   </StoreProvider>,
   document.getElementById("root")

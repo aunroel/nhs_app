@@ -5,6 +5,8 @@ old stuff/README_orig.md
 /client/node_modules
 /client/package-lock.json
 /client/build
+/client/yarn-error.log
+
 
 /flaskenv
 .env

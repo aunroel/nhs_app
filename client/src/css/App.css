@@ -1,0 +1,28 @@
+/* html {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height: 100%;
+}
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+} */
+
+:root {
+  --header-primary-color: rgb(0, 94, 184);
+  --header-secondary-color: white;
+  --primary-color: white;
+  --vivid-color: rgb(160, 223, 231);
+  --text-color: black;
+  --secondary-background-color: aliceblue;
+}
+
+body {
+  font-family: "Spartan";
+  background-color: var(--secondary-background-color);
+  /* margin: 0; */
+}

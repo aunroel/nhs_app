@@ -34,4 +34,22 @@ module.exports = {
     "react/jsx-props-no-spreading": "off",
     "import/prefer-default-export": "off",
   },
+  settings: {
+    "import/resolver": {
+      "babel-plugin-root-import": [
+        {
+          rootPathSuffix: "src/css",
+          rootPathPrefix: "css",
+        },
+        {
+          rootPathSuffix: "src/store",
+          rootPathPrefix: "store",
+        },
+        {
+          rootPathSuffix: "src/utils",
+          rootPathPrefix: "utils",
+        },
+      ],
+    },
+  },
 };

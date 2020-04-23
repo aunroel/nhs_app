@@ -1,5 +1,4 @@
 import React from "react";
-import "../../../css/colors.css";
 
 const mockModelTemplate = `
 {

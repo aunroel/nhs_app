@@ -1,12 +1,12 @@
 {
   "liveServer.settings.port": 5501,
   "python.pythonPath": "flaskenv\\Scripts\\python.exe",
-  "editor.formatOnSave": false,
+  // "editor.formatOnSave": false,
   "saveAndRunExt": {
     "commands": [
       {
         "match": "\\.(py$)",
-        "isShellCommand": false,
+        "isShellCommand": false
         // "cmd": "workbench.action.debug.restart"
       }
     ]

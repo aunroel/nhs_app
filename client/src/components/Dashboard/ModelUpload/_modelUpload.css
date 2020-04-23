@@ -1,0 +1,21 @@
+.previewBox {
+  width: 100%;
+  height: 20em;
+  border-width: 2;
+  border-color: var(--text-color);
+  border-style: solid;
+  padding: 1em;
+  overflow: auto;
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: rgb(0, 209, 17);
+}
+
+.yellow {
+  color: gold;
+}

@@ -1,6 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
-import "../css/sizing.css";
+import "./Dashboard/DashbarodHeader/node_modules/css/sizing.css";
 
 const flexBox = {
   // position: "absolute",
