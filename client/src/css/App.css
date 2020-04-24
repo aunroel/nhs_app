@@ -21,8 +21,34 @@
   --secondary-background-color: aliceblue;
 }
 
+html {
+  height: 100%;
+}
+
 body {
+  min-height: 100%;
+  margin: 0;
   font-family: "Spartan";
   background-color: var(--secondary-background-color);
-  /* margin: 0; */
+  display: flex;
+}
+
+#root {
+  width: 100%;
+}
+
+.container-for-content-and-footer {
+  min-height: 100%;
+  background-color: var(--primary-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* .app {
+  background-color: var(--secondary-background-color);
+} */
+
+.footer {
+  color: gray;
 }
