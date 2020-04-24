@@ -1,14 +1,10 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  useHistory,
-} from "react-router-dom";
-import { Card, Container, Navbar } from "react-bootstrap";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Container } from "react-bootstrap";
 import "css/App.css";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
 
 const App = () => {
   return (
@@ -22,11 +18,7 @@ const App = () => {
             </Switch>
           </Container>
         </div>
-        <Card.Footer bg="light">
-          <Container>
-            <text className="footer">NHSX Project, UCL - 2020</text>
-          </Container>
-        </Card.Footer>
+        <Footer />
       </div>
     </Router>
   );

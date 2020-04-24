@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { UploadButton } from "./subcomponents/UploadButton";
-import "./_modelUpload.css";
+import "css/dashboard/model-upload.css";
 
 const uploadStatuses = {
   NONE: "NONE",
@@ -78,11 +78,11 @@ const ModelUpload = () => {
         fileProperties.fileIsH5 === true ? (
           <h3>Model is ready to upload</h3>
         ) : (
-          <h3 className="red">File with he model must be .h5 format.</h3>
-        )
+            <h3 className="red">File with he model must be .h5 format.</h3>
+          )
       ) : (
-        <h3>Please choose a .h5 file to upload.</h3>
-      )}
+          <h3>Please choose a .h5 file to upload.</h3>
+        )}
       <br />
       <UploadButton onClick={upload} enabled={fileReadyToUpload} />
       <br />

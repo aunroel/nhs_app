@@ -2,7 +2,7 @@
   background-color: var(--header-primary-color);
   color: var(--primary-color);
   width: 100%;
-  height: 80px;
+  height: 4em;
 }
 
 .flex-box-vert-align {
@@ -44,6 +44,7 @@
 
 .header-button:hover {
   color: var(--vivid-color);
+  text-decoration: none;
 }
 
 .header-button-selected {

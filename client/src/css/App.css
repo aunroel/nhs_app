@@ -45,10 +45,7 @@ body {
   justify-content: space-between;
 }
 
-/* .app {
-  background-color: var(--secondary-background-color);
-} */
-
 .footer {
   color: gray;
+  padding: 3px;
 }

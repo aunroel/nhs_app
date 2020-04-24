@@ -23,10 +23,7 @@ const DataViewer = () => {
       const body = JSON.stringify({});
 
       try {
-        const res = await axios.get("./api/data/", body, config);
-        // const parsedData = res.data.map((entry) => JSON.parse(entry));
-        console.log(res.data);
-        // const parsedData = JSON.parse(res.data);
+        const res = await axios.get("/api/data/", body, config);
         const payload = res.data;
         setTableData(payload.data.map((entry) => JSON.parse(entry)));
         setNumberOfEntres(payload.numberOfEntries);
@@ -34,6 +31,7 @@ const DataViewer = () => {
         console.log(error);
       }
     };
+
     getData();
   });
 
@@ -48,8 +46,8 @@ const DataViewer = () => {
           <DataTable data={tableData} />
         </>
       ) : (
-        <h3>Loading data...</h3>
-      )}
+          <h3>Loading data...</h3>
+        )}
     </div>
   );
 };

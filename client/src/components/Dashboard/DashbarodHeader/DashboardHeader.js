@@ -1,11 +1,12 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useRouteMatch } from "react-router-dom";
 import "css/dashboard/dashboard-header.css";
 import "css/sizing.css";
 import LinkButton from "./LinkButton";
 
 const DashboardHeader = () => {
   const { pathname: currentUrl } = useLocation();
+  const { url } = useRouteMatch();
 
   return (
     <div className="header-container">
@@ -16,18 +17,17 @@ const DashboardHeader = () => {
         >
           <div className="flex-box-vert-align">
             <LinkButton
-              linkUrl="/modellist"
+              linkUrl={`${url}/modellist`}
               buttonText="Model Viewer"
               currentUrl={currentUrl}
             />
-
             <LinkButton
-              linkUrl="/modelupload"
+              linkUrl={`${url}/modelupload`}
               buttonText="Model Upload"
               currentUrl={currentUrl}
             />
             <LinkButton
-              linkUrl="/dataViewer"
+              linkUrl={`${url}/dataViewer`}
               buttonText="Data Viewer"
               currentUrl={currentUrl}
             />

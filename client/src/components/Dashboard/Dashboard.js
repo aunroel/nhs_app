@@ -1,27 +1,26 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Switch, Route, useRouteMatch } from "react-router-dom";
 import DashboardHeader from "./DashbarodHeader/DashboardHeader";
 import ModelList from "./ModelList/ModelList";
 import ModelUpload from "./ModelUpload/ModelUpload";
 import DataViewer from "./DataViewer/DataViewer";
+import "css/dashboard/dashboard.css"
 
 const Dashboard = () => {
-  const match = useRouteMatch();
+  const { url, path } = useRouteMatch();
 
   return (
     <>
-      <h1>dcsdcsdc</h1>
       <DashboardHeader />
-      <Switch>
-        <Route path="/modellist" component={ModelList} />
-        <Route path="/modelupload" component={ModelUpload} />
-        <Route path="/dataViewer" component={DataViewer} />
-      </Switch>
+      <div className="dashboard-content">
+        <Switch>
+          <Route path={`${path}/modellist`} component={ModelList} />
+          <Route path={`${path}/modelupload`} component={ModelUpload} />
+          <Route path={`${path}/dataViewer`} component={DataViewer} />
+        </Switch>
+      </div>
     </>
   );
 };
-
-Dashboard.propTypes = {};
 
 export default Dashboard;
