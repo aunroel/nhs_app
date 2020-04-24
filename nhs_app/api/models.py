@@ -8,7 +8,7 @@ from webargs import fields
 from webargs.flaskparser import use_args, use_kwargs
 
 from nhs_app.models.uploaded_model import UploadedModelMeta
-from nhs_app.machine_learning.ml_model import ML
+from nhs_app.machine_learning.ml_util import ML
 from nhs_app.file_system.ml_model_filename_builder import \
     build_uploaded_model_file_name, \
     file_format_is_h5, \
@@ -53,7 +53,7 @@ def set_deployed(filename):
                 old_depl_model_filename)
             remove(tflite_model_save_dir + old_tflite_mdl_filename)
         except FileNotFoundError as e:
-            print("Exisiting model {} did not have a deployed version in models/lite"
+            print("Exisiting model {} did not have a deployed version in models/uploaded_lite"
                   .format(old_tflite_mdl_filename))
 
     return "Update successful"

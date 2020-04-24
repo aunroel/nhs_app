@@ -1,8 +1,6 @@
 import os
 from flask import send_from_directory
-from flask import Flask, render_template, url_for, redirect, flash, request, \
-    make_response, jsonify
-from flask_wtf.csrf import CSRFProtect
+from flask import Flask, render_template, url_for, redirect, flash, request, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager, current_user, login_user
@@ -10,12 +8,6 @@ from flask_restful import Api
 from flask_bootstrap import Bootstrap
 from config import Config
 from werkzeug.urls import url_parse
-from werkzeug.security import generate_password_hash, check_password_hash
-from webargs import fields, validate, ValidationError
-from webargs.flaskparser import use_args, use_kwargs
-import jwt
-import json
-import datetime
 
 
 app = Flask(__name__)
@@ -31,11 +23,12 @@ bootstrap = Bootstrap(app)
 
 from nhs_app.api.models import models
 from nhs_app.api.data import data
-# from nhs_app.api.auth import auth
+from nhs_app.api.auth import auth
 from nhs_app.resource.update_aggregator import Aggregator
 from nhs_app.resource.node import NodeRegister
 from nhs_app.resource.user import UserLogout
-from nhs_app.resource.ml_resource import MLDownload, MLTrainingResource, ModelAvailability
+from nhs_app.resource.ml_resource import NationalMLDownload, MLTrainingResource, NationalModelAvailability, \
+    LocalMLDownload, UploadedMLDownload, LocalModelAvailability, LocalMLTrainingResource
 from nhs_app.resource.project import Dashboard, Homepage, ApiDoc
 from nhs_app.forms.user_forms import UserLogin, UserRegister
 from nhs_app.models.user_model import User
@@ -53,9 +46,13 @@ api.add_resource(NodeRegister, '/node', endpoint='node')
 api.add_resource(UserLogout, '/logout', endpoint='logout')
 api.add_resource(ApiDoc, '/doc', endpoint='doc')
 api.add_resource(Dashboard, '/dashboard', endpoint='dashboard')
-api.add_resource(MLDownload, '/model', endpoint='model')
+api.add_resource(NationalMLDownload, '/model', endpoint='model')
+api.add_resource(LocalMLDownload, '/local_model/<string:postcode>', endpoint='local_model')
+api.add_resource(UploadedMLDownload, '/uploaded_model', endpoint='uploaded_model')
 api.add_resource(MLTrainingResource, '/train', endpoint='train')
-api.add_resource(ModelAvailability, '/available', endpoint='available')
+api.add_resource(LocalMLTrainingResource, '/local_train/<string:postcode>', endpoint='local_train')
+api.add_resource(NationalModelAvailability, '/available', endpoint='available')
+api.add_resource(LocalModelAvailability, '/local_available/<string:postcode>', endpoint='local_available')
 
 
 @app.route('/login', methods=['GET', 'POST'])

@@ -53,6 +53,14 @@ class MainData(db.Model):
         return cls.query.all()
 
     @classmethod
+    def find_all_by_postcode(cls, postcode):
+        return cls.query.filter_by(postCode=postcode).all()
+
+    @classmethod
+    def find_by_postcode(cls, postcode):
+        return cls.query.filter_by(postCode=postcode).first()
+
+    @classmethod
     def find_by_id(cls, _id):
         return cls.query.filter_by(id=_id).first()
 
