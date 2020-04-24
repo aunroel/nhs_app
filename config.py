@@ -27,7 +27,7 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # JWT
-    SECRET_KEY = "flyingavocados"
+    # SECRET_KEY = "flyingavocados"
     JWT_TOKEN_EXPIRY_S = 3600000
 
     # Model saving
