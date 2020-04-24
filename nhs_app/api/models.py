@@ -7,7 +7,7 @@ from sqlalchemy import update
 from webargs import fields
 from webargs.flaskparser import use_args, use_kwargs
 
-from nhs_app.models.uploaded_model import UploadedModelMeta
+from nhs_app.database.uploaded_model import UploadedModelMeta
 from nhs_app.machine_learning.ml_util import ML
 from nhs_app.file_system.ml_model_filename_builder import \
     build_uploaded_model_file_name, \

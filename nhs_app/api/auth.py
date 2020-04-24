@@ -1,6 +1,6 @@
 from webargs import fields, validate, ValidationError
 from flask.json import jsonify
-from nhs_app.models.user_model import User
+from nhs_app.database.user_model import User
 from flask.blueprints import Blueprint
 from functools import wraps
 from flask import request, g, abort

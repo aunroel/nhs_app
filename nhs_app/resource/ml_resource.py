@@ -1,12 +1,11 @@
 import os
 from flask import send_from_directory, make_response, render_template
 from flask_restful import Resource, reqparse
-from nhs_app.models.mobile_model import Node
-from nhs_app.machine_learning.ml_util import ML
+from nhs_app.database.mobile_model import Node
 from flask_login import login_required
 from app import config
-from nhs_app.models.uploaded_model import UploadedModelMeta
-from nhs_app.models.main_data_model import MainData
+from nhs_app.database.uploaded_model import UploadedModelMeta
+from nhs_app.database.main_data_model import MainData
 from nhs_app.file_system.ml_model_filename_builder import \
     change_ext_from_h5_to_tflite
 
@@ -33,7 +32,7 @@ class NationalMLDownload(Resource):
 class LocalMLDownload(Resource):
 
     def post(self, postcode):
-        if not MainData.find_all_by_postcode(postcode):
+        if not MainData.find_by_postcode(postcode):
             return {'message': f'No such postcode'}, 403
         
         data = _user_parser.parse_args()
@@ -61,38 +60,36 @@ class UploadedMLDownload(Resource):
             tflite_model_save_dir, depl_filename, as_attachment=True)
 
 
-class MLTrainingResource(Resource):
-
-    @login_required
-    def get(self):
-        ml = ML()
-        ml.refresh_model()
-        # TODO verify this line
-        ml.save_default_and_convert()
-
-        headers = {'Content-Type': 'text/html'}
-
-        return make_response(render_template('training_complete.html'), 200, headers)
-
-
-class LocalMLTrainingResource(Resource):
-
-    @login_required
-    def get(self, postcode):
-        if not MainData.find_by_postcode(postcode):
-            return {'message': f'No such postcode'}, 403
-
-        ml = ML()
-        ml.postcode = postcode
-        ml.national = False
-        ml.directory = './models/local'
-        ml.refresh_model()
-        # TODO verify this line
-        ml.save_default_and_convert()
-
-        headers = {'Content-Type': 'text/html'}
-
-        return make_response(render_template('training_complete.html'), 200, headers)
+# class MLTrainingResource(Resource):
+#
+#     @login_required
+#     def get(self):
+#         ml = ML()
+#         ml.refresh_model()
+#         ml.save_default_and_convert()
+#
+#         headers = {'Content-Type': 'text/html'}
+#
+#         return make_response(render_template('training_complete.html'), 200, headers)
+#
+#
+# class LocalMLTrainingResource(Resource):
+#
+#     @login_required
+#     def get(self, postcode):
+#         if not MainData.find_by_postcode(postcode):
+#             return {'message': f'No such postcode'}, 403
+#
+#         ml = ML()
+#         ml.postcode = postcode
+#         ml.national = False
+#         ml.directory = './database/local'
+#         ml.refresh_model()
+#         ml.save_default_and_convert()
+#
+#         headers = {'Content-Type': 'text/html'}
+#
+#         return make_response(render_template('training_complete.html'), 200, headers)
 
 
 class NationalModelAvailability(Resource):
@@ -101,10 +98,7 @@ class NationalModelAvailability(Resource):
     def get(self):
         headers = {'Content-Type': 'text/html'}
 
-        depl_filename = UploadedModelMeta.get_deployed_filename()
-        depl_filename = change_ext_from_h5_to_tflite(depl_filename)
-
-        if os.path.isfile(tflite_model_save_dir + depl_filename):
+        if os.path.isfile(f'./models/national/lite/default_model.tflite'):
             return make_response(render_template('model_ready.html', code=200), 200, headers)
         else:
             return make_response(render_template('model_ready.html', code=404), 404, headers)
@@ -114,11 +108,11 @@ class LocalModelAvailability(Resource):
 
     @login_required
     def get(self, postcode):
-        if not MainData.find_all_by_postcode(postcode):
+        if not MainData.find_by_postcode(postcode):
             return {'message': f'No such postcode'}, 403
 
         headers = {'Content-Type': 'text/html'}
-        if os.path.isfile(f'models/local/uploaded_lite/{postcode}/default_model.tflite'):
+        if os.path.isfile(f'models/local/lite/{postcode}/default_model.tflite'):
             return make_response(render_template('model_ready.html', code=200), 200, headers)
         else:
             return make_response(render_template('model_ready.html', code=404), 404, headers)

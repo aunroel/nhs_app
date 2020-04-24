@@ -1,6 +1,6 @@
 from webargs import fields, validate, ValidationError
 from flask.json import jsonify
-from nhs_app.models.user_model import User
+from nhs_app.database.user_model import User
 from flask.blueprints import Blueprint
 from functools import wraps
 from flask import request, g, abort
@@ -10,7 +10,7 @@ import json
 from app import config
 from webargs.flaskparser import use_args, use_kwargs
 from auth.main import login_required
-from nhs_app.models.update_aggregator_model import UpdateAggregator
+from nhs_app.database.update_aggregator_model import UpdateAggregator
 
 
 data = Blueprint("data", __name__)

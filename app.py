@@ -8,6 +8,7 @@ from flask_restful import Api
 from flask_bootstrap import Bootstrap
 from config import Config
 from werkzeug.urls import url_parse
+from flask_crontab import Crontab
 
 
 app = Flask(__name__)
@@ -19,6 +20,7 @@ login = LoginManager(app)
 login.login_view = 'login'
 api = Api(app)
 bootstrap = Bootstrap(app)
+crontab = Crontab(app)
 
 
 from nhs_app.api.models import models
@@ -27,12 +29,13 @@ from nhs_app.api.auth import auth
 from nhs_app.resource.update_aggregator import Aggregator
 from nhs_app.resource.node import NodeRegister
 from nhs_app.resource.user import UserLogout
-from nhs_app.resource.ml_resource import NationalMLDownload, MLTrainingResource, NationalModelAvailability, \
-    LocalMLDownload, UploadedMLDownload, LocalModelAvailability, LocalMLTrainingResource
+from nhs_app.resource.ml_resource import NationalMLDownload, NationalModelAvailability, \
+    LocalMLDownload, UploadedMLDownload, LocalModelAvailability
 from nhs_app.resource.project import Dashboard, Homepage, ApiDoc
 from nhs_app.forms.user_forms import UserLogin, UserRegister
-from nhs_app.models.user_model import User
-from nhs_app.models.uploaded_model import UploadedModelMeta
+from nhs_app.database.user_model import User
+from nhs_app import cron_scripts
+from nhs_app.database.uploaded_model import UploadedModelMeta
 # from auth.main import login_required
 
 
@@ -49,10 +52,27 @@ api.add_resource(Dashboard, '/dashboard', endpoint='dashboard')
 api.add_resource(NationalMLDownload, '/model', endpoint='model')
 api.add_resource(LocalMLDownload, '/local_model/<string:postcode>', endpoint='local_model')
 api.add_resource(UploadedMLDownload, '/uploaded_model', endpoint='uploaded_model')
-api.add_resource(MLTrainingResource, '/train', endpoint='train')
-api.add_resource(LocalMLTrainingResource, '/local_train/<string:postcode>', endpoint='local_train')
 api.add_resource(NationalModelAvailability, '/available', endpoint='available')
 api.add_resource(LocalModelAvailability, '/local_available/<string:postcode>', endpoint='local_available')
+
+
+@crontab.job(minute='00', hour='22', day_of_week='0')
+def flush_and_retrain():
+    cron_scripts.flush()
+    cron_scripts.retrain()
+
+
+@app.route('/flush_test', methods=['GET'])
+def flush_test():
+    cron_scripts.flush()
+    return 'success'
+
+
+@app.route('/train_test', methods=['GET'])
+def ca_boom():
+    cron_scripts.retrain()
+    headers = {'Content-Type': 'text/html'}
+    return make_response(render_template('training_complete.html'), 200, headers)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -80,8 +100,8 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-  if current_user.is_authenticated:
-    return redirect(url_for('dashboard'))
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
 
     form = UserRegister()
     if form.validate_on_submit():
@@ -92,7 +112,6 @@ def register():
         return redirect(url_for('index'))
 
     return render_template('register.html', form=form)
-
 
 
 @app.errorhandler(404)
