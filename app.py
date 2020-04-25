@@ -59,18 +59,23 @@ api.add_resource(LocalModelAvailability, '/local_available/<string:postcode>', e
 @crontab.job(minute='00', hour='22', day_of_week='0')
 def flush_and_retrain():
     cron_scripts.flush()
-    cron_scripts.retrain()
+    cron_scripts.train_national()
+
+    # training local models takes around an hour (since there are 253 postcode areas)
+    # remove the comment to enable area training
+    # cron_scripts.train_locals()
 
 
 @app.route('/flush_test', methods=['GET'])
 def flush_test():
     cron_scripts.flush()
-    return 'success'
+    return 'success', 200
 
 
 @app.route('/train_test', methods=['GET'])
-def ca_boom():
-    cron_scripts.retrain()
+def test_train():
+    cron_scripts.train_national()
+    # cron_scripts.train_locals()
     headers = {'Content-Type': 'text/html'}
     return make_response(render_template('training_complete.html'), 200, headers)
 
@@ -111,7 +116,9 @@ def register():
         flash('Congratulations, registration completed. System admin will review and approve your permissions shortly.')
         return redirect(url_for('index'))
 
-    return render_template('register.html', form=form)
+    headers = {'Content-Type': 'text/html'}
+
+    return make_response(render_template('register.html', form=form), 406, headers)
 
 
 @app.errorhandler(404)

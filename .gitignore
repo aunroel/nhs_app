@@ -15,5 +15,9 @@ __pycache__
 nhs_app/forms/__pycache__/
 nhs_app/resource/__pycache__/
 nhs_app/database/__pycache__/
+nhs_app/api/__pycache__/
+nhs_app/machine_learning/__pycache__/
+nhs_app/file_system/__pycache__/
+
 
 

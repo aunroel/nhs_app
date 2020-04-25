@@ -26,7 +26,7 @@ class NationalMLDownload(Resource):
         filename = 'default_model.tflite'
 
         return send_from_directory(
-            directory, filename, as_attachment=True)
+            directory, filename, as_attachment=True), 200
     
 
 class LocalMLDownload(Resource):
@@ -60,38 +60,6 @@ class UploadedMLDownload(Resource):
             tflite_model_save_dir, depl_filename, as_attachment=True)
 
 
-# class MLTrainingResource(Resource):
-#
-#     @login_required
-#     def get(self):
-#         ml = ML()
-#         ml.refresh_model()
-#         ml.save_default_and_convert()
-#
-#         headers = {'Content-Type': 'text/html'}
-#
-#         return make_response(render_template('training_complete.html'), 200, headers)
-#
-#
-# class LocalMLTrainingResource(Resource):
-#
-#     @login_required
-#     def get(self, postcode):
-#         if not MainData.find_by_postcode(postcode):
-#             return {'message': f'No such postcode'}, 403
-#
-#         ml = ML()
-#         ml.postcode = postcode
-#         ml.national = False
-#         ml.directory = './database/local'
-#         ml.refresh_model()
-#         ml.save_default_and_convert()
-#
-#         headers = {'Content-Type': 'text/html'}
-#
-#         return make_response(render_template('training_complete.html'), 200, headers)
-
-
 class NationalModelAvailability(Resource):
 
     @login_required
@@ -99,9 +67,9 @@ class NationalModelAvailability(Resource):
         headers = {'Content-Type': 'text/html'}
 
         if os.path.isfile(f'./models/national/lite/default_model.tflite'):
-            return make_response(render_template('model_ready.html', code=200), 200, headers)
+            return make_response(render_template('model_ready.html', national=True, code=200), 200, headers)
         else:
-            return make_response(render_template('model_ready.html', code=404), 404, headers)
+            return make_response(render_template('model_ready.html', national=True, code=404), 404, headers)
 
 
 class LocalModelAvailability(Resource):
@@ -113,8 +81,8 @@ class LocalModelAvailability(Resource):
 
         headers = {'Content-Type': 'text/html'}
         if os.path.isfile(f'models/local/lite/{postcode}/default_model.tflite'):
-            return make_response(render_template('model_ready.html', code=200), 200, headers)
+            return make_response(render_template('model_ready.html', national=False, area=postcode, code=200), 200, headers)
         else:
-            return make_response(render_template('model_ready.html', code=404), 404, headers)
+            return make_response(render_template('model_ready.html', national=False, area=postcode, code=404), 404, headers)
 
 
