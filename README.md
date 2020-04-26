@@ -90,6 +90,27 @@ flask run
 
 Once you finish working on the project, run `docker-compose down` to stop the Docker container with local database.
 
+## Training of local models
+Training of local models is currently disabled due to the amount of time it takes t re-train model for all of the postcode areas (around an hour for 253 postcode areas currently in the database).
+If you want to enable local training - uncomment the following line in flush_and_retrain() method in app.py file:
+```
+    # cron_scripts.train_locals()
+
+```
+
+
+## Log-in into the web-interface
+Username: admin
+
+Password: admin
+
+## Code coverage
+In order to get the test coverage report, execute the following command from the project root:
+```
+coverage run --omit 'flaskenv/*' -m unittest project_tests.py && coverage html
+```
+It will execute all of the tests and generate a coverage report in HTML format in 'htmlcov' folder.
+
 ## Create MySQL database
 1. Make sure you have run `docker-compose up` to run MySQL server
 2. In Python interactive console execute:
@@ -97,6 +118,7 @@ Once you finish working on the project, run `docker-compose down` to stop the Do
    from app import db
    db.create_all()
    ```
+
 
 ### Troubleshooting
 
