@@ -10,6 +10,9 @@
 
 For using both server and client side in development run both concurrently (in different terminals).
 
+## Mobile frameworks
+In order to access code for the iOS or Android, please switch to 'iOS' or 'android_branch' branch.
+
 ## Running client
 
 Worklfow is the same for windows and unix
