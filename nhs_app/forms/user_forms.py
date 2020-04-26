@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
-from nhs_app.models.user_model import User
+from nhs_app.database.user_model import User
 
 
 class UserRegister(FlaskForm):

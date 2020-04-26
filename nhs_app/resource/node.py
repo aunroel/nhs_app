@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from nhs_app.models.mobile_model import Node
+from nhs_app.database.mobile_model import Node
 
 _user_parser = reqparse.RequestParser()
 _user_parser.add_argument('uid', type=str, required=True, help='uid required')

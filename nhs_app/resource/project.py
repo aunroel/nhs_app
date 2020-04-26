@@ -29,26 +29,26 @@ class ApiDoc(Resource):
             'body': 'standard data in json format',
             'description': 'An endpoint to receive updates from the nodes'
         },
-        {
-                'status': 'ready',
-                'method': 'POST',
-                'url': '/node',
-                'body': '{"uid": "unique id for the device"}',
-                'description': 'An endpoint to register the device with the server'
+            {
+            'status': 'ready',
+            'method': 'POST',
+            'url': '/node',
+            'body': '{"uid": "unique id for the device"}',
+            'description': 'An endpoint to register the device with the server'
         },
-        {
-                'status': 'ready',
-                'method': 'GET',
-                'url': '	/available',
-                'body': '--//--',
-                'description': 'Ask the server whether a tflite model is ready for download'
+            {
+            'status': 'ready',
+            'method': 'GET',
+            'url': '	/available',
+            'body': '--//--',
+            'description': 'Ask the server whether a tflite model is ready for download'
         },
-        {
-                'status': 'ready',
-                'method': 'POST',
-                'url': '	/model',
-                'body': '{"uid": "<unique device id>"}',
-                'description': 'An endpoint to download a TFLite model from the server'
+            {
+            'status': 'ready',
+            'method': 'POST',
+            'url': '	/model',
+            'body': '{"uid": "<unique device id>"}',
+            'description': 'An endpoint to download a TFLite model from the server'
         }
         ]
         headers = {'Content-Type': 'text/html'}

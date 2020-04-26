@@ -6,27 +6,42 @@ from flask_migrate import Migrate
 from flask_login import LoginManager, current_user, login_user
 from flask_restful import Api
 from flask_bootstrap import Bootstrap
-from config import StagingConfig
+from config import Config
 from werkzeug.urls import url_parse
+from flask_crontab import Crontab
 
 
 app = Flask(__name__)
-app.config.from_object(StagingConfig)
+app.config.from_object(Config)
+config = app.config
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
 login.login_view = 'login'
 api = Api(app)
 bootstrap = Bootstrap(app)
+crontab = Crontab(app)
 
+
+from nhs_app.api.models import models
+from nhs_app.api.data import data
+from nhs_app.api.auth import auth
 from nhs_app.resource.update_aggregator import Aggregator
 from nhs_app.resource.node import NodeRegister
 from nhs_app.resource.user import UserLogout
-from nhs_app.resource.ml_resource import MLDownload, MLTrainingResource, ModelAvailability
+from nhs_app.resource.ml_resource import NationalMLDownload, NationalModelAvailability, \
+    LocalMLDownload, UploadedMLDownload, LocalModelAvailability
 from nhs_app.resource.project import Dashboard, Homepage, ApiDoc
 from nhs_app.forms.user_forms import UserLogin, UserRegister
-from nhs_app.models.user_model import User
+from nhs_app.database.user_model import User
+from nhs_app import cron_scripts
+from nhs_app.database.uploaded_model import UploadedModelMeta
+# from auth.main import login_required
 
+
+app.register_blueprint(auth, url_prefix='/api/auth')
+app.register_blueprint(data, url_prefix='/api/data')
+app.register_blueprint(models, url_prefix='/api/models')
 
 api.add_resource(Homepage, '/index', '/', endpoint='index')
 api.add_resource(Aggregator, '/update/<string:uid>', endpoint='update')
@@ -34,9 +49,35 @@ api.add_resource(NodeRegister, '/node', endpoint='node')
 api.add_resource(UserLogout, '/logout', endpoint='logout')
 api.add_resource(ApiDoc, '/doc', endpoint='doc')
 api.add_resource(Dashboard, '/dashboard', endpoint='dashboard')
-api.add_resource(MLDownload, '/model', endpoint='model')
-api.add_resource(MLTrainingResource, '/train', endpoint='train')
-api.add_resource(ModelAvailability, '/available', endpoint='available')
+api.add_resource(NationalMLDownload, '/model', endpoint='model')
+api.add_resource(LocalMLDownload, '/local_model/<string:postcode>', endpoint='local_model')
+api.add_resource(UploadedMLDownload, '/uploaded_model', endpoint='uploaded_model')
+api.add_resource(NationalModelAvailability, '/available', endpoint='available')
+api.add_resource(LocalModelAvailability, '/local_available/<string:postcode>', endpoint='local_available')
+
+
+@crontab.job(minute='00', hour='22', day_of_week='0')
+def flush_and_retrain():
+    cron_scripts.flush()
+    cron_scripts.train_national()
+
+    # training local models takes around an hour (since there are 253 postcode areas)
+    # remove the comment to enable area training
+    # cron_scripts.train_locals()
+
+
+@app.route('/flush_test', methods=['GET'])
+def flush_test():
+    cron_scripts.flush()
+    return 'success', 200
+
+
+@app.route('/train_test', methods=['GET'])
+def test_train():
+    cron_scripts.train_national()
+    # cron_scripts.train_locals()
+    headers = {'Content-Type': 'text/html'}
+    return make_response(render_template('training_complete.html'), 200, headers)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -47,7 +88,8 @@ def login():
     form = UserLogin()
     if form.validate_on_submit():
         user = User.find_by_username(form.username.data)
-        if user is None or not user.check_password(form.password.data) or user.user_type != 1:
+        if user is None  or not user.check_password(form.password.data):
+            # or user.user_type != 1:
             flash('Invalid username or password')
             return redirect(url_for('login'))
 
@@ -74,7 +116,9 @@ def register():
         flash('Congratulations, registration completed. System admin will review and approve your permissions shortly.')
         return redirect(url_for('index'))
 
-    return render_template('register.html', form=form)
+    headers = {'Content-Type': 'text/html'}
+
+    return make_response(render_template('register.html', form=form), 406, headers)
 
 
 @app.errorhandler(404)
@@ -98,5 +142,3 @@ def favicon():
 if __name__ == '__main__':
     db.init_app(app)
     app.run(port=5000, debug=True)
-
-
