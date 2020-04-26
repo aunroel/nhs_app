@@ -226,29 +226,20 @@ class ProjectTests(unittest.TestCase):
 
     def test_ml(self):
         ml = ML()
-        # raw_data = ml.raw_data
-        # df_data = ml.df_data
-        # model = ml.model
-        # train_ds = ml.train_ds
-        # test_ds = ml.test_ds
-        # train_stats = ml.train_stats
-        # train_labels = ml.train_labels
-        # normed_train_data = ml.normed_train_data
-        # normed_test_data = ml.normed_test_data
         ml.get_data_as_list()
+
         self.assertEqual(10, len(ml.raw_data))
 
         ml.convert_to_df()
+
         self.assertEqual(10, len(ml.df_data))
 
         ml.train_ds = ml.df_data.sample(frac=0.8, random_state=0)
         ml.test_ds = ml.df_data.drop(ml.train_ds.index)
-
         ml.stats()
         ml.norm()
 
         self.assertTrue(ml.normed_train_data is not None)
-
         self.assertTrue(ml.normed_test_data is not None)
 
         ml.define_model()

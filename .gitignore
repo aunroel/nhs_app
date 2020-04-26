@@ -6,7 +6,6 @@ old stuff/README_orig.md
 /client/build
 
 /flaskenv
-.env
 old.docker-compose.yml
 .env/
 
