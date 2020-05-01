@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ModelBox } from "./ModelBox";
-import "./model-list.css";
+import "css/dashboard/model-list.css";
 
 const ModelList = () => {
   const [searchValue, setSearchValue] = useState(null);
@@ -48,8 +48,8 @@ const ModelList = () => {
             return <ModelBox key={model.filename} modelData={model} />;
           })
       ) : (
-        <h3>Loading models... </h3>
-      )}
+          <h3>Loading models... </h3>
+        )}
     </div>
   );
 };

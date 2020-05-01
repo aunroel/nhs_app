@@ -1,5 +1,5 @@
 import React from "react";
-import "./model-list.css";
+import "css/dashboard/model-list.css";
 import { Line } from "react-chartjs-2";
 
 const options = {

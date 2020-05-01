@@ -1,34 +1,20 @@
-import { REGISTER_SUCCESS, REGISTER_FAIL } from "../actions";
+import { REGISTER_SUCCESS } from "../actions";
 
 const initialState = {
   token: localStorage.getItem("token"),
-  isAuthenticated: null,
-  loading: true,
-  user: null,
 };
 
 export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case REGISTER_SUCCESS:
-      localStorage.setItem("token", payload.token);
+    case REGISTER_SUCCESS: {
+      const { token } = payload;
+      localStorage.setItem("token", token);
       return {
-        ...state,
-        ...payload,
-        isAuthenticated: true,
-        loading: false,
+        token,
       };
-
-    case REGISTER_FAIL:
-      localStorage.removeItem("token");
-      return {
-        ...state,
-        ...payload,
-        isAuthenticated: true,
-        loading: false,
-      };
-
+    }
     default:
       return state;
   }

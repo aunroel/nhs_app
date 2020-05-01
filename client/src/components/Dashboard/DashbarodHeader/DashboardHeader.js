@@ -1,7 +1,6 @@
 import React from "react";
 import { useLocation, useRouteMatch } from "react-router-dom";
 import "css/dashboard/dashboard-header.css";
-import "css/sizing.css";
 import LinkButton from "./LinkButton";
 
 const DashboardHeader = () => {

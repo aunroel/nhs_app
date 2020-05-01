@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import axios from "axios";
+import sleep from "utils/sleep";
 import DataTable from "./DataTable";
 
 const DataViewer = () => {
@@ -9,8 +9,6 @@ const DataViewer = () => {
   const [numberOfEntries, setNumberOfEntres] = useState(null);
 
   useEffect(() => {
-    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
     const getData = async () => {
       await sleep(500);
 
@@ -46,8 +44,8 @@ const DataViewer = () => {
           <DataTable data={tableData} />
         </>
       ) : (
-          <h3>Loading data...</h3>
-        )}
+        <h3>Loading data...</h3>
+      )}
     </div>
   );
 };

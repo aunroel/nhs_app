@@ -12,7 +12,7 @@
       "webRoot": "${workspaceFolder}/client/src"
     },
     {
-      "name": "Python: Flask",
+      "name": "Flask Server",
       "type": "python",
       "request": "launch",
       "module": "flask",

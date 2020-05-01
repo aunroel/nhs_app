@@ -24,11 +24,11 @@ auth = Blueprint("auth", __name__)
     })
 def register(username, email, password, password2):
     try: 
-        if User.find_by_email(email):
-            raise ValidationError('Email already in use. Please use different email address')
-
         if User.find_by_username(username):
             raise ValidationError('Username already exists. Please choose another')
+
+        if User.find_by_email(email):
+            raise ValidationError('Email already in use. Please use different email address')
 
         if password != password2:
             raise ValidationError("Password and Repeated Password must match")
@@ -82,7 +82,7 @@ def login(email, password):
 
 
 
-@auth.route('/test', methods=["POST"])
+@auth.route('/checkToken', methods=["POST"])
 @login_required
 def test(userData):
     userId = userData['id']

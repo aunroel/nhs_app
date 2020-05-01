@@ -1,7 +1,11 @@
 import React from "react";
 import { Navbar, Nav, NavDropdown, Button, Container } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import "css/header.css";
+import HeaderLink from "./HeaderLink";
+
 const Header = () => {
-  const loggedIn = true;
+  const loggedIn = false;
 
   return (
     <>
@@ -11,20 +15,20 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-              <Nav.Link href="index">Home</Nav.Link>
+              <HeaderLink to="/index" text="Home" />
+
               {loggedIn ? (
                 <>
-                  <Nav.Link href="dashboard">Dashboard</Nav.Link>
-                  <Nav.Link href="doc">API Doc</Nav.Link>
-                  <Nav.Link href="available">Availibility</Nav.Link>
+                  <HeaderLink to="/doc" text="API Doc" />
+                  <HeaderLink to="/available" text="Availibility" />
                 </>
               ) : null}
             </Nav>
             <Nav>
               {loggedIn ? (
-                <Nav.Link href="login">Login</Nav.Link>
+                <HeaderLink to="/logout" text="Logout" />
               ) : (
-                <Nav.Link href="logout">Logout</Nav.Link>
+                <HeaderLink to="/login" text="Login" />
               )}
             </Nav>
           </Navbar.Collapse>

@@ -45,6 +45,11 @@ body {
   justify-content: space-between;
 }
 
+.container-padding {
+  padding-top: 2rem;
+  /* padding: 8px; */
+}
+
 .footer {
   color: gray;
   padding: 3px;

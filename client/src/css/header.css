@@ -1,0 +1,14 @@
+.link {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  color: rgba(0,0,0,.5);
+  padding: 8px;
+  transition: 150ms;
+}
+
+.link:hover { 
+  text-decoration: none;
+  color: rgba(0,0,0,.9);
+
+}
