@@ -9,16 +9,17 @@ old stuff/README_orig.md
 
 
 /flaskenv
-.env
 old.docker-compose.yml
 .env/
 
 **.pyc
 __pycache__
 nhs_app/forms/__pycache__/
-nhs_app/models/__pycache__/
 nhs_app/resource/__pycache__/
-models/graphs/15_03_20/
-models/lite/latest_converted_model.tflite
-models/results/15_03_20/
+nhs_app/database/__pycache__/
+nhs_app/api/__pycache__/
+nhs_app/machine_learning/__pycache__/
+nhs_app/file_system/__pycache__/
+
+
 

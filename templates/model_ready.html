@@ -1,10 +1,18 @@
 {% extends "base.html" %}
 
 {% block app_content %}
-    {% if code == 200 %}
-        <h1>The model is ready for downloading.</h1>
+    {% if national %}
+        {% if code == 200 %}
+            <h1>National model is ready for downloading.</h1>
+        {% else %}
+            <h1>National model is not ready for downloading.</h1>
+        {% endif %}
     {% else %}
-        <h1>The model is not ready for downloading.</h1>
+        {% if code == 200 %}
+            <h1>{{ area }} model is ready for downloading.</h1>
+        {% else %}
+            <h1>{{ area }} model is not ready for downloading.</h1>
+        {% endif %}
     {% endif %}
     <p><a href="{{ url_for('index') }}">Back</a></p>
 {% endblock %}
