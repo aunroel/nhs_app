@@ -8,6 +8,7 @@ import Footer from "./components/Footer/Footer";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import HeaderLink from "./components/Header/HeaderLink";
+import TeamMembersTable from "./components/TeamMembersTable/TeamMembersTable";
 
 const App = () => {
   const loggedIn = false;
@@ -41,6 +42,7 @@ const App = () => {
           />
           <Container className="container-padding">
             <Switch>
+              <Route path={["/", "/index"]} component={TeamMembersTable} />
               <Route path="/dashboard" component={Dashboard} />
               <Route path="/login" component={Login} />
               <Route path="/register" component={Register} />
