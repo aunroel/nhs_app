@@ -1,8 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Container } from "react-bootstrap";
+import { Container, Button } from "react-bootstrap";
 import "css/App.css";
 import { connect } from "react-redux";
+import { logout } from "store/actions/auth";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
@@ -12,9 +13,7 @@ import HeaderLink from "./components/Header/HeaderLink";
 import TeamMembersTable from "./components/TeamMembersTable/TeamMembersTable";
 import AuthForm from "./components/auth/AuthForm";
 
-const App = () => {
-  const loggedIn = false;
-
+const App = ({ loggedIn, logout }) => {
   return (
     <Router>
       <div className="container-for-content-and-footer">
@@ -27,6 +26,7 @@ const App = () => {
                 {loggedIn ? (
                   <>
                     <HeaderLink to="/doc" text="API Doc" />
+                    <HeaderLink to="/dashboard" text="Dashboard" />
                     <HeaderLink to="/available" text="Availibility" />
                   </>
                 ) : null}
@@ -35,7 +35,15 @@ const App = () => {
             rightButtons={
               <>
                 {loggedIn ? (
-                  <HeaderLink to="/logout" text="Logout" />
+                  <Button
+                    variant="link secondary"
+                    onClick={() => {
+                      console.log("click");
+                      logout();
+                    }}
+                  >
+                    Logout
+                  </Button>
                 ) : (
                   <HeaderLink to="/login" text="Login" />
                 )}
@@ -66,7 +74,7 @@ const App = () => {
 };
 
 const mapStateToProps = (state) => ({
-  loggedIn: !!state.token,
+  loggedIn: !!state.auth.token,
 });
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, { logout })(App);
