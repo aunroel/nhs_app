@@ -1,12 +1,9 @@
 import React from "react";
-import { Navbar, Nav, NavDropdown, Button, Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Navbar, Nav, Container } from "react-bootstrap";
 import "css/header.css";
-import HeaderLink from "./HeaderLink";
+import PropTypes from "prop-types";
 
-const Header = () => {
-  const loggedIn = false;
-
+const Header = ({ leftButtons, rightButtons }) => {
   return (
     <>
       <Navbar bg="light" expand="lg">
@@ -14,23 +11,8 @@ const Header = () => {
           <Navbar.Brand href="index">NHSX App</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
-              <HeaderLink to="/index" text="Home" />
-
-              {loggedIn ? (
-                <>
-                  <HeaderLink to="/doc" text="API Doc" />
-                  <HeaderLink to="/available" text="Availibility" />
-                </>
-              ) : null}
-            </Nav>
-            <Nav>
-              {loggedIn ? (
-                <HeaderLink to="/logout" text="Logout" />
-              ) : (
-                <HeaderLink to="/login" text="Login" />
-              )}
-            </Nav>
+            <Nav className="mr-auto"> {leftButtons} </Nav>
+            <Nav>{rightButtons}</Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
@@ -38,6 +20,9 @@ const Header = () => {
   );
 };
 
-Header.propTypes = {};
+Header.propTypes = {
+  leftButtons: PropTypes.func.isRequired,
+  rightButtons: PropTypes.func.isRequired,
+};
 
 export default Header;

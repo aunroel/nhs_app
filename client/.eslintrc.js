@@ -4,10 +4,12 @@ module.exports = {
     es6: true,
   },
   extends: [
-    "plugin:react/recommended",
+    // "react-app",
+    // "plugin:react/recommended",
     // "client\\node_modules\\eslint-plugin-react",
     "airbnb",
     "prettier",
+    "prettier/react",
   ],
   globals: {
     Atomics: "readonly",
@@ -33,6 +35,7 @@ module.exports = {
     "react/prop-types": "warn",
     "react/jsx-props-no-spreading": "off",
     "import/prefer-default-export": "off",
+    "import/no-extraneous-dependencies": "off",
   },
   settings: {
     "import/resolver": {

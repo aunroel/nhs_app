@@ -7,13 +7,38 @@ import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
+import HeaderLink from "./components/Header/HeaderLink";
 
 const App = () => {
+  const loggedIn = false;
+
   return (
     <Router>
       <div className="container-for-content-and-footer">
         <div>
-          <Header />
+          <Header
+            leftButtons={
+              <>
+                <HeaderLink to="/index" text="Home" />
+
+                {loggedIn ? (
+                  <>
+                    <HeaderLink to="/doc" text="API Doc" />
+                    <HeaderLink to="/available" text="Availibility" />
+                  </>
+                ) : null}
+              </>
+            }
+            rightButtons={
+              <>
+                {loggedIn ? (
+                  <HeaderLink to="/logout" text="Logout" />
+                ) : (
+                  <HeaderLink to="/login" text="Login" />
+                )}
+              </>
+            }
+          />
           <Container className="container-padding">
             <Switch>
               <Route path="/dashboard" component={Dashboard} />
@@ -29,3 +54,6 @@ const App = () => {
 };
 
 export default App;
+
+// </Nav>
+// <Nav>
