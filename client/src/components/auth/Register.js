@@ -7,41 +7,17 @@ import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { registerSuccess } from "store/actions/auth";
 
-const errorMessageTimeoutMs = 5000;
-const homePageRedirectTimeoutMs = 2000;
-
-const errMsg = (msg, cancelTimeout) => ({
-  msg,
-  cancelTimeout,
-});
-
-const Register = ({ registerSuccess }) => {
+const Register = ({ registerSuccess, setErrorMessage, setSuccessMessage }) => {
   const [inputs, setInputs] = useState({
     username: "",
     email: "",
     password: "",
     password2: "",
   });
-  const [errorMessage, setErrorMessage] = useState(errMsg(null, null));
-  const [registrationSuccessful, setRS] = useState(false);
-
-  const history = useHistory();
 
   const handleInput = (event) => {
     const { name, value } = event.target;
     setInputs({ ...inputs, [name]: value });
-  };
-
-  const handleErrorMessage = (msg) => {
-    if (errorMessage.msg) {
-      errorMessage.cancelTimeout();
-    }
-
-    const timeoutCanc = setTimeout(() => {
-      setErrorMessage(errMsg(null, null));
-    }, errorMessageTimeoutMs);
-
-    setErrorMessage(msg, timeoutCanc);
   };
 
   const register = async () => {
@@ -57,19 +33,16 @@ const Register = ({ registerSuccess }) => {
       const res = await axios.post("/api/auth/register", body, config);
 
       if (res.data.error) {
-        handleErrorMessage(res.data.error);
+        setErrorMessage(res.data.error);
       } else {
         const { token } = res.data;
 
         registerSuccess(token);
 
-        setRS(true);
-        setTimeout(() => {
-          history.push("/index");
-        }, homePageRedirectTimeoutMs);
+        setSuccessMessage("Registration successful.");
       }
     } catch (error) {
-      handleErrorMessage("An error has occured, please try again.");
+      setErrorMessage("An error has occured, please try again.");
     }
   };
 
@@ -77,7 +50,8 @@ const Register = ({ registerSuccess }) => {
     event.preventDefault();
 
     if (inputs.password !== inputs.password2) {
-      handleErrorMessage("Passwords do not match");
+      setErrorMessage("Passwords do not match");
+      return;
     }
 
     register();
@@ -128,13 +102,6 @@ const Register = ({ registerSuccess }) => {
         </Form.Group>
         <Button type="submit">Submit</Button>
       </Form>
-      {registrationSuccessful ? (
-        <Alert variant="success">
-          Registration successful, you will be soon redirected to home page...
-        </Alert>
-      ) : errorMessage.msg ? (
-        <Alert variant="danger">{errorMessage}</Alert>
-      ) : null}
     </div>
   );
 };
