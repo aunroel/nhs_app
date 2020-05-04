@@ -11,7 +11,7 @@ const errMsg = (msg, cancelTimeout) => ({
   cancelTimeout,
 });
 
-const AuthForm = (props) => {
+const AuthForm = ({ Form }) => {
   const [errorMessage, setErrorMessage] = useState(errMsg(null, null));
   const [successMessage, setSuccessMessage] = useState(null);
 
@@ -39,20 +39,16 @@ const AuthForm = (props) => {
 
   return (
     <div>
-      {/* <Form
+      <Form
         setErrorMessage={handleErrorMessage}
         setSuccessMessage={handleSuccess}
-      /> */}
-      {props.Form({
-        setErrorMessage: handleErrorMessage,
-        setSuccessMessage: handleSuccess,
-      })}
+      />
       {successMessage ? (
         <Alert variant="success">
           {successMessage + "You will be soon redirected to home page..."}
         </Alert>
       ) : errorMessage.msg ? (
-        <Alert variant="danger">{errorMessage}</Alert>
+        <Alert variant="danger">{errorMessage.msg}</Alert>
       ) : null}
     </div>
   );

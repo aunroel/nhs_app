@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import "css/App.css";
+import { connect } from "react-redux";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
@@ -49,9 +50,11 @@ const App = () => {
                 component={TeamMembersTable}
               />
               <Route path="/dashboard" component={Dashboard} />
-              <Route path="/login" component={Login} />
+              <Route path="/login">
+                <AuthForm Form={Login} />
+              </Route>
               <Route path="/register">
-                <AuthForm Form={Regsiter} />
+                <AuthForm Form={Register} />
               </Route>
             </Switch>
           </Container>
@@ -62,7 +65,8 @@ const App = () => {
   );
 };
 
-export default App;
+const mapStateToProps = (state) => ({
+  loggedIn: !!state.token,
+});
 
-// </Nav>
-// <Nav>
+export default connect(mapStateToProps)(App);

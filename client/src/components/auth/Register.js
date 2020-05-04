@@ -70,7 +70,7 @@ const Register = ({ registerSuccess, setErrorMessage, setSuccessMessage }) => {
             name="username"
           />
         </Form.Group>
-        <Form.Group controlId="formBasicEmail">
+        <Form.Group>
           <Form.Label>Email address</Form.Label>
           <Form.Control
             type="email"
@@ -80,7 +80,7 @@ const Register = ({ registerSuccess, setErrorMessage, setSuccessMessage }) => {
             name="email"
           />
         </Form.Group>
-        <Form.Group controlId="formBasicPassword">
+        <Form.Group>
           <Form.Label>Password</Form.Label>
           <Form.Control
             type="password"
@@ -90,7 +90,7 @@ const Register = ({ registerSuccess, setErrorMessage, setSuccessMessage }) => {
             name="password"
           />
         </Form.Group>
-        <Form.Group controlId="formBasicPassword">
+        <Form.Group>
           <Form.Label>Repeat Password</Form.Label>
           <Form.Control
             type="password"
@@ -105,9 +105,5 @@ const Register = ({ registerSuccess, setErrorMessage, setSuccessMessage }) => {
     </div>
   );
 };
-
-// const mapStateToProps = (state) => ({
-//   loggedIn: !!state.token,
-// });
 
 export default connect(null, { registerSuccess })(Register);

@@ -57,13 +57,13 @@ def register(username, email, password, password2):
 
 @auth.route('/login', methods=["POST"])
 @use_kwargs({
-    "email": fields.Email(required=True),
+    "username": fields.Str(required=True),
     "password": fields.Str(required=True), 
 })
-def login(email, password):
+def login(username, password):
 
     try :
-        user = User.find_by_email(email)
+        user = User.find_by_username(username)
 
         if user is None or not user.check_password(password):
             raise ValidationError('User or password are incorrect')
