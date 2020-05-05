@@ -33,9 +33,7 @@ const styles = (theme) => ({
 
 ReactDOM.render(
   <StoreProvider store={store}>
-    {/* <PersistGate loading={null} persistor={persistor}> */}
     <App />
-    {/* </PersistGate> */}
   </StoreProvider>,
   document.getElementById("root")
 );

@@ -14,6 +14,8 @@ import TeamMembersTable from "./components/TeamMembersTable/TeamMembersTable";
 import AuthForm from "./components/auth/AuthForm";
 
 const App = ({ loggedIn, logout }) => {
+  loggedIn = true;
+
   return (
     <Router>
       <div className="container-for-content-and-footer">

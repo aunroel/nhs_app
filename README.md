@@ -85,7 +85,7 @@ In order to run the project for local development, please switch to the 'develop
 ##### Unix
 
 ```
-docker-compose up
+docker-compose up -d
 source flaskenv/bin/activate
 export FLASK_APP=app.py
 export FLASK_ENV=development
