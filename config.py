@@ -37,6 +37,10 @@ class Config(object):
     NATIONAL_MODELS_GRAPHS = "./models/national/"
     UPLOADED_MODEL_FILENAME_PREFIX = "uploaded"
 
+    # Model template
+    MODEL_TEMPLATE_FILES_DIR = "./nhs_app/machine_learning/template_for_download/"
+    MODEL_TEMPLATE_ZIP_SAVE = "./nhs_app/machine_learning/"
+
 
 class ProductionConfig(Config):
     DEBUG = False

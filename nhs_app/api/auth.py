@@ -53,6 +53,13 @@ def register(username, email, password, password2):
         print(str(e))
         return jsonify( { 'error' : "An error occurred saving the user to the database " } ), 500
 
+def check_credentials(username, password):
+    user = User.find_by_username(username)
+
+    if user is None or not user.check_password(password):
+        raise ValidationError('User or password are incorrect')
+
+    return user
 
 
 @auth.route('/login', methods=["POST"])
@@ -63,10 +70,7 @@ def register(username, email, password, password2):
 def login(username, password):
 
     try :
-        user = User.find_by_username(username)
-
-        if user is None or not user.check_password(password):
-            raise ValidationError('User or password are incorrect')
+        user = check_credentials(username, password)
 
         encoded_jwt = user.encode_auth_token()
 

@@ -1,11 +1,14 @@
 from os import walk, remove
+import shutil
 from flask.blueprints import Blueprint
-from flask import request, jsonify
+from flask import request, make_response, jsonify, send_from_directory
 from app import config
 from auth.main import login_required
 from sqlalchemy import update
-from webargs import fields
+from webargs import fields, ValidationError
 from webargs.flaskparser import use_args, use_kwargs
+from nhs_app.api.auth import check_credentials
+
 
 from nhs_app.database.uploaded_model import UploadedModelMeta
 from nhs_app.machine_learning.ml_util import ML
@@ -16,6 +19,8 @@ from nhs_app.file_system.ml_model_filename_builder import \
 
 uploaded_save_dir = config['UPLOADED_MODELS_DIR']
 tflite_model_save_dir = config['TFLITE_MODELS_DIR']
+tf_template_files_dir = config['MODEL_TEMPLATE_FILES_DIR']
+tf_template_zip_dir = config['MODEL_TEMPLATE_ZIP_SAVE']
 
 
 models = Blueprint("models", __name__)
@@ -82,3 +87,37 @@ def upload():
     model_meta.save_to_db()
 
     return 'Model saved successfully'
+
+
+@models.route('/data', methods=["GET"])
+@use_kwargs({
+    "username": fields.Str(required=True),
+    "password": fields.Str(required=True),
+})
+def data(username, password):
+    try :
+        check_credentials(username, password)
+    except ValidationError as e:
+        print(str(e))
+        return jsonify( { 'error' : str(e) } )
+    except Exception as e:
+        print(str(e))
+        return jsonify( { 'error' : "An error occurred. Please try again." } ), 500
+
+    raw_data = ML().get_data_as_list().raw_data
+    data = [d.to_dict() for d in raw_data]
+
+    return jsonify({
+        'data': data
+    })
+
+
+@models.route('/template', methods=["GET"])
+def template_route():
+
+    filename = 'tf_template'
+    zip_template = shutil.make_archive(
+        tf_template_zip_dir + filename, 'zip', tf_template_files_dir)
+
+    response = send_from_directory(tf_template_zip_dir, filename + ".zip")
+    return response

@@ -1,6 +1,6 @@
 {
   "liveServer.settings.port": 5501,
-  "python.pythonPath": "c:\\Users\\wojci\\Desktop\\UCL 4th\\B Software\\nhs_app\\flaskenv\\Scripts\\python.exe",
+  "python.pythonPath": "flaskenv/bin/python3",
   // "editor.formatOnSave": false,
   "saveAndRunExt": {
     "commands": [
