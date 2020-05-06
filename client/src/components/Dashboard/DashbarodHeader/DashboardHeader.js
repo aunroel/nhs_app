@@ -16,17 +16,20 @@ const DashboardHeader = () => {
         >
           <div className="flex-box-vert-align">
             <LinkButton
-              linkUrl={`${url}/modellist`}
+              // linkUrl={`${url}/modellist`}
+              linkUrl={`/modellist`}
               buttonText="Model Viewer"
               currentUrl={currentUrl}
             />
             <LinkButton
-              linkUrl={`${url}/modelupload`}
+              // linkUrl={`${url}/modelupload`}
+              linkUrl={`/modelupload`}
               buttonText="Model Upload"
               currentUrl={currentUrl}
             />
             <LinkButton
-              linkUrl={`${url}/dataViewer`}
+              // linkUrl={`${url}/dataViewer`}
+              linkUrl={`/dataViewer`}
               buttonText="Data Viewer"
               currentUrl={currentUrl}
             />

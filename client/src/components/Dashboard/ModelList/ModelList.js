@@ -41,7 +41,22 @@ const ModelList = () => {
     loadModels();
   }, []);
 
-  // const modelsToDisplay =
+  const setDeployed = async (modelName) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const body = JSON.stringify({ filename: modelName });
+
+    try {
+      await axios.put("/api/models/setDeployed", body, config);
+      loadModels();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="model-list-container">
@@ -76,6 +91,7 @@ const ModelList = () => {
                   model.json_summary.summary.config.layers[1].config.activation
                 }
                 isDeployed={model.deployed}
+                setDeployed={setDeployed}
               />
             );
           })

@@ -12,28 +12,8 @@ export const ModelBox = ({
   learningRate,
   activation,
   isDeployed,
+  setDeployed,
 }) => {
-  const [deployedInMeantime, setD] = useState(false);
-
-  const setDeployed = async () => {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    const body = JSON.stringify({ filename: modelName });
-
-    try {
-      await axios.put("/api/models/setDeployed", body, config);
-      setD(true);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const depl = isDeployed || deployedInMeantime;
-
   return (
     <div className="model-box">
       <div className="model-box-text" style={{ paddingRight: "40px" }}>
@@ -63,9 +43,11 @@ export const ModelBox = ({
         <br />
         <div>
           Is deplyoed:
-          <span style={{ fontWeight: "bold" }}>{depl + ""}</span>
+          <span style={{ fontWeight: "bold" }}>{isDeployed + ""}</span>
           <br />
-          {!depl ? <Button onClick={setDeployed}>Deploy</Button> : null}
+          {!isDeployed ? (
+            <Button onClick={() => setDeployed(modelName)}>Deploy</Button>
+          ) : null}
         </div>
       </div>
       <div className="model-box-text">
