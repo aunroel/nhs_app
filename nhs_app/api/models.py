@@ -1,5 +1,7 @@
 from os import walk, remove
+import h5py
 import shutil
+import json
 from flask.blueprints import Blueprint
 from flask import request, make_response, jsonify, send_from_directory
 from app import config
@@ -29,7 +31,7 @@ models = Blueprint("models", __name__)
 @models.route('/list', methods=["GET"])
 def model_list():
     models = UploadedModelMeta.find_all()
-    return jsonify([str(model.to_dict()) for model in models])
+    return jsonify([model.to_dict() for model in models])
 
 
 @models.route('/setDeployed', methods=["PUT"])
@@ -78,12 +80,22 @@ def upload():
     save_path = uploaded_save_dir + filename
     file.save(save_path)
 
+    # Get history and optimizer
+    f = h5py.File(save_path, 'r')
+    json_history = json.loads(f['history'].value)
+    json_optimizer = json.loads(f['optimizer'].value)
+
     # Get summary
     model = ML().load(save_path).model
     json_summary = model.to_json()
 
+    json_full = json.dumps({
+        'summary': json_summary,
+        'history': json_history,
+        'optimizer': json_optimizer
+    })
     # Save to db
-    model_meta = UploadedModelMeta(filename, json_summary)
+    model_meta = UploadedModelMeta(filename, json_full)
     model_meta.save_to_db()
 
     return 'Model saved successfully'
@@ -119,5 +131,6 @@ def template_route():
     zip_template = shutil.make_archive(
         tf_template_zip_dir + filename, 'zip', tf_template_files_dir)
 
-    response = send_from_directory(tf_template_zip_dir, filename + ".zip")
+    response = send_from_directory(tf_template_zip_dir, filename + ".zip",as_attachment=True)
+    # response.headers['Content-Disposition'] = 'attachment;filename=tf_template.zip'
     return response

@@ -4,6 +4,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import { UploadButton } from "./subcomponents/UploadButton";
 import "css/dashboard/model-upload.css";
+import { Button } from "react-bootstrap";
+import fileDownload from "js-file-download";
+import { useHistory } from "react-router";
 
 const uploadStatuses = {
   NONE: "NONE",
@@ -43,6 +46,21 @@ const ModelUpload = () => {
   const fileIsChosen = fileProperties.fileIsH5 != null;
   const fileReadyToUpload = fileProperties.fileIsH5 === true;
 
+  const downloadTemplate = async () => {
+    try {
+      const res = await axios.get("/api/models/template", {}, {});
+      // const file = new File(res.data, "t.zip");
+      // ArrayBuffer;
+      // fileDownload(new ArrayBuffer(res.data), "tf_template.zip");
+      console.log(res);
+      if (res.status === 200) {
+      } else {
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const upload = async (e) => {
     setUploadStatus(uploadStatuses.PENDING);
 
@@ -69,6 +87,22 @@ const ModelUpload = () => {
 
   return (
     <div>
+      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        {/* <Button
+          variant="primary"
+          onClick={() => {
+            console.log("click");
+            downloadTemplate();
+          }}
+        >
+          Download .py template
+        </Button> */}
+        <a href="http://localhost:5000/api/models/template" download>
+          Download .py template
+        </a>
+      </div>
+      <br />
+      <br />
       <h2>Model Upload</h2>
       <div style={{ display: "flex" }}>
         <input type="file" id="modelFileUpload" onChange={handleFiles} />
@@ -78,11 +112,11 @@ const ModelUpload = () => {
         fileProperties.fileIsH5 === true ? (
           <h3>Model is ready to upload</h3>
         ) : (
-            <h3 className="red">File with he model must be .h5 format.</h3>
-          )
+          <h3 className="red">File with he model must be .h5 format.</h3>
+        )
       ) : (
-          <h3>Please choose a .h5 file to upload.</h3>
-        )}
+        <h3>Please choose a .h5 file to upload.</h3>
+      )}
       <br />
       <UploadButton onClick={upload} enabled={fileReadyToUpload} />
       <br />

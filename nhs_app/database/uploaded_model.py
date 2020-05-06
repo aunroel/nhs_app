@@ -19,9 +19,9 @@ class UploadedModelMeta(db.Model):
 
     def to_dict(self):
         return {
-            'filename': self.filename,
-            'json_summary': self.json_summary,
-            'deployed': self.deployed
+            "filename": self.filename,
+            "json_summary": self.json_summary,
+            "deployed": self.deployed
         }
 
     def save_to_db(self):
