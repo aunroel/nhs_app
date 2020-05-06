@@ -23,7 +23,17 @@ class MainData(db.Model):
     def __str__(self):
         return {
             'supportCode':     self.supportCode,
-            'wellBeingScore': self.wellBeingScore,
+            'wellBeingScore':  self.wellBeingScore,
+            'weeklySteps':     self.weeklySteps,
+            'weeklyCalls':     self.weeklyCalls,
+            'errorRate':       self.errorRate,
+            'postCode':        self.postCode
+        }
+
+    def to_dict(self):
+        return {
+            'supportCode':     self.supportCode,
+            'wellBeingScore':  self.wellBeingScore,
             'weeklySteps':     self.weeklySteps,
             'weeklyCalls':     self.weeklyCalls,
             'errorRate':       self.errorRate,

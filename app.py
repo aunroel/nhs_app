@@ -22,7 +22,6 @@ api = Api(app)
 bootstrap = Bootstrap(app)
 crontab = Crontab(app)
 
-
 from nhs_app.api.models import models
 from nhs_app.api.data import data
 from nhs_app.api.auth import auth
@@ -39,7 +38,7 @@ from nhs_app.database.uploaded_model import UploadedModelMeta
 # from auth.main import login_required
 
 
-app.register_blueprint(auth, url_prefix='/api/auth')
+# app.register_blueprint(auth, url_prefix='/api/auth')
 app.register_blueprint(data, url_prefix='/api/data')
 app.register_blueprint(models, url_prefix='/api/models')
 

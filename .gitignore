@@ -1,9 +1,12 @@
 old stuff/README_orig.md
 .idea
+.vscode
 
 /client/node_modules
 /client/package-lock.json
 /client/build
+/client/yarn-error.log
+
 
 /flaskenv
 old.docker-compose.yml
@@ -20,3 +23,4 @@ nhs_app/file_system/__pycache__/
 
 
 
+nhs_app/machine_learning/tf_template.zip

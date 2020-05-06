@@ -1,5 +1,9 @@
+/* eslint-disable no-restricted-syntax */
 export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
-export const REGISTER_FAIL = "REGISTER_FAIL";
+// export const REGISTER_FAIL = "REGISTER_FAIL";
+
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const LOGOUT = "LOGOUT";
 
 export function validateType(obj, types) {
   if (Object.keys(obj).length !== Object.keys(types).length) {

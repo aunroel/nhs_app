@@ -4,10 +4,12 @@ module.exports = {
     es6: true,
   },
   extends: [
-    "plugin:react/recommended",
+    // "react-app",
+    // "plugin:react/recommended",
     // "client\\node_modules\\eslint-plugin-react",
     "airbnb",
     "prettier",
+    "prettier/react",
   ],
   globals: {
     Atomics: "readonly",
@@ -23,7 +25,7 @@ module.exports = {
   },
   plugins: ["react", "@typescript-eslint"],
   rules: {
-    "no-nested-ternary": "warn",
+    "no-nested-ternary": "off",
     "prefer-template": "off",
 
     "react/jsx-filename-extension": [
@@ -33,5 +35,24 @@ module.exports = {
     "react/prop-types": "warn",
     "react/jsx-props-no-spreading": "off",
     "import/prefer-default-export": "off",
+    "import/no-extraneous-dependencies": "off",
+  },
+  settings: {
+    "import/resolver": {
+      "babel-plugin-root-import": [
+        {
+          rootPathSuffix: "src/css",
+          rootPathPrefix: "css",
+        },
+        {
+          rootPathSuffix: "src/store",
+          rootPathPrefix: "store",
+        },
+        {
+          rootPathSuffix: "src/utils",
+          rootPathPrefix: "utils",
+        },
+      ],
+    },
   },
 };

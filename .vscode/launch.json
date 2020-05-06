@@ -9,10 +9,10 @@
       "request": "launch",
       "name": "Launch Chrome",
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}"
+      "webRoot": "${workspaceFolder}/client/src"
     },
     {
-      "name": "Python: Flask",
+      "name": "Flask Server",
       "type": "python",
       "request": "launch",
       "module": "flask",

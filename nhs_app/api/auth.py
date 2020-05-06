@@ -24,11 +24,11 @@ auth = Blueprint("auth", __name__)
     })
 def register(username, email, password, password2):
     try: 
-        if User.find_by_email(email):
-            raise ValidationError('Email already in use. Please use different email address')
-
         if User.find_by_username(username):
             raise ValidationError('Username already exists. Please choose another')
+
+        if User.find_by_email(email):
+            raise ValidationError('Email already in use. Please use different email address')
 
         if password != password2:
             raise ValidationError("Password and Repeated Password must match")
@@ -53,20 +53,24 @@ def register(username, email, password, password2):
         print(str(e))
         return jsonify( { 'error' : "An error occurred saving the user to the database " } ), 500
 
+def check_credentials(username, password):
+    user = User.find_by_username(username)
+
+    if user is None or not user.check_password(password):
+        raise ValidationError('User or password are incorrect')
+
+    return user
 
 
 @auth.route('/login', methods=["POST"])
 @use_kwargs({
-    "email": fields.Email(required=True),
+    "username": fields.Str(required=True),
     "password": fields.Str(required=True), 
 })
-def login(email, password):
+def login(username, password):
 
     try :
-        user = User.find_by_email(email)
-
-        if user is None or not user.check_password(password):
-            raise ValidationError('User or password are incorrect')
+        user = check_credentials(username, password)
 
         encoded_jwt = user.encode_auth_token()
 
@@ -82,7 +86,7 @@ def login(email, password):
 
 
 
-@auth.route('/test', methods=["POST"])
+@auth.route('/checkToken', methods=["POST"])
 @login_required
 def test(userData):
     userId = userData['id']

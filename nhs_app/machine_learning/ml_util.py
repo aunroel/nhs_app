@@ -48,6 +48,8 @@ class ML:
             self.raw_data = MainData.find_all()
         else:
             self.raw_data = MainData.find_all_by_postcode(self.postcode)
+            
+        return self
 
     def convert_to_df(self, features=FeatureFlag.DEFAULT):
         if features == FeatureFlag.STEPS_CALLS_MSGS:
