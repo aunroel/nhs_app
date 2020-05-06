@@ -75,6 +75,7 @@ const ModelList = () => {
                 activation={
                   model.json_summary.summary.config.layers[1].config.activation
                 }
+                isDeployed={model.deployed}
               />
             );
           })

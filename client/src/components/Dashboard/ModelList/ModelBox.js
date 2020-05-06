@@ -1,32 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import "css/dashboard/model-list.css";
 import { Line } from "react-chartjs-2";
-
-const options = {
-  scales: {
-    yAxes: [
-      {
-        display: true,
-        labelString: "validation loss",
-
-        ticks: {
-          suggestedMin: 0, // minimum will be 0, unless there is a lower value.
-          suggestedMax: 10,
-          // OR //
-          // beginAtZero: true, // minimum value will be 0.
-        },
-      },
-    ],
-    xAxes: [
-      {
-        scaleLabel: {
-          display: true,
-          labelString: "epoch",
-        },
-      },
-    ],
-  },
-};
+import axios from "axios";
+import { Button } from "react-bootstrap";
 
 export const ModelBox = ({
   modelName,
@@ -35,7 +11,29 @@ export const ModelBox = ({
   optimizerName,
   learningRate,
   activation,
+  isDeployed,
 }) => {
+  const [deployedInMeantime, setD] = useState(false);
+
+  const setDeployed = async () => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const body = JSON.stringify({ filename: modelName });
+
+    try {
+      await axios.put("/api/models/setDeployed", body, config);
+      setD(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const depl = isDeployed || deployedInMeantime;
+
   return (
     <div className="model-box">
       <div className="model-box-text" style={{ paddingRight: "40px" }}>
@@ -63,6 +61,12 @@ export const ModelBox = ({
           <span style={{ fontWeight: "bold" }}>{activation}</span>
         </div>
         <br />
+        <div>
+          Is deplyoed:
+          <span style={{ fontWeight: "bold" }}>{depl + ""}</span>
+          <br />
+          {!depl ? <Button onClick={setDeployed}>Deploy</Button> : null}
+        </div>
       </div>
       <div className="model-box-text">
         <Line
