@@ -7,11 +7,13 @@ const options = {
     yAxes: [
       {
         display: true,
+        labelString: "validation loss",
+
         ticks: {
           suggestedMin: 0, // minimum will be 0, unless there is a lower value.
           suggestedMax: 10,
           // OR //
-          beginAtZero: true, // minimum value will be 0.
+          // beginAtZero: true, // minimum value will be 0.
         },
       },
     ],
@@ -26,61 +28,70 @@ const options = {
   },
 };
 
-export const ModelBox = ({ modelData }) => {
+export const ModelBox = ({
+  modelName,
+  validationLossHistory,
+  validationLoss,
+  optimizerName,
+  learningRate,
+  activation,
+}) => {
   return (
     <div className="model-box">
       <div className="model-box-text" style={{ paddingRight: "40px" }}>
-        <h1 style={{ margin: 0 }}>{modelData.name}</h1>
+        <h3 style={{ margin: 0, maxWidth: "15em", overflow: "auto" }}>
+          {modelName}
+        </h3>
         <br />
         <div style={{ fontSize: "1.4em" }}>
-          Test loss:{"  "}
+          Validation loss:{"  "}
           <span style={{ fontWeight: "bold" }}>
-            {modelData.loss.toFixed(1)}
+            {validationLoss.toFixed(1)}
           </span>
-        </div>
-        <br />
-        <div>
-          Upload date:{"  "}
-          <span style={{ fontWeight: "bold" }}>{modelData.uploadDate}</span>
-        </div>
-        <br />
-        <div>
-          Regularizer:{"  "}
-          <span style={{ fontWeight: "bold" }}>{modelData.regularizer}</span>
         </div>
         <br />
         <div>
           Optimizer:{"  "}
-          <span style={{ fontWeight: "bold" }}>{modelData.optimizer}</span>
+          <span style={{ fontWeight: "bold" }}>{optimizerName}</span>
+        </div>
+        <div>
+          Learning Rate:{"  "}
+          <span style={{ fontWeight: "bold" }}>{learningRate.toFixed(5)}</span>
+        </div>
+        <div>
+          Activation:{"  "}
+          <span style={{ fontWeight: "bold" }}>{activation}</span>
         </div>
         <br />
-        {/* <div>
-          Features used{" "}
-          <span style={{ fontWeight: "bold" }}>
-            ({modelData.features.length + " "} total)
-          </span>
-          :
-          <ol style={{ fontWeight: "bold" }}>
-            {modelData.features.map(featureString => (
-              <li>{featureString}</li>
-            ))}
-          </ol>
-        </div> */}
       </div>
       <div className="model-box-text">
         <Line
-          // data={{
-          //   datasets: [
-          //     {
-          //       label: "Training Accuracy",
-          //       data: modelData.trainingAccuracyHistory
-          //     }
-          //   ],
-          //   backgroundColor: "rgb(255, 0,0)",
-          //   borderColor: "rgb(255, 0,0)"
-          // }}
-          data={modelData.data}
-          options={options}
+          data={{
+            labels: validationLossHistory.map((v) => ""),
+            datasets: [
+              {
+                label: "Training Accuracy",
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(75,192,192,0.4)",
+                borderColor: "rgba(75,192,192,1)",
+                borderCapStyle: "butt",
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: "miter",
+                pointBorderColor: "rgba(75,192,192,1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: validationLossHistory,
+              },
+            ],
+          }}
         />
       </div>
     </div>

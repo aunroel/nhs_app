@@ -10,9 +10,28 @@ const ModelList = () => {
 
   const loadModels = async () => {
     try {
-      const res = await axios.get("/api/model/list");
-      setModels(JSON.parse(res.data));
-      console.log(res);
+      const res = await axios.get("/api/models/list");
+      console.log("resr", res);
+      const parsed = res.data
+        .filter((modelMeta) => {
+          const json_summary = JSON.parse(modelMeta.json_summary);
+          return json_summary.summary;
+          // typeof modelMeta.json_summary !== "string"
+        })
+        .map((modelMeta) => {
+          const json_summary = JSON.parse(modelMeta.json_summary);
+
+          return {
+            ...modelMeta,
+            json_summary: {
+              ...json_summary,
+              summary: JSON.parse(json_summary.summary),
+            },
+          };
+        });
+
+      console.log("parsed", parsed);
+      setModels(parsed);
     } catch (err) {
       console.log(err);
     }
@@ -35,8 +54,7 @@ const ModelList = () => {
       </div>
       {models ? (
         models
-          .filter((model) => {
-            const { name } = model;
+          .filter(({ filename: name }) => {
             if (!searchValue) return true;
             const searchItems = searchValue.split(" ");
             for (const string of searchItems) {
@@ -45,11 +63,24 @@ const ModelList = () => {
             return false;
           })
           .map((model) => {
-            return <ModelBox key={model.filename} modelData={model} />;
+            const val_loss = model.json_summary.history.history.val_loss;
+            return (
+              <ModelBox
+                key={model.filename}
+                modelName={model.filename}
+                validationLossHistory={val_loss}
+                validationLoss={val_loss[val_loss.length - 1]}
+                optimizerName={model.json_summary.optimizer.name}
+                learningRate={model.json_summary.optimizer.learning_rate}
+                activation={
+                  model.json_summary.summary.config.layers[1].config.activation
+                }
+              />
+            );
           })
       ) : (
-          <h3>Loading models... </h3>
-        )}
+        <h3>Loading models... </h3>
+      )}
     </div>
   );
 };
