@@ -63,7 +63,7 @@ SQLAlchemy==1.3.15
 tb-nightly==2.3.0a20200424
 tensorboard==2.1.1
 tensorboard-plugin-wit==1.6.0.post3
-tensorflow==2.1.0
+tensorflow==2.6.4
 tensorflow-docs==0.0.0
 tensorflow-estimator==2.1.0
 termcolor==1.1.0
